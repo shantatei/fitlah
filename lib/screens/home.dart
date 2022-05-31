@@ -36,11 +36,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         .push(MaterialPageRoute(builder: (context) => HistoryScreen()));
   }
 
-  // void onClickSettingsScreenButton(BuildContext context) {
-  //   Navigator.of(context)
-  //       .push(MaterialPageRoute(builder: (context) => SettingsScreen()));
-  // }
-
   void onClickDayViewScreenButton(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => DayViewScreen()));
@@ -52,13 +47,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text(
-        //     "Flutter Calorie Tracker App",
-        //     style: TextStyle(
-        //         color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-        //   ),
-        // ),
         body: new Column(
           children: <Widget>[
             new ListTile(
@@ -76,11 +64,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                   onClickHistoryScreenButton(context);
                 },
                 child: Text("History Screen")),
-            // new ElevatedButton(
-            //     onPressed: () {
-            //       onClickSettingsScreenButton(context);
-            //     },
-            //     child: Text("Settings Screen")),
           ],
         ));
   }

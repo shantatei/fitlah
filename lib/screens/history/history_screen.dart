@@ -17,8 +17,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     super.initState();
   }
 
-  void onClickBackButton() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

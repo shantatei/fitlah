@@ -80,6 +80,17 @@ class _DayViewState extends State<DayViewScreen> {
     );
   }
 
+  Widget _backButton() {
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios),
+      iconSize: 20,
+      color: Colors.white,
+      onPressed: () async {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   Widget _addFoodButton() {
     return IconButton(
       icon: Icon(Icons.add_box),
@@ -309,11 +320,11 @@ class _DayViewState extends State<DayViewScreen> {
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.arrow_left, size: 25.0),
-            color: Colors.white,
+            color: Colors.black,
             onPressed: () {
               setState(() {
                 _value = _value.subtract(Duration(days: 1));
-                _rightArrowColor = Colors.white;
+                _rightArrowColor = Colors.black;
               });
             },
           ),
@@ -323,7 +334,7 @@ class _DayViewState extends State<DayViewScreen> {
             // },
             child: Text(_dateFormatter(_value),
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontFamily: 'Open Sans',
                   fontSize: 18.0,
                   fontWeight: FontWeight.w700,
@@ -336,7 +347,7 @@ class _DayViewState extends State<DayViewScreen> {
                 if (today.difference(_value).compareTo(Duration(days: 1)) ==
                     -1) {
                   setState(() {
-                    _rightArrowColor = Color(0xffC1C1C1);
+                    _rightArrowColor = Color.fromARGB(113, 0, 0, 0);
                   });
                 } else {
                   setState(() {
@@ -345,7 +356,7 @@ class _DayViewState extends State<DayViewScreen> {
                   if (today.difference(_value).compareTo(Duration(days: 1)) ==
                       -1) {
                     setState(() {
-                      _rightArrowColor = Color(0xffC1C1C1);
+                      _rightArrowColor = Color.fromARGB(113, 0, 0, 0);
                     });
                   }
                 }
@@ -418,16 +429,15 @@ class _DayViewState extends State<DayViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            iconTheme: IconThemeData(
-              color: Colors.white, //change your color here
-            ),
+            automaticallyImplyLeading: false,
             elevation: 0,
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _showDatePicker(),
+                  _backButton(),
+                  // _showDatePicker(),
                   _addFoodButton(),
                 ],
               ),
@@ -438,10 +448,13 @@ class _DayViewState extends State<DayViewScreen> {
                   uid: DATABASE_UID, currentDate: DateTime.now())
               .foodTracks,
           child: new Column(children: <Widget>[
+            _showDatePicker(),
             _calorieCounter(),
             Expanded(
                 child: ListView(
-              children: <Widget>[FoodTrackList(datePicked: _value)],
+              children: <Widget>[
+                FoodTrackList(datePicked: _value),
+              ],
             ))
           ]),
         ));
