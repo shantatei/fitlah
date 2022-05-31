@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "96620376950",
+    "project_id": "fitlah-fb199",
+    "storage_bucket": "fitlah-fb199.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96620376950:android:dac57a2c4befaa187e0057",
+        "android_client_info": {
+          "package_name": "com.example.fitlah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96620376950-dljrg471fsic2ao6ffo4pbj9fbu5q3b3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkGzVvWzohSh2L_VDr0ehvm_T26FhOe3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96620376950-dljrg471fsic2ao6ffo4pbj9fbu5q3b3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
