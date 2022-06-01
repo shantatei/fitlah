@@ -136,14 +136,6 @@ class _DayViewState extends State<DayViewScreen> {
       return true;
     }
     return false;
-    // if (addFoodTrack.calories != 0 &&
-    //     addFoodTrack.carbs != 0 &&
-    //     addFoodTrack.protein != 0 &&
-    //     addFoodTrack.fat != 0 &&
-    //     addFoodTrack.grams != 0) {
-    //   return true;
-    // }
-    // return false;
   }
 
   _showFoodToAdd(BuildContext context) {
@@ -169,6 +161,9 @@ class _DayViewState extends State<DayViewScreen> {
                         .add(Duration(milliseconds: randomMilliSecond));
                     databaseService.addFoodTrackEntry(addFoodTrack);
                     resetFoodTrack();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Food Added Successfully'),
+                    ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
@@ -343,6 +338,26 @@ class _DayViewState extends State<DayViewScreen> {
             });
           },
         ),
+        DropdownButtonFormField(
+          decoration: InputDecoration(
+            label: Text('Mealtime'),
+          ),
+          items: [
+            DropdownMenuItem(child: Text('Breakfast'), value: 'breakfast'),
+            DropdownMenuItem(child: Text('Lunch'), value: 'lunch'),
+            DropdownMenuItem(child: Text('Dinner'), value: 'dinner'),
+            DropdownMenuItem(child: Text('Supper'), value: 'supper'),
+          ],
+          validator: (value) {
+            if (value == null)
+              return "Please provide a mealtime";
+            else
+              return null;
+          },
+          onChanged: (value) {
+            addFoodTrack.mealTime = value as String;
+          },
+        )
       ]),
     );
   }
@@ -537,14 +552,25 @@ class FoodTrackList extends StatelessWidget {
   }
 }
 
-class FoodTrackTile extends StatelessWidget {
+class FoodTrackTile extends StatefulWidget {
   final FoodTrackTask foodTrackEntry;
-  DatabaseService databaseService =
-      new DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
 
   FoodTrackTile({required this.foodTrackEntry});
 
+  @override
+  State<FoodTrackTile> createState() => _FoodTrackTileState();
+}
+
+class _FoodTrackTileState extends State<FoodTrackTile> {
+  var form = GlobalKey<FormState>();
+  DatabaseService databaseService =
+      new DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
+
   List macros = CalorieStats.macroData;
+  // late FoodTrackTask widget.foodTrackEntry;
+  DateTime _value = DateTime.now();
+  DateTime today = DateTime.now();
+  double servingSize = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -554,7 +580,7 @@ class FoodTrackTile extends StatelessWidget {
         backgroundColor: Color(0xff5FA55A),
         child: _itemCalories(),
       ),
-      title: Text(foodTrackEntry.food_name,
+      title: Text(widget.foodTrackEntry.food_name,
           style: TextStyle(
             fontSize: 16.0,
             fontFamily: 'Open Sans',
@@ -567,12 +593,232 @@ class FoodTrackTile extends StatelessWidget {
     );
   }
 
+  checkFormValid() {
+    bool isValid = form.currentState!.validate();
+    if (isValid) {
+      form.currentState!.save();
+      return true;
+    }
+    return false;
+  }
+
+  _editFoodToAdd(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Edit Food '),
+            content: _editAmountHad(),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.pop(context), // passing false
+                child: Text('Cancel'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  if (checkFormValid()) {
+                    Navigator.pop(context);
+                    databaseService.editFoodTrackEntry(widget.foodTrackEntry);
+                    form.currentState!.reset();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Food Updated Successfully'),
+                    ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Invalid form data! All numeric fields must contain numeric values greater than 0"),
+                      backgroundColor: Colors.white,
+                    ));
+                  }
+                },
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget _editAmountHad() {
+    return SingleChildScrollView(
+      child: Column(children: <Widget>[
+        _editFoodForm(),
+      ]),
+    );
+  }
+
+  Widget _editFoodForm() {
+    return Form(
+      key: form,
+      child: Column(children: [
+        TextFormField(
+          initialValue: widget.foodTrackEntry.food_name,
+          decoration: const InputDecoration(
+            labelText: "Name *",
+            hintText: "Please enter food name",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter the food name";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            widget.foodTrackEntry.food_name = value;
+            // addFood.calories = value;
+          },
+        ),
+        TextFormField(
+          initialValue: widget.foodTrackEntry.calories.toString(),
+          decoration: const InputDecoration(
+            labelText: "Calories *",
+            hintText: "Please enter a calorie amount",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a calorie amount";
+            }
+            return null;
+          },
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            try {
+              widget.foodTrackEntry.calories = int.parse(value);
+            } catch (e) {
+              // return "Please enter numeric values"
+              widget.foodTrackEntry.calories = 0;
+            }
+            // addFood.calories = value;
+          },
+          // onSaved: (value) {
+          //   widget.foodTrackEntry.calories = int.parse(value!);
+          // },
+        ),
+        TextFormField(
+          initialValue: widget.foodTrackEntry.carbs.toString(),
+          decoration: const InputDecoration(
+            labelText: "Carbs *",
+            hintText: "Please enter a carbs amount",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a carbs amount";
+            }
+            return null;
+          },
+          keyboardType: TextInputType.number,
+          onChanged: (value) {
+            try {
+              widget.foodTrackEntry.carbs = int.parse(value);
+            } catch (e) {
+              widget.foodTrackEntry.carbs = 0;
+            }
+          },
+        ),
+        TextFormField(
+          initialValue: widget.foodTrackEntry.protein.toString(),
+          decoration: const InputDecoration(
+            labelText: "Protein *",
+            hintText: "Please enter a protein amount",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a calorie amount";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            try {
+              widget.foodTrackEntry.protein = int.parse(value);
+            } catch (e) {
+              widget.foodTrackEntry.protein = 0;
+            }
+          },
+        ),
+        TextFormField(
+          initialValue: widget.foodTrackEntry.fat.toString(),
+          decoration: const InputDecoration(
+            labelText: "Fat *",
+            hintText: "Please enter a fat amount",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a fat amount";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            try {
+              widget.foodTrackEntry.fat = int.parse(value);
+            } catch (e) {
+              widget.foodTrackEntry.fat = 0;
+            }
+          },
+        ),
+        TextFormField(
+          initialValue: widget.foodTrackEntry.grams.toString(),
+          decoration: const InputDecoration(
+            labelText: "Grams *",
+            hintText: "eg. 100",
+            errorStyle: TextStyle(color: Colors.red),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter the amount of grams";
+            }
+            return null;
+          },
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
+          onChanged: (value) {
+            try {
+              widget.foodTrackEntry.grams = int.parse(value);
+            } catch (e) {
+              widget.foodTrackEntry.grams = 0;
+            }
+
+            setState(() {
+              servingSize = double.tryParse(value) ?? 0;
+            });
+          },
+        ),
+        DropdownButtonFormField(
+          decoration: InputDecoration(
+            label: Text('Mealtime'),
+          ),
+          items: [
+            DropdownMenuItem(child: Text('Breakfast'), value: 'breakfast'),
+            DropdownMenuItem(child: Text('Lunch'), value: 'lunch'),
+            DropdownMenuItem(child: Text('Dinner'), value: 'dinner'),
+            DropdownMenuItem(child: Text('Supper'), value: 'supper'),
+          ],
+          value: widget.foodTrackEntry.mealTime,
+          validator: (value) {
+            if (value == null)
+              return "Please provide a mealtime";
+            else
+              return null;
+          },
+          onChanged: (value) {
+            widget.foodTrackEntry.mealTime = value as String;
+          },
+        )
+      ]),
+    );
+  }
+
   Widget _itemCalories() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(foodTrackEntry.calories.toStringAsFixed(0),
+        Text(widget.foodTrackEntry.calories.toStringAsFixed(0),
             style: TextStyle(
               fontSize: 16.0,
               color: Colors.white,
@@ -608,7 +854,10 @@ class FoodTrackTile extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  Text(' ' + foodTrackEntry.carbs.toStringAsFixed(1) + 'g    ',
+                  Text(
+                      ' ' +
+                          widget.foodTrackEntry.carbs.toStringAsFixed(1) +
+                          'g    ',
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
@@ -624,7 +873,9 @@ class FoodTrackTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                      ' ' + foodTrackEntry.protein.toStringAsFixed(1) + 'g    ',
+                      ' ' +
+                          widget.foodTrackEntry.protein.toStringAsFixed(1) +
+                          'g    ',
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
@@ -639,7 +890,7 @@ class FoodTrackTile extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  Text(' ' + foodTrackEntry.fat.toStringAsFixed(1) + 'g',
+                  Text(' ' + widget.foodTrackEntry.fat.toStringAsFixed(1) + 'g',
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
@@ -648,7 +899,7 @@ class FoodTrackTile extends StatelessWidget {
                       )),
                 ],
               ),
-              Text(foodTrackEntry.grams.toString() + 'g',
+              Text(widget.foodTrackEntry.grams.toString() + 'g',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Colors.black,
@@ -692,7 +943,8 @@ class FoodTrackTile extends StatelessWidget {
         IconButton(
             icon: Icon(Icons.edit),
             iconSize: 16,
-            onPressed: () {
+            onPressed: () async {
+              _editFoodToAdd(context);
               print("Edit button pressed");
             }),
         IconButton(
@@ -700,7 +952,10 @@ class FoodTrackTile extends StatelessWidget {
             iconSize: 16,
             onPressed: () async {
               print("Delete button pressed");
-              databaseService.deleteFoodTrackEntry(foodTrackEntry);
+              databaseService.deleteFoodTrackEntry(widget.foodTrackEntry);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Food Deleted Successfully'),
+              ));
             }),
       ],
     );
@@ -708,8 +963,8 @@ class FoodTrackTile extends StatelessWidget {
 
   Widget _expandedCalories() {
     double caloriesValue = 0;
-    if (!(foodTrackEntry.calories / macros[0]).isNaN) {
-      caloriesValue = foodTrackEntry.calories / macros[0];
+    if (!(widget.foodTrackEntry.calories / macros[0]).isNaN) {
+      caloriesValue = widget.foodTrackEntry.calories / macros[0];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
@@ -738,8 +993,8 @@ class FoodTrackTile extends StatelessWidget {
 
   Widget _expandedCarbs() {
     double carbsValue = 0;
-    if (!(foodTrackEntry.carbs / macros[2]).isNaN) {
-      carbsValue = foodTrackEntry.carbs / macros[2];
+    if (!(widget.foodTrackEntry.carbs / macros[2]).isNaN) {
+      carbsValue = widget.foodTrackEntry.carbs / macros[2];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
@@ -762,8 +1017,8 @@ class FoodTrackTile extends StatelessWidget {
 
   Widget _expandedProtein() {
     double proteinValue = 0;
-    if (!(foodTrackEntry.protein / macros[1]).isNaN) {
-      proteinValue = foodTrackEntry.protein / macros[1];
+    if (!(widget.foodTrackEntry.protein / macros[1]).isNaN) {
+      proteinValue = widget.foodTrackEntry.protein / macros[1];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
@@ -786,8 +1041,8 @@ class FoodTrackTile extends StatelessWidget {
 
   Widget _expandedFat() {
     double fatValue = 0;
-    if (!(foodTrackEntry.fat / macros[3]).isNaN) {
-      fatValue = foodTrackEntry.fat / macros[3];
+    if (!(widget.foodTrackEntry.fat / macros[3]).isNaN) {
+      fatValue = widget.foodTrackEntry.fat / macros[3];
     }
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
@@ -797,7 +1052,7 @@ class FoodTrackTile extends StatelessWidget {
             height: 10.0,
             width: 200.0,
             child: LinearProgressIndicator(
-              value: (foodTrackEntry.fat / macros[3]),
+              value: (widget.foodTrackEntry.fat / macros[3]),
               backgroundColor: Color(0xffEDEDED),
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xff01B4BC)),
             ),
@@ -807,4 +1062,6 @@ class FoodTrackTile extends StatelessWidget {
       ),
     );
   }
+
+  // void setState(Null Function() param0) {}
 }

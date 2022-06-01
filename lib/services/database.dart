@@ -40,22 +40,20 @@ class DatabaseService {
   }
 
   //method to edit a record for food diary
-   Future editFoodTrackEntry(FoodTrackTask food) async {
-    return await foodTrackCollection
-        .doc(food.createdOn.millisecondsSinceEpoch.toString())
-        .set({
-      'food_name': food.food_name,
-      'calories': food.calories,
-      'carbs': food.carbs,
-      'fat': food.fat,
-      'protein': food.protein,
-      'mealTime': food.mealTime,
-      'createdOn': food.createdOn,
-      'grams': food.grams
+  editFoodTrackEntry(FoodTrackTask editEntry) {
+    return foodTrackCollection
+        .doc(editEntry.createdOn.millisecondsSinceEpoch.toString())
+        .update({
+      'food_name': editEntry.food_name,
+      'calories': editEntry.calories,
+      'carbs': editEntry.carbs,
+      'fat': editEntry.fat,
+      'protein': editEntry.protein,
+      'mealTime': editEntry.mealTime,
+      'createdOn': editEntry.createdOn,
+      'grams': editEntry.grams
     });
   }
-
-
 
   //converting data from firestore (array format)
   //mapping it and converting into FoodTrackTask Object
