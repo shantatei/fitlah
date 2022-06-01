@@ -179,10 +179,9 @@ class _DayViewState extends State<DayViewScreen> {
   }
 
   Widget _showAmountHad() {
-    return new Scaffold(
-      body: Column(children: <Widget>[
+    return SingleChildScrollView(
+      child: Column(children: <Widget>[
         _showAddFoodForm(),
-        _showUserAmount(),
       ]),
     );
   }
@@ -202,7 +201,6 @@ class _DayViewState extends State<DayViewScreen> {
           },
           onChanged: (value) {
             addFoodTrack.food_name = value;
-
             // addFood.calories = value;
           },
         ),
@@ -224,7 +222,6 @@ class _DayViewState extends State<DayViewScreen> {
               // return "Please enter numeric values"
               addFoodTrack.calories = 0;
             }
-
             // addFood.calories = value;
           },
         ),
@@ -281,19 +278,15 @@ class _DayViewState extends State<DayViewScreen> {
             }
           },
         ),
-      ]),
-    );
-  }
-
-  Widget _showUserAmount() {
-    return new Expanded(
-      child: new TextField(
-          maxLines: 1,
-          autofocus: true,
-          decoration: new InputDecoration(
-              labelText: 'Grams *',
-              hintText: 'eg. 100',
-              contentPadding: EdgeInsets.all(0.0)),
+        TextFormField(
+          decoration:
+              const InputDecoration(labelText: "Grams *", hintText: "eg. 100"),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a fat amount";
+            }
+            return null;
+          },
           keyboardType: TextInputType.number,
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
@@ -304,10 +297,13 @@ class _DayViewState extends State<DayViewScreen> {
             } catch (e) {
               addFoodTrack.grams = 0;
             }
+
             setState(() {
               servingSize = double.tryParse(value) ?? 0;
             });
-          }),
+          },
+        ),
+      ]),
     );
   }
 
@@ -654,7 +650,12 @@ class FoodTrackTile extends StatelessWidget {
               fontFamily: 'Open Sans',
               fontWeight: FontWeight.w400,
             )),
-        IconButton(icon: Icon(Icons.edit), iconSize: 16, onPressed: () {}),
+        IconButton(
+            icon: Icon(Icons.edit),
+            iconSize: 16,
+            onPressed: () {
+              print("Edit button pressed");
+            }),
         IconButton(
             icon: Icon(Icons.delete),
             iconSize: 16,
