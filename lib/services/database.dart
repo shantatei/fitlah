@@ -61,7 +61,6 @@ class DatabaseService {
   List<FoodTrackTask> _foodTrackListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return FoodTrackTask(
-        id: doc.id,
         food_name: doc['food_name'] ?? '',
         calories: doc['calories'] ?? 0,
         carbs: doc['carbs'] ?? 0,

@@ -1,10 +1,8 @@
-import 'package:fitlah/utils/uuid.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 @JsonSerializable()
 class FoodTrackTask {
-  String id;
   String food_name;
   num calories;
   num carbs;
@@ -23,8 +21,7 @@ class FoodTrackTask {
     required this.mealTime,
     required this.createdOn,
     required this.grams,
-    String? id,
-  }) : this.id = id ?? Uuid().generateV4(); //genrating id using UUID
+  }); 
 
   factory FoodTrackTask.fromSnapshot(DataSnapshot snap) => FoodTrackTask(
       food_name: snap.child('food_name').value as String,
@@ -50,8 +47,7 @@ class FoodTrackTask {
   }
 
   FoodTrackTask.fromJson(Map<dynamic, dynamic> json)
-      : id = json['id'],
-        mealTime = json['mealTime'],
+:       mealTime = json['mealTime'],
         calories = json['calories'],
         createdOn = DateTime.parse(json['createdOn']),
         food_name = json['food_name'],
@@ -61,7 +57,6 @@ class FoodTrackTask {
         grams = json['grams'];
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-        'id': id,
         'mealTime': mealTime,
         'createdOn': createdOn.toString(),
         'food_name': food_name,
