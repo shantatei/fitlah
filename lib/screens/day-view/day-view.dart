@@ -130,14 +130,20 @@ class _DayViewState extends State<DayViewScreen> {
   }
 
   checkFormValid() {
-    if (addFoodTrack.calories != 0 &&
-        addFoodTrack.carbs != 0 &&
-        addFoodTrack.protein != 0 &&
-        addFoodTrack.fat != 0 &&
-        addFoodTrack.grams != 0) {
+    bool isValid = _addFoodKey.currentState!.validate();
+    if (isValid) {
+      _addFoodKey.currentState!.save();
       return true;
     }
     return false;
+    // if (addFoodTrack.calories != 0 &&
+    //     addFoodTrack.carbs != 0 &&
+    //     addFoodTrack.protein != 0 &&
+    //     addFoodTrack.fat != 0 &&
+    //     addFoodTrack.grams != 0) {
+    //   return true;
+    // }
+    // return false;
   }
 
   _showFoodToAdd(BuildContext context) {
@@ -192,7 +198,13 @@ class _DayViewState extends State<DayViewScreen> {
       child: Column(children: [
         TextFormField(
           decoration: const InputDecoration(
-              labelText: "Name *", hintText: "Please enter food name"),
+            labelText: "Name *",
+            hintText: "Please enter food name",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter the food name";
@@ -206,8 +218,13 @@ class _DayViewState extends State<DayViewScreen> {
         ),
         TextFormField(
           decoration: const InputDecoration(
-              labelText: "Calories *",
-              hintText: "Please enter a calorie amount"),
+            labelText: "Calories *",
+            hintText: "Please enter a calorie amount",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter a calorie amount";
@@ -227,7 +244,13 @@ class _DayViewState extends State<DayViewScreen> {
         ),
         TextFormField(
           decoration: const InputDecoration(
-              labelText: "Carbs *", hintText: "Please enter a carbs amount"),
+            labelText: "Carbs *",
+            hintText: "Please enter a carbs amount",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter a carbs amount";
@@ -245,8 +268,13 @@ class _DayViewState extends State<DayViewScreen> {
         ),
         TextFormField(
           decoration: const InputDecoration(
-              labelText: "Protein *",
-              hintText: "Please enter a protein amount"),
+            labelText: "Protein *",
+            hintText: "Please enter a protein amount",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter a calorie amount";
@@ -263,7 +291,13 @@ class _DayViewState extends State<DayViewScreen> {
         ),
         TextFormField(
           decoration: const InputDecoration(
-              labelText: "Fat *", hintText: "Please enter a fat amount"),
+            labelText: "Fat *",
+            hintText: "Please enter a fat amount",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return "Please enter a fat amount";
@@ -279,11 +313,17 @@ class _DayViewState extends State<DayViewScreen> {
           },
         ),
         TextFormField(
-          decoration:
-              const InputDecoration(labelText: "Grams *", hintText: "eg. 100"),
+          decoration: const InputDecoration(
+            labelText: "Grams *",
+            hintText: "eg. 100",
+            errorStyle: TextStyle(color: Colors.red),
+            // errorBorder: OutlineInputBorder(
+            //   borderSide: BorderSide(color: Colors.red),
+            // ),
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Please enter a fat amount";
+              return "Please enter the amount of grams";
             }
             return null;
           },
@@ -433,7 +473,6 @@ class _DayViewState extends State<DayViewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   _backButton(),
-                  // _showDatePicker(),
                   _addFoodButton(),
                 ],
               ),
