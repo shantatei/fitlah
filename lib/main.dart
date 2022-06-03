@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitlah/screens/home.dart';
+import 'package:fitlah/screens/login_signup.dart';
 import 'package:fitlah/screens/profile.dart';
 import 'package:flutter/material.dart';
 
@@ -46,58 +47,59 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Fitlah")),
-      body: SizedBox.expand(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _currentIndex = index);
-          },
-          children: <Widget>[
-            Container(
-              child: Home(),
-            ),
-            Container(
-              color: Colors.red,
-            ),
-            Container(
-              color: Colors.green,
-            ),
-            Container(
-              child: Profile(),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavyBar(
-        selectedIndex: _currentIndex,
-        onItemSelected: (index) {
-          setState(() => _currentIndex = index);
-          _pageController.jumpToPage(index);
-        },
-        items: <BottomNavyBarItem>[
-          BottomNavyBarItem(
-            title: Text('Home'),
-            icon: Icon(Icons.home),
-            activeColor: Color.fromARGB(255, 250, 25, 209),
-          ),
-          BottomNavyBarItem(
-            title: Text('Item Two'),
-            icon: Icon(Icons.apps),
-            activeColor: Colors.red,
-          ),
-          BottomNavyBarItem(
-            title: Text('Item Three'),
-            icon: Icon(Icons.chat_bubble),
-            activeColor: Colors.green,
-          ),
-          BottomNavyBarItem(
-            title: Text('Profile'),
-            icon: Icon(Icons.settings),
-            activeColor: Colors.blue,
-          ),
-        ],
-      ),
+      // appBar: AppBar(title: Text("Fitlah")),
+      body: LoginSignupScreen(),
+      // body: SizedBox.expand(
+      //   child: PageView(
+      //     controller: _pageController,
+      //     onPageChanged: (index) {
+      //       setState(() => _currentIndex = index);
+      //     },
+      //     children: <Widget>[
+      //       Container(
+      //         child: Home(),
+      //       ),
+      //       Container(
+      //         child: LoginSignupScreen(),
+      //       ),
+      //       Container(
+      //         color: Colors.green,
+      //       ),
+      //       Container(
+      //         child: Profile(),
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      // bottomNavigationBar: BottomNavyBar(
+      //   selectedIndex: _currentIndex,
+      //   onItemSelected: (index) {
+      //     setState(() => _currentIndex = index);
+      //     _pageController.jumpToPage(index);
+      //   },
+      //   items: <BottomNavyBarItem>[
+      //     BottomNavyBarItem(
+      //       title: Text('Home'),
+      //       icon: Icon(Icons.home),
+      //       activeColor: Color.fromARGB(255, 250, 25, 209),
+      //     ),
+      //     BottomNavyBarItem(
+      //       title: Text('Item Two'),
+      //       icon: Icon(Icons.apps),
+      //       activeColor: Colors.red,
+      //     ),
+      //     BottomNavyBarItem(
+      //       title: Text('Item Three'),
+      //       icon: Icon(Icons.chat_bubble),
+      //       activeColor: Colors.green,
+      //     ),
+      //     BottomNavyBarItem(
+      //       title: Text('Profile'),
+      //       icon: Icon(Icons.settings),
+      //       activeColor: Colors.blue,
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
