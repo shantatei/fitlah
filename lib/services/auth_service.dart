@@ -11,11 +11,19 @@ class AuthService {
         .signInWithEmailAndPassword(email: email, password: password);
   }
 
+  Future<void> forgotPassword(email) {
+    return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
   Stream<User?> getAuthUser() {
     return FirebaseAuth.instance.authStateChanges();
   }
 
   logOut() {
     return FirebaseAuth.instance.signOut();
+  }
+
+  User? getCurrentUser() {
+    return FirebaseAuth.instance.currentUser;
   }
 }

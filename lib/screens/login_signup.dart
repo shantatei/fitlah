@@ -1,24 +1,93 @@
+import 'package:fitlah/screens/reset_password.dart';
+import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class LoginSignupScreen extends StatefulWidget {
+  static String routeName = '/auth';
   @override
   State<LoginSignupScreen> createState() => _LoginSignupScreenState();
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  String? email;
+  String? password;
+  String? confirmPassword;
+
+  AuthService authService = AuthService();
   var form = GlobalKey<FormState>();
   bool isMale = true;
   bool isSignupScreen = true;
   bool isRememberMe = false;
 
-  checkFormValid() {
+  // checkFormValid() {
+  //   bool isValid = form.currentState!.validate();
+  //   if (isValid) {
+  //     form.currentState!.save();
+  //     return true;
+  //   }
+  //   return false;
+  // }
+  register() {
     bool isValid = form.currentState!.validate();
+
     if (isValid) {
       form.currentState!.save();
-      return true;
+
+      if (password != confirmPassword) {
+        FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Password and Confirm Password does not match!'),
+        ));
+      }
+
+      AuthService authService = AuthService();
+
+      return authService.register(email, password).then((value) {
+        FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('User Registered successfully!'),
+        ));
+      }).catchError((error) {
+        FocusScope.of(context).unfocus();
+        String message = error.toString().contains('] ')
+            ? error.toString().split('] ')[1]
+            : 'An error has occurred.';
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      });
     }
-    return false;
+  }
+
+  login() {
+    bool isValid = form.currentState!.validate();
+
+    if (isValid) {
+      form.currentState!.save();
+
+      AuthService authService = AuthService();
+
+      return authService.login(email, password).then((value) {
+        FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Login successfully!'),
+        ));
+      }).catchError((error) {
+        FocusScope.of(context).unfocus();
+        String message = error.toString().contains('] ')
+            ? error.toString().split('] ')[1]
+            : 'An error has occurred.';
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      });
+    }
   }
 
   @override
@@ -190,7 +259,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(ResetPasswordScreen.routeName);
+                  },
                   child: Text(
                     "Forget Password",
                     style: TextStyle(fontSize: 12, color: Color(textColor1)),
@@ -208,9 +280,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       child: Form(
         key: form,
         child: Column(children: [
-          buildTextField(Icons.person, "Username", false, false),
+          // buildTextField(Icons.person, "Username", false, false),
           buildTextField(Icons.email, "Email", false, true),
           buildTextField(Icons.lock, "Password", true, false),
+          buildTextField(Icons.lock, "Confirm Password", true, false),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),
             child: Row(
@@ -336,10 +409,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         ]),
                     child: IconButton(
                       onPressed: () {
-                        if (checkFormValid()) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Validated Successfully'),
-                          ));
+                        if (isSignupScreen) {
+                          register();
+                        } else {
+                          login();
                         }
                       },
                       icon: const Icon(Icons.arrow_forward),
@@ -380,10 +453,38 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               borderRadius: BorderRadius.all(Radius.circular(35.0))),
         ),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return "Please enter a key ";
+          if (isPassword) {
+            if (value == null || value.isEmpty) {
+              return "Please provide a password ";
+            } else if (value.length < 6)
+              return 'Password must be at least 6 characters.';
+            else
+              return null;
+          } else if (isEmail) {
+            if (value == null || value.isEmpty) {
+              return "Please enter an email address ";
+            } else if (!value.contains('@'))
+              return "Please provide a valid email address.";
+            else
+              return null;
           }
-          return null;
+          // } else {
+          //   if (value == null || value.isEmpty) {
+          //     return "Please provide a password ";
+          //   } else if (value.length < 6)
+          //     return 'Password must be at least 6 characters.';
+          //   else
+          //     return null;
+          // }
+        },
+        onSaved: (value) {
+          if (isPassword) {
+            password = value;
+          } else if (isEmail) {
+            email = value;
+          } else {
+            confirmPassword = value;
+          }
         },
       ),
     );

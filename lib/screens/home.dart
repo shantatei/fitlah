@@ -1,4 +1,5 @@
 import 'package:fitlah/screens/day-view/day-view.dart';
+import 'package:fitlah/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -37,6 +38,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    AuthService authService = AuthService();
     final ButtonStyle buttonStyle =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
@@ -44,8 +46,8 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         body: new Column(
       children: <Widget>[
         new ListTile(
-            leading: const Icon(Icons.food_bank),
-            title: new Text("Welcome To Calorie Tracker App!",
+            title: new Text(
+                "Hello " + authService.getCurrentUser()!.email! + "!",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.bold))),
         new ElevatedButton(
