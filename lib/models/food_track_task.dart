@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 @JsonSerializable()
 class FoodTrackTask {
+  String email;
   String food_name;
   num calories;
   num carbs;
@@ -13,6 +14,7 @@ class FoodTrackTask {
   num grams;
 
   FoodTrackTask({
+    required this.email,
     required this.food_name,
     required this.calories,
     required this.carbs,
@@ -21,9 +23,10 @@ class FoodTrackTask {
     required this.mealTime,
     required this.createdOn,
     required this.grams,
-  }); 
+  });
 
   factory FoodTrackTask.fromSnapshot(DataSnapshot snap) => FoodTrackTask(
+      email: snap.child('email').value as String,
       food_name: snap.child('food_name').value as String,
       calories: snap.child('calories') as int,
       carbs: snap.child('carbs').value as int,
@@ -35,6 +38,7 @@ class FoodTrackTask {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'email': email,
       'mealTime': mealTime,
       'food_name': food_name,
       'calories': calories,
@@ -47,7 +51,8 @@ class FoodTrackTask {
   }
 
   FoodTrackTask.fromJson(Map<dynamic, dynamic> json)
-:       mealTime = json['mealTime'],
+      : email = json['email'],
+        mealTime = json['mealTime'],
         calories = json['calories'],
         createdOn = DateTime.parse(json['createdOn']),
         food_name = json['food_name'],
@@ -57,6 +62,7 @@ class FoodTrackTask {
         grams = json['grams'];
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
+        'email' : email,
         'mealTime': mealTime,
         'createdOn': createdOn.toString(),
         'food_name': food_name,

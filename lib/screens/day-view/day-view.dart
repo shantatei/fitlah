@@ -36,6 +36,7 @@ class _DayViewState extends State<DayViewScreen> {
   void initState() {
     super.initState();
     addFoodTrack = FoodTrackTask(
+        email: "",
         food_name: "",
         calories: 0,
         carbs: 0,
@@ -49,6 +50,7 @@ class _DayViewState extends State<DayViewScreen> {
 
   void resetFoodTrack() {
     addFoodTrack = FoodTrackTask(
+        email: "",
         food_name: "",
         calories: 0,
         carbs: 0,

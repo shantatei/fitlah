@@ -1,4 +1,6 @@
 import 'package:fitlah/services/auth_service.dart';
+import 'package:fitlah/utils/theme_colors.dart';
+import 'package:fitlah/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -41,38 +43,66 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       appBar: AppBar(
         title: Text('Fitlah'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          key: form,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(label: Text('Email')),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null)
-                    return "Please provide an email address.";
-                  else if (!value.contains('@'))
-                    return "Please provide a valid email address.";
-                  else
-                    return null;
-                },
-                onSaved: (value) {
-                  email = value;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                  onPressed: () {
-                    reset();
+      body: Padding(
+        padding: kDefaultPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 200,
+            ),
+            Text(
+              'Reset Password',
+              style: titleText,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Text(
+              'Please enter your email address',
+              style: subTitle.copyWith(fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Form(
+              key: form,
+              child: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                      hintText: 'Email',
+                      hintStyle: TextStyle(color: kTextFieldColor),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: kPrimaryColor))),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null)
+                      return "Please provide an email address.";
+                    else if (!value.contains('@'))
+                      return "Please provide a valid email address.";
+                    else
+                      return null;
                   },
-                  child: Text('Reset Password')),
-            ],
-          ),
+                  onSaved: (value) {
+                    email = value;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            GestureDetector(
+                onTap: () {
+                  reset();
+                },
+                child: PrimaryButton(buttonText: 'Reset Password'))
+          ],
         ),
       ),
     );
   }
 }
+
+

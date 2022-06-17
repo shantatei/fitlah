@@ -3,7 +3,10 @@ import 'package:fitlah/models/food_track_task.dart';
 import 'dart:async';
 import 'dart:io';
 
+import 'package:fitlah/services/auth_service.dart';
+
 class DatabaseService {
+  AuthService authService = AuthService();
   final String uid;
   final DateTime currentDate;
   DatabaseService({required this.uid, required this.currentDate});
@@ -20,6 +23,7 @@ class DatabaseService {
     return await foodTrackCollection
         .doc(food.createdOn.millisecondsSinceEpoch.toString())
         .set({
+      'email': authService.getCurrentUser()!.email,
       'food_name': food.food_name,
       'calories': food.calories,
       'carbs': food.carbs,
@@ -61,6 +65,7 @@ class DatabaseService {
   List<FoodTrackTask> _foodTrackListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return FoodTrackTask(
+        email: doc['email'] ?? '',
         food_name: doc['food_name'] ?? '',
         calories: doc['calories'] ?? 0,
         carbs: doc['carbs'] ?? 0,
@@ -75,38 +80,22 @@ class DatabaseService {
 
   //converted to list
   Stream<List<FoodTrackTask>> get foodTracks {
-    return foodTrackCollection.snapshots().map(_foodTrackListFromSnapshot);
+    return foodTrackCollection
+        .where('email', isEqualTo: authService.getCurrentUser()!.email)
+        .snapshots()
+        .map(_foodTrackListFromSnapshot);
   }
 
   //get all food track reccords in a database
-  Future<List<dynamic>> getAllFoodTrackData() async {
-    QuerySnapshot snapshot = await foodTrackCollection.get();
-    List<dynamic> result = snapshot.docs.map((doc) => doc.data()).toList();
-    return result;
-  }
+  // Future<List<dynamic>> getAllFoodTrackData() async {
+  //   QuerySnapshot snapshot = await foodTrackCollection.get();
+  //   List<dynamic> result = snapshot.docs.map((doc) => doc.data()).toList();
+  //   return result;
+  // }
 
   //getting a specific food track record using uid
   Future<String> getFoodTrackData(String uid) async {
     DocumentSnapshot snapshot = await foodTrackCollection.doc(uid).get();
     return snapshot.toString();
-  }
-
-  //for testing only
-  Future<FoodTrackTask> loadFoodTrackEntryToDatabase() async {
-    try {
-      Future.delayed(Duration(seconds: 2));
-      return FoodTrackTask(
-          food_name: "Oatmeal",
-          calories: 20,
-          carbs: 20,
-          protein: 20,
-          fat: 20,
-          mealTime: "Lunch",
-          createdOn: DateTime.now(),
-          grams: 20);
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
   }
 }

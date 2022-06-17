@@ -20,14 +20,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   bool isSignupScreen = true;
   bool isRememberMe = false;
 
-  // checkFormValid() {
-  //   bool isValid = form.currentState!.validate();
-  //   if (isValid) {
-  //     form.currentState!.save();
-  //     return true;
-  //   }
-  //   return false;
-  // }
   register() {
     bool isValid = form.currentState!.validate();
 
@@ -38,28 +30,30 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
           content: Text('Password and Confirm Password does not match!'),
         ));
+      } else {
+        AuthService authService = AuthService();
+
+        return authService.register(email, password).then((value) {
+          FocusScope.of(context).unfocus();
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('User Registered successfully!'),
+          ));
+        }).catchError((error) {
+          FocusScope.of(context).unfocus();
+          String message = error.toString().contains('] ')
+              ? error.toString().split('] ')[1]
+              : 'An error has occurred.';
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(message),
+          ));
+        });
       }
-
-      AuthService authService = AuthService();
-
-      return authService.register(email, password).then((value) {
-        FocusScope.of(context).unfocus();
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('User Registered successfully!'),
-        ));
-      }).catchError((error) {
-        FocusScope.of(context).unfocus();
-        String message = error.toString().contains('] ')
-            ? error.toString().split('] ')[1]
-            : 'An error has occurred.';
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(message),
-        ));
-      });
     }
   }
 
@@ -75,6 +69,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
           content: Text('Login successfully!'),
         ));
       }).catchError((error) {
@@ -87,7 +82,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           content: Text(message),
         ));
       });
+      // } else {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(backgroundColor: Colors.red, content: Text('Login Failed')));
+      // }
     }
+  }
+
+  void _resetForm() {
+    form.currentState?.reset();
   }
 
   @override
@@ -108,7 +111,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       fit: BoxFit.fill)),
               child: Container(
                 padding: EdgeInsets.only(top: 90, left: 20),
-                color: Color(0xFF3b5999).withOpacity(.85),
+                color: Colors.transparent.withOpacity(.85),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -118,7 +121,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           style: TextStyle(
                             fontSize: 25,
                             letterSpacing: 2,
-                            color: Colors.yellow[700],
+                            color: Colors.white,
                           ),
                           children: [
                             TextSpan(
@@ -126,7 +129,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.yellow[700],
+                                color: Colors.white,
                               ),
                             )
                           ]),
@@ -154,7 +157,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           AnimatedPositioned(
               duration: Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
-              top: isSignupScreen ? 200 : 230,
+              top: isSignupScreen ? 310 : 340,
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 700),
                 curve: Curves.bounceInOut,
@@ -182,6 +185,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               setState(() {
                                 isSignupScreen = false;
                               });
+                              _resetForm();
                             },
                             child: Column(
                               children: [
@@ -208,6 +212,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             onTap: () {
                               setState(() {
                                 isSignupScreen = true;
+                                _resetForm();
                               });
                             },
                             child: Column(
@@ -254,8 +259,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         key: form,
         child: Column(
           children: [
-            buildTextField(Icons.email, "example@gmail.com", false, true),
-            buildTextField(Icons.lock, "*********", true, false),
+            buildTextField(
+                Icons.email, "example@gmail.com", false, true, false),
+            buildTextField(Icons.lock, "*********", true, false, false),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -281,9 +287,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         key: form,
         child: Column(children: [
           // buildTextField(Icons.person, "Username", false, false),
-          buildTextField(Icons.email, "Email", false, true),
-          buildTextField(Icons.lock, "Password", true, false),
-          buildTextField(Icons.lock, "Confirm Password", true, false),
+          buildTextField(Icons.email, "Email", false, true, false),
+          buildTextField(Icons.lock, "Password", true, false, false),
+          buildTextField(Icons.lock, "Confirm Password", false, false, true),
           Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),
             child: Row(
@@ -372,7 +378,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return AnimatedPositioned(
         duration: Duration(milliseconds: 700),
         curve: Curves.bounceInOut,
-        top: isSignupScreen ? 535 : 470,
+        top: isSignupScreen ? 645 : 580,
         right: 0,
         left: 0,
         child: Center(
@@ -424,12 +430,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ));
   }
 
-  Widget buildTextField(
-      IconData icon, String hintText, bool isPassword, bool isEmail) {
+  Widget buildTextField(IconData icon, String hintText, bool isPassword,
+      bool isEmail, bool isConfirmPassword) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: TextFormField(
-        obscureText: isPassword,
+        obscureText: isPassword || isConfirmPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
           prefixIcon: Icon(
@@ -467,6 +473,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               return "Please provide a valid email address.";
             else
               return null;
+          } else if (isConfirmPassword) {
+            if (value == null || value.isEmpty) {
+              return "Please provide a password ";
+            } else if (value.length < 6)
+              return 'Password must be at least 6 characters.';
+            else
+              return null;
           }
           // } else {
           //   if (value == null || value.isEmpty) {
@@ -482,7 +495,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             password = value;
           } else if (isEmail) {
             email = value;
-          } else {
+          } else if (isConfirmPassword) {
             confirmPassword = value;
           }
         },
