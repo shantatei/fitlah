@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 const CARBS_COLOR = 0xffD83027;
 const PROTEIN_COLOR = 0x9027D830;
@@ -14,7 +15,10 @@ const kDarkGreyColor = Color(0xFFA8A8A8);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kZambeziColor = Color(0xFF5B5B5B);
 const kBlackColor = Color(0xFF272726);
+const kLightColor = Color(0xffc4bbcc);
 const kTextFieldColor = Color(0xFF979797);
+const kBackgroundColor = Color(0xffF3F3F3);
+const themeColor = Color.fromARGB(255, 15, 3, 226);
 
 const kDefaultPadding = EdgeInsets.symmetric(horizontal: 30);
 
@@ -27,3 +31,22 @@ TextStyle textButton = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.w700,
 );
+
+class CustomTextStyle {
+  static const dayTabBarStyleInactive = TextStyle(
+    color: kTextFieldColor,
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
+
+  static const dayTabBarStyleActive = TextStyle(
+    color: themeColor,
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
+  static const metricTextStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 25,
+  );
+}

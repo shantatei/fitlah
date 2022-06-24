@@ -1,12 +1,16 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fitlah/screens/explore.dart';
 import 'package:fitlah/screens/home.dart';
 import 'package:fitlah/screens/login_signup.dart';
 import 'package:fitlah/screens/profile.dart';
+import 'package:fitlah/screens/record.dart';
 import 'package:fitlah/screens/reset_password.dart';
 import 'package:fitlah/services/auth_service.dart';
+import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,9 +91,18 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fitlah"),
+        backgroundColor: Colors.white,
+        title: Text(
+          "Fitlah",
+          style: TextStyle(color: themeColor),
+        ),
         actions: [
-          IconButton(onPressed: () => logOut(), icon: Icon(Icons.logout))
+          IconButton(
+              onPressed: () => logOut(),
+              icon: Icon(
+                Icons.logout,
+                color: themeColor,
+              ))
         ],
       ),
       body: SizedBox.expand(
@@ -103,10 +116,10 @@ class _MainScreenState extends State<MainScreen> {
               child: Home(),
             ),
             Container(
-              color: Colors.red,
+              child: Record(),
             ),
             Container(
-              color: Colors.green,
+              child: Explore(),
             ),
             Container(
               child: Profile(),
@@ -124,22 +137,22 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavyBarItem(
             title: Text('Home'),
             icon: Icon(Icons.home),
-            activeColor: Color.fromARGB(255, 250, 25, 209),
+            activeColor: Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: Text('Item Two'),
-            icon: Icon(Icons.apps),
-            activeColor: Colors.red,
+            title: Text('Record'),
+            icon: FaIcon(FontAwesomeIcons.recordVinyl),
+            activeColor: Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: Text('Item Three'),
-            icon: Icon(Icons.chat_bubble),
-            activeColor: Colors.green,
+            title: Text('Explore'),
+            icon: Icon(Icons.explore),
+            activeColor: Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
             title: Text('Profile'),
-            icon: Icon(Icons.settings),
-            activeColor: Colors.blue,
+            icon: FaIcon(FontAwesomeIcons.user),
+            activeColor: Color.fromARGB(255, 15, 3, 226),
           ),
         ],
       ),

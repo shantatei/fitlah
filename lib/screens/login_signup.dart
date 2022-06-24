@@ -11,6 +11,7 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String? email;
+  String? username;
   String? password;
   String? confirmPassword;
 
@@ -286,7 +287,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       child: Form(
         key: form,
         child: Column(children: [
-          // buildTextField(Icons.person, "Username", false, false),
+          // buildTextField(Icons.person, "Username", false, false, false),
           buildTextField(Icons.email, "Email", false, true, false),
           buildTextField(Icons.lock, "Password", true, false, false),
           buildTextField(Icons.lock, "Confirm Password", false, false, true),
@@ -480,15 +481,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               return 'Password must be at least 6 characters.';
             else
               return null;
+          } else {
+            if (value == null || value.isEmpty) {
+              return "Please enter your username";
+            } else if (value.length < 6)
+              return 'Username must be at least 6 characters';
+            else
+              return null;
           }
-          // } else {
-          //   if (value == null || value.isEmpty) {
-          //     return "Please provide a password ";
-          //   } else if (value.length < 6)
-          //     return 'Password must be at least 6 characters.';
-          //   else
-          //     return null;
-          // }
         },
         onSaved: (value) {
           if (isPassword) {
@@ -497,6 +497,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             email = value;
           } else if (isConfirmPassword) {
             confirmPassword = value;
+          } else {
+            username = value;
           }
         },
       ),
