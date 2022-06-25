@@ -4,11 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 
-class CalorieStats extends StatelessWidget {
-
+class CalorieStatsSimplified extends StatelessWidget {
   DateTime datePicked;
   DateTime today = DateTime.now();
-  CalorieStats({required this.datePicked});
+  CalorieStatsSimplified({required this.datePicked});
 
   num totalCalories = 0;
   num totalCarbs = 0;
@@ -16,9 +15,7 @@ class CalorieStats extends StatelessWidget {
   num totalProtein = 0;
   num displayCalories = 0;
 
-
   bool dateCheck() {
-
     DateTime formatPicked =
         DateTime(datePicked.year, datePicked.month, datePicked.day);
     DateTime formatToday = DateTime(today.year, today.month, today.day);
@@ -27,9 +24,7 @@ class CalorieStats extends StatelessWidget {
     } else {
       return false;
     }
-
   }
-  
 
   static List<num> macroData = [];
 
@@ -107,7 +102,7 @@ class CalorieStats extends StatelessWidget {
 
     Widget _chartLabels() {
       return Padding(
-        padding: EdgeInsets.only(top: 78.0),
+        padding: EdgeInsets.only(left: 15, top: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -134,7 +129,7 @@ class CalorieStats extends StatelessWidget {
               children: <Widget>[
                 Text('Protein ',
                     style: TextStyle(
-                      color: Color(0xffFA8925),
+                      color: Color(PROTEIN_COLOR),
                       fontFamily: 'Open Sans',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -153,7 +148,7 @@ class CalorieStats extends StatelessWidget {
               children: <Widget>[
                 Text('Fat ',
                     style: TextStyle(
-                      color: Color(0xff01B4BC),
+                      color: Color(FAT_COLOR),
                       fontFamily: 'Open Sans',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
@@ -210,7 +205,7 @@ class CalorieStats extends StatelessWidget {
           child: Text('Add food to see calorie breakdown.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 40.0,
+                fontSize: 20,
                 fontWeight: FontWeight.w500,
               )),
         );
@@ -220,13 +215,18 @@ class CalorieStats extends StatelessWidget {
           child: Text('No food added on this day.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 40.0,
+                fontSize: 20,
                 fontWeight: FontWeight.w500,
               )),
         );
       }
     } else {
       return Container(
+        height: 160,
+        width: 300,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         child: Row(
           children: <Widget>[
             Stack(alignment: Alignment.center, children: <Widget>[
@@ -236,7 +236,7 @@ class CalorieStats extends StatelessWidget {
                   PieChartData(
                     sections: _sections,
                     borderData: FlBorderData(show: false),
-                    centerSpaceRadius: 40,
+                    centerSpaceRadius: 15,
                     sectionsSpace: 3,
                   ),
                 ),

@@ -509,7 +509,9 @@ class _DayViewState extends State<DayViewScreen> {
               ],
             ))
           ]),
-        ));
+        )
+        
+        );
   }
 }
 
