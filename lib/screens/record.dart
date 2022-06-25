@@ -15,8 +15,6 @@ class _RecordState extends State<Record> {
     zoom: 11.5,
   );
 
-  // late final GoogleMapController _googleMapController;
-
   Completer<GoogleMapController> _googleMapController = Completer();
 
   static final Marker _initialMarker = Marker(
@@ -52,12 +50,6 @@ class _RecordState extends State<Record> {
       strokeWidth: 2,
       fillColor: Colors.transparent);
 
-  // @override
-  // void dispose() {
-  //   _googleMapController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +72,6 @@ class _RecordState extends State<Record> {
                   },
                   polygons: {_kPolygon},
                   initialCameraPosition: _initialCameraPosition,
-                  // onMapCreated: (controller) =>
-                  //     _googleMapController = controller,
                   onMapCreated: (GoogleMapController controller) {
                     _googleMapController.complete(controller);
                   },

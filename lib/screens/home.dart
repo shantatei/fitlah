@@ -74,7 +74,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
               ],
             ),
             _showDatePicker(),
-            // _calorieCounter(),
             InkWell(
               onTap: () {
                 onClickDayViewScreenButton(context);
@@ -195,23 +194,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                             )
                           ]),
                         )),
-                    // Positioned(
-                    //   top: 150,
-                    //   left: 20,
-                    //   child: Container(
-                    //     child: Row(children: [
-                    //       Text(
-                    //         "1200",
-                    //         style: CustomTextStyle.metricTextStyle,
-                    //       ),
-                    //       Text(
-                    //         " " + "kcal",
-                    //         style: TextStyle(
-                    //             color: kBlackColor, fontWeight: FontWeight.w600),
-                    //       )
-                    //     ]),
-                    //   ),
-                    // ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -367,28 +349,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
     } else {
       return "${tm.day} $month ${tm.year}";
     }
-  }
-
-  Widget _calorieCounter() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-      child: new Container(
-        // decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     border: Border(
-        //         bottom: BorderSide(
-        //       color: Colors.grey.withOpacity(0.5),
-        //       width: 1.5,
-        //     ))),
-        height: 100,
-        width: 236,
-        child: Row(
-          children: <Widget>[
-            CalorieStatsSimplified(datePicked: _value),
-          ],
-        ),
-      ),
-    );
   }
 }
 
