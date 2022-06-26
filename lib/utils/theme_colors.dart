@@ -49,4 +49,10 @@ class CustomTextStyle {
     fontWeight: FontWeight.bold,
     fontSize: 25,
   );
+
+  static const metricTextStyle2 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
 }

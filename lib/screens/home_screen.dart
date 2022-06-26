@@ -1,7 +1,7 @@
 import 'package:fitlah/models/food_track_task.dart';
-import 'package:fitlah/screens/day-view/calorie-stats-simplified.dart';
-import 'package:fitlah/screens/day-view/calorie-stats.dart';
-import 'package:fitlah/screens/day-view/day-view.dart';
+import 'package:fitlah/widgets/calorie-stats-simplified_widget.dart';
+import 'package:fitlah/screens/day-view_screen.dart';
+import 'package:fitlah/screens/water_intake_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/services/database.dart';
 import 'package:fitlah/utils/constants.dart';
@@ -33,6 +33,11 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         .push(MaterialPageRoute(builder: (context) => DayViewScreen()));
   }
 
+  onClickWaterIntakeScreenButton(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => WaterIntake()));
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthService authService = AuthService();
@@ -48,36 +53,43 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
       child: SingleChildScrollView(
         child: new Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Welcome to ",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 30),
-                ),
-                Text(
-                  "FITLAH",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: themeColor),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.only(left: 8, top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Welcome to ",
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 30),
+                  ),
+                  Text(
+                    "FITLAH",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: themeColor),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Shanta Tei",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 25),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Shanta Tei",
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 25),
+                  ),
+                ],
+              ),
             ),
             _showDatePicker(),
+            //Running Card
             InkWell(
-              onTap: () {
-                onClickDayViewScreenButton(context);
-              },
+              onTap: () {},
               child: Container(
                 height: 200,
                 width: 350,
@@ -105,12 +117,10 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                               children: [
                                 Text(
                                   "RUNNING",
-                                  style: TextStyle(
-                                      color: kBlackColor,
-                                      fontWeight: FontWeight.w600),
+                                  style: CustomTextStyle.metricTextStyle2,
                                 ),
                                 Text(
-                                  "2500",
+                                  "2500" + "m",
                                   style: CustomTextStyle.metricTextStyle,
                                 )
                               ],
@@ -128,9 +138,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                           ),
                           Text(
                             " " + "m",
-                            style: TextStyle(
-                                color: kBlackColor,
-                                fontWeight: FontWeight.w600),
+                            style: CustomTextStyle.metricTextStyle2,
                           )
                         ]),
                       ),
@@ -154,6 +162,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
+            //Calories Card
             InkWell(
               onTap: () {
                 onClickDayViewScreenButton(context);
@@ -185,9 +194,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                               children: [
                                 Text(
                                   "CALORIES",
-                                  style: TextStyle(
-                                      color: kBlackColor,
-                                      fontWeight: FontWeight.w600),
+                                  style: CustomTextStyle.metricTextStyle2,
                                 ),
                                 TotalCalories(datePicked: _value)
                               ],
@@ -199,6 +206,83 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20, top: 40),
                         child: CalorieStatsSimplified(datePicked: _value),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            //Water Intake Card
+            InkWell(
+              onTap: () {
+                onClickWaterIntakeScreenButton(context);
+              },
+              child: Container(
+                height: 200,
+                width: 350,
+                margin: EdgeInsets.only(bottom: 8, top: 8),
+                decoration: BoxDecoration(
+                    color: themeColor,
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Stack(
+                  children: [
+                    Positioned(
+                        top: 20,
+                        left: 20,
+                        child: Container(
+                          child: Row(children: [
+                            FaIcon(
+                              FontAwesomeIcons.glassWater,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Water Intake",
+                                  style: CustomTextStyle.metricTextStyle2,
+                                ),
+                                Text(
+                                  "240" + "ml",
+                                  style: CustomTextStyle.metricTextStyle,
+                                )
+                              ],
+                            )
+                          ]),
+                        )),
+                    Positioned(
+                      top: 150,
+                      left: 20,
+                      child: Container(
+                        child: Row(children: [
+                          Text(
+                            "2000",
+                            style: CustomTextStyle.metricTextStyle,
+                          ),
+                          Text(
+                            " " + "ml",
+                            style: CustomTextStyle.metricTextStyle2,
+                          )
+                        ]),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 10,
+                        width: 260,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: LinearProgressIndicator(
+                            value: 0.6,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                            backgroundColor: kLightColor.withOpacity(0.2),
+                          ),
+                        ),
                       ),
                     )
                   ],
@@ -392,7 +476,7 @@ class TotalCalories extends StatelessWidget {
     displayCalories = 0;
 
     return Text(
-      macroData[0].toStringAsFixed(0),
+      macroData[0].toStringAsFixed(0) + "kcal",
       style: CustomTextStyle.metricTextStyle,
     );
   }

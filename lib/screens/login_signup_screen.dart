@@ -1,4 +1,4 @@
-import 'package:fitlah/screens/reset_password.dart';
+import 'package:fitlah/screens/reset_password_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';

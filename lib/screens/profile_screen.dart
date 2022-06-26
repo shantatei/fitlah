@@ -1,4 +1,4 @@
-import 'package:fitlah/screens/edit_profile.dart';
+import 'package:fitlah/screens/edit_profile_screen.dart';
 import 'package:fitlah/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 

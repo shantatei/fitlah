@@ -1,6 +1,6 @@
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
-import 'package:fitlah/widgets/primary_button.dart';
+import 'package:fitlah/widgets/primary_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
