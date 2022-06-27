@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/all_water_intake.dart';
+
 class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +42,9 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    AuthService authService = AuthService();
+    AllWaterIntake waterintakeList = Provider.of<AllWaterIntake>(context);
+
+    // AuthService authService = AuthService();
 
     final ButtonStyle buttonStyle =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
@@ -204,7 +208,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 20, top: 40),
+                        padding: EdgeInsets.only(left: 20, top: 50),
                         child: CalorieStatsSimplified(datePicked: _value),
                       ),
                     )
@@ -247,7 +251,10 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                                   style: CustomTextStyle.metricTextStyle2,
                                 ),
                                 Text(
-                                  "240" + "ml",
+                                  waterintakeList
+                                          .getTotalWater()
+                                          .toStringAsFixed(0) +
+                                      "ml",
                                   style: CustomTextStyle.metricTextStyle,
                                 )
                               ],

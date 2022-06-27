@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -70,7 +69,7 @@ class _RecordState extends State<Record> {
                   polylines: {
                     _kPolyline,
                   },
-                  polygons: {_kPolygon},
+                  // polygons: {_kPolygon},
                   initialCameraPosition: _initialCameraPosition,
                   onMapCreated: (GoogleMapController controller) {
                     _googleMapController.complete(controller);

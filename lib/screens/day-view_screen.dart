@@ -943,14 +943,17 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
               fontWeight: FontWeight.w400,
             )),
         IconButton(
-            icon: Icon(Icons.edit),
+            icon: Icon(Icons.edit, color: Colors.black),
             iconSize: 16,
             onPressed: () async {
               _editFoodToAdd(context);
               print("Edit button pressed");
             }),
         IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
             iconSize: 16,
             onPressed: () async {
               print("Delete button pressed");
@@ -1064,6 +1067,4 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       ),
     );
   }
-
-  // void setState(Null Function() param0) {}
 }

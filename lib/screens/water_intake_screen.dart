@@ -1,8 +1,10 @@
 import 'package:fitlah/models/water_intake_task.dart';
+import 'package:fitlah/providers/all_water_intake.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:fitlah/widgets/waterintake_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class WaterIntake extends StatefulWidget {
   @override
@@ -15,10 +17,31 @@ class _WaterIntakeState extends State<WaterIntake> {
   double? waterintake;
   DateTime? createdon;
 
-  List<WaterIntakeTask> myWaterIntakeTask = [];
+  void addWater(AllWaterIntake intakeList) {
+    bool isValid = form.currentState!.validate();
+    if (isValid) {
+      form.currentState!.save();
+
+      createdon = DateTime.now();
+
+      intakeList.addWaterIntake(waterintake, createdon);
+      // Hide the keyboard
+      FocusScope.of(context).unfocus();
+      // Resets the form
+      form.currentState!.reset();
+      // Shows a SnackBar
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Water intake added successfully!'),
+      ));
+    }
+  }
+
+  // List<WaterIntakeTask> myWaterIntakeTask = [];
 
   @override
   Widget build(BuildContext context) {
+    AllWaterIntake waterintakeList = Provider.of<AllWaterIntake>(context);
+
     Widget _backButton() {
       return IconButton(
         icon: Icon(Icons.arrow_back_ios),
@@ -28,63 +51,6 @@ class _WaterIntakeState extends State<WaterIntake> {
           Navigator.of(context).pop();
         },
       );
-    }
-
-    Widget _addWaterButton() {
-      return IconButton(
-        icon: Icon(Icons.add_box),
-        iconSize: 25,
-        color: Colors.white,
-        onPressed: () async {},
-      );
-    }
-
-    addWater() {
-      bool isValid = form.currentState!.validate();
-      if (isValid) {
-        form.currentState!.save();
-        print(waterintake);
-
-        createdon = DateTime.now().toUtc();
-
-        myWaterIntakeTask.insert(
-            0, WaterIntakeTask(water: waterintake!, createdon: createdon!));
-        // Hide the keyboard
-        FocusScope.of(context).unfocus();
-        // Resets the form
-        form.currentState!.reset();
-        // Shows a SnackBar
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Water intake added successfully!'),
-        ));
-      }
-    }
-
-    // ignore: unused_element
-    void removeItem(i) {
-      showDialog<Null>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Confirmation'),
-              content: Text('Are you sure you want to delete?'),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      setState(() {
-                        myWaterIntakeTask.removeAt(i);
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Yes')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('No')),
-              ],
-            );
-          });
     }
 
     return Scaffold(
@@ -163,14 +129,16 @@ class _WaterIntakeState extends State<WaterIntake> {
             ),
           ),
           OutlinedButton(
-            onPressed: addWater,
+            onPressed: () {
+              addWater(waterintakeList);
+            },
             child: Text("Add Glasses"),
           ),
           Expanded(
-              child: myWaterIntakeTask.length > 0
+              child: waterintakeList.getMyWaterIntake().length > 0
                   ? Container(
                       height: 200,
-                      child: WaterintakeList(myWaterIntakeTask, removeItem),
+                      child: WaterintakeList(),
                     )
                   : Column(
                       children: [

@@ -1,6 +1,7 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fitlah/providers/all_water_intake.dart';
 import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home_screen.dart';
 import 'package:fitlah/screens/login_signup_screen.dart';
@@ -11,6 +12,7 @@ import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,28 +25,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-        stream: authService.getAuthUser(),
-        builder: (context, snapshot) {
-          return MaterialApp(
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              home: snapshot.connectionState == ConnectionState.waiting
-                  ? Center(child: CircularProgressIndicator())
-                  : snapshot.hasData
-                      ? MainScreen()
-                      : LoginSignupScreen(),
-              routes: {
-                LoginSignupScreen.routeName: (_) {
-                  return LoginSignupScreen();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AllWaterIntake>(
+            create: (ctx) => AllWaterIntake())
+      ],
+      child: StreamBuilder<User?>(
+          stream: authService.getAuthUser(),
+          builder: (context, snapshot) {
+            return MaterialApp(
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                home: snapshot.connectionState == ConnectionState.waiting
+                    ? Center(child: CircularProgressIndicator())
+                    : snapshot.hasData
+                        ? MainScreen()
+                        : LoginSignupScreen(),
+                routes: {
+                  LoginSignupScreen.routeName: (_) {
+                    return LoginSignupScreen();
+                  },
+                  ResetPasswordScreen.routeName: (_) {
+                    return ResetPasswordScreen();
+                  },
                 },
-                ResetPasswordScreen.routeName: (_) {
-                  return ResetPasswordScreen();
-                },
-              },
-              debugShowCheckedModeBanner: false);
-        });
+                debugShowCheckedModeBanner: false);
+          }),
+    );
   }
 }
 
