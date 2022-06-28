@@ -1,8 +1,8 @@
 import 'package:fitlah/models/food_track_task.dart';
+import 'package:fitlah/providers/goals_provider.dart';
 import 'package:fitlah/widgets/calorie-stats-simplified_widget.dart';
 import 'package:fitlah/screens/day-view_screen.dart';
 import 'package:fitlah/screens/water_intake_screen.dart';
-import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/services/database.dart';
 import 'package:fitlah/utils/constants.dart';
 import 'package:fitlah/utils/theme_colors.dart';
@@ -44,7 +44,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     AllWaterIntake waterintakeList = Provider.of<AllWaterIntake>(context);
 
-    // AuthService authService = AuthService();
+    GoalsProvider goalsList = Provider.of<GoalsProvider>(context);
 
     final ButtonStyle buttonStyle =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
@@ -137,7 +137,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                       child: Container(
                         child: Row(children: [
                           Text(
-                            "4000",
+                            goalsList.getStepsGoals().toStringAsFixed(0),
                             style: CustomTextStyle.metricTextStyle,
                           ),
                           Text(
@@ -155,7 +155,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: LinearProgressIndicator(
-                            value: 0.6,
+                            value: 2500 / goalsList.getStepsGoals(),
                             valueColor: AlwaysStoppedAnimation(Colors.white),
                             backgroundColor: kLightColor.withOpacity(0.2),
                           ),
@@ -205,13 +205,32 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                             )
                           ]),
                         )),
+                    //Chart
+
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
                         padding: EdgeInsets.only(left: 20, top: 50),
                         child: CalorieStatsSimplified(datePicked: _value),
                       ),
-                    )
+                    ),
+
+                    //Progress Bar
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: Container(
+                    //     height: 10,
+                    //     width: 260,
+                    //     child: ClipRRect(
+                    //       borderRadius: BorderRadius.circular(10.0),
+                    //       child: LinearProgressIndicator(
+                    //         value: 100 / 2000,
+                    //         valueColor: AlwaysStoppedAnimation(Colors.white),
+                    //         backgroundColor: kLightColor.withOpacity(0.2),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -267,7 +286,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                       child: Container(
                         child: Row(children: [
                           Text(
-                            "2000",
+                            goalsList.getWaterIntakeGoals().toStringAsFixed(0),
                             style: CustomTextStyle.metricTextStyle,
                           ),
                           Text(
@@ -285,7 +304,8 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: LinearProgressIndicator(
-                            value: 0.6,
+                            value: waterintakeList.getTotalWater() /
+                                goalsList.getWaterIntakeGoals(),
                             valueColor: AlwaysStoppedAnimation(Colors.white),
                             backgroundColor: kLightColor.withOpacity(0.2),
                           ),

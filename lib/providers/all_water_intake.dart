@@ -23,8 +23,9 @@ class AllWaterIntake with ChangeNotifier {
     notifyListeners();
   }
 
-  getSpecificWaterIntake(i) {
-    return myWaterIntake[i];
+  void editWaterIntake(double newWater, int index) {
+    myWaterIntake[index].water = newWater;
+    notifyListeners();
   }
 
   double getTotalWater() {

@@ -23,7 +23,7 @@ class _WaterIntakeState extends State<WaterIntake> {
       form.currentState!.save();
 
       createdon = DateTime.now();
-
+      
       intakeList.addWaterIntake(waterintake, createdon);
       // Hide the keyboard
       FocusScope.of(context).unfocus();
@@ -70,17 +70,18 @@ class _WaterIntakeState extends State<WaterIntake> {
           )),
       body: Column(
         children: [
+          
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FaIcon(FontAwesomeIcons.minusCircle),
+                // FaIcon(FontAwesomeIcons.minusCircle),
                 Image.asset(
                   'images/water_bottle.png',
                   width: 150,
                 ),
-                FaIcon(FontAwesomeIcons.plusCircle)
+                // FaIcon(FontAwesomeIcons.plusCircle)
               ],
             ),
           ),
@@ -121,18 +122,26 @@ class _WaterIntakeState extends State<WaterIntake> {
                   ),
                 ),
               )),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              "1x Glass 240ml",
-              style: CustomTextStyle.metricTextStyle2,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 8.0),
+          //   child: Text(
+          //     "1x Glass 240ml",
+          //     style: CustomTextStyle.metricTextStyle2,
+          //   ),
+          // ),
           OutlinedButton(
+            style: OutlinedButton.styleFrom(backgroundColor: themeColor),
             onPressed: () {
               addWater(waterintakeList);
             },
-            child: Text("Add Glasses"),
+            child: Text(
+              "Add Glasses",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
           ),
           Expanded(
               child: waterintakeList.getMyWaterIntake().length > 0

@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitlah/providers/all_water_intake.dart';
+import 'package:fitlah/providers/goals_provider.dart';
 import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home_screen.dart';
 import 'package:fitlah/screens/login_signup_screen.dart';
@@ -28,7 +29,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AllWaterIntake>(
-            create: (ctx) => AllWaterIntake())
+          create: (ctx) => AllWaterIntake(),
+        ),
+        ChangeNotifierProvider<GoalsProvider>(
+          create: (ctx) => GoalsProvider(),
+        )
       ],
       child: StreamBuilder<User?>(
           stream: authService.getAuthUser(),
