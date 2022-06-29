@@ -85,6 +85,8 @@ class _WaterIntakeState extends State<WaterIntake> {
                   width: 200,
                   child: TextFormField(
                     decoration: InputDecoration(
+                      labelText: "Water Intake (ml)",
+                      hintText: "Please enter your Water Intake",
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                         // borderRadius: BorderRadius.all(Radius.circular(35.0)),

@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../providers/all_water_intake.dart';
 
 class WaterintakeList extends StatefulWidget {
-  
   @override
   State<WaterintakeList> createState() => _WaterintakeListState();
 }
@@ -128,13 +127,9 @@ class _WaterintakeListState extends State<WaterintakeList> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 OutlinedButton(
-                  // icon: Icon(
-                  //   Icons.edit,
-                  //   color: Colors.green,
-                  // ),
                   child: Text(
                     "Edit",
-                    style: CustomTextStyle.metricTextStyle2,
+                    style: CustomTextStyle.metricTextStyle,
                   ),
                   style:
                       OutlinedButton.styleFrom(backgroundColor: Colors.green),
@@ -143,13 +138,9 @@ class _WaterintakeListState extends State<WaterintakeList> {
                   },
                 ),
                 OutlinedButton(
-                  // child: Icon(
-                  //   Icons.delete,
-                  //   color: Colors.red,
-                  // ),
                   child: Text(
                     "Delete",
-                    style: CustomTextStyle.metricTextStyle2,
+                    style: CustomTextStyle.metricTextStyle,
                   ),
                   style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
                   onPressed: () {
@@ -159,15 +150,6 @@ class _WaterintakeListState extends State<WaterintakeList> {
               ],
             ),
           ],
-          // trailing: IconButton(
-          //   icon: Icon(
-          //     Icons.delete,
-          //     color: Colors.red,
-          //   ),
-          //   onPressed: () {
-          //     removeItem(i, waterintakeList);
-          //   },
-          // ),
         );
       },
       itemCount: waterintakeList.getMyWaterIntake().length,
