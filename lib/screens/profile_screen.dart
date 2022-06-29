@@ -49,7 +49,8 @@ class _ProfileState extends State<Profile> {
                         }
                         return null;
                       },
-                      onChanged: (value) {
+                      onSaved: (value) {
+                        if (value == null) return;
                         caloriesintake = int.parse(value);
                       },
                     ),
@@ -67,7 +68,8 @@ class _ProfileState extends State<Profile> {
                         }
                         return null;
                       },
-                      onChanged: (value) {
+                      onSaved: (value) {
+                        if (value == null) return;
                         waterintake = int.parse(value);
                       },
                     ),
@@ -84,7 +86,8 @@ class _ProfileState extends State<Profile> {
                         }
                         return null;
                       },
-                      onChanged: (value) {
+                      onSaved: (value) {
+                        if (value == null) return;
                         steps = int.parse(value);
                       },
                     ),

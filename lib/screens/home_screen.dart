@@ -266,7 +266,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Water Intake",
+                                  "WATER INTAKE",
                                   style: CustomTextStyle.metricTextStyle2,
                                 ),
                                 Text(

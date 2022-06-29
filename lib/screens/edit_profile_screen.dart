@@ -16,6 +16,10 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: themeColor, //change your color here
+        ),
+        backgroundColor: Colors.white,
         title: Text("Fitlah"),
       ),
       body: ListView(
@@ -51,7 +55,34 @@ class _EditProfileState extends State<EditProfile> {
         ),
         const SizedBox(height: 8),
         buildTextField('teirenxuanshanta@gmail.com', true),
-        ElevatedButton(onPressed: editSave, child: Text("Save"))
+        Text(
+          'Weight',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 8),
+        buildTextField('55kg', false),
+        Text(
+          'Age',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 8),
+        buildTextField('26 y.o', false),
+        Text(
+          'Height',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 8),
+        buildTextField('165 cm', false),
+        Center(
+          child: OutlinedButton(
+            onPressed: editSave,
+            child: Text(
+              "Save",
+              style: CustomTextStyle.metricTextStyle,
+            ),
+            style: OutlinedButton.styleFrom(backgroundColor: themeColor),
+          ),
+        )
       ]),
     );
   }

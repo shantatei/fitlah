@@ -23,7 +23,7 @@ class _WaterIntakeState extends State<WaterIntake> {
       form.currentState!.save();
 
       createdon = DateTime.now();
-      
+
       intakeList.addWaterIntake(waterintake, createdon);
       // Hide the keyboard
       FocusScope.of(context).unfocus();
@@ -46,7 +46,7 @@ class _WaterIntakeState extends State<WaterIntake> {
       return IconButton(
         icon: Icon(Icons.arrow_back_ios),
         iconSize: 20,
-        color: Colors.white,
+        color: themeColor,
         onPressed: () async {
           Navigator.of(context).pop();
         },
@@ -56,21 +56,13 @@ class _WaterIntakeState extends State<WaterIntake> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _backButton(),
-                // _addWaterButton(),
-              ],
-            ),
-          )),
+        iconTheme: IconThemeData(
+          color: themeColor, //change your color here
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: Column(
         children: [
-          
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Row(

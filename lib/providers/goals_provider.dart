@@ -3,7 +3,7 @@ import '../models/goals.dart';
 
 class GoalsProvider with ChangeNotifier {
   List<Goals> goalsList = [
-    Goals(waterintake: 1920, caloriesintake: 2000, steps: 7000)
+    Goals(waterintake: 1920, caloriesintake: 2000, steps: 10000)
   ];
 
   List<Goals> getMyGoals() {

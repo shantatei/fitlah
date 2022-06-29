@@ -86,7 +86,7 @@ class _DayViewState extends State<DayViewScreen> {
     return IconButton(
       icon: Icon(Icons.arrow_back_ios),
       iconSize: 20,
-      color: Colors.white,
+      color: themeColor,
       onPressed: () async {
         Navigator.of(context).pop();
       },
@@ -97,7 +97,7 @@ class _DayViewState extends State<DayViewScreen> {
     return IconButton(
       icon: Icon(Icons.add_box),
       iconSize: 25,
-      color: Colors.white,
+      color: themeColor,
       onPressed: () async {
         setState(() {});
         _showFoodToAdd(context);
@@ -482,8 +482,7 @@ class _DayViewState extends State<DayViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: false,
-            elevation: 0,
+            backgroundColor: Colors.white,
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(5.0),
               child: Row(
