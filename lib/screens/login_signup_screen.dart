@@ -21,7 +21,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   bool isSignupScreen = true;
   bool isRememberMe = false;
 
-  register() {
+  register() async {
     bool isValid = form.currentState!.validate();
 
     if (isValid) {
@@ -36,15 +36,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ));
       } else {
         AuthService authService = AuthService();
-
-        return authService.register(email, password).then((value) {
+        try {
+          var value = await authService.register(email, password);
+          authService.logOut();
           FocusScope.of(context).unfocus();
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.green,
             content: Text('User Registered successfully!'),
           ));
-        }).catchError((error) {
+        } catch (error) {
           FocusScope.of(context).unfocus();
           String message = error.toString().contains('] ')
               ? error.toString().split('] ')[1]
@@ -53,27 +54,27 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(message),
           ));
-        });
+        }
       }
     }
   }
 
-  login() {
+  login() async {
     bool isValid = form.currentState!.validate();
 
     if (isValid) {
       form.currentState!.save();
 
       AuthService authService = AuthService();
-
-      return authService.login(email, password).then((value) {
+      try {
+        var value = await authService.login(email, password);
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.green,
           content: Text('Login successfully!'),
         ));
-      }).catchError((error) {
+      } catch (error) {
         FocusScope.of(context).unfocus();
         String message = error.toString().contains('] ')
             ? error.toString().split('] ')[1]
@@ -82,7 +83,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
         ));
-      });
+      }
       // } else {
       //   ScaffoldMessenger.of(context).showSnackBar(
       //       SnackBar(backgroundColor: Colors.red, content: Text('Login Failed')));
@@ -431,8 +432,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         ));
   }
 
-  Widget buildTextField(IconData icon, String hintText, bool isPassword,
-      bool isEmail, bool isConfirmPassword) {
+  Widget buildTextField(
+    IconData icon,
+    String hintText,
+    bool isPassword,
+    bool isEmail,
+    bool isConfirmPassword,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: TextFormField(

@@ -30,24 +30,24 @@ class _RecordState extends State<Record> {
     position: LatLng(1.3452, 103.9326),
   );
 
-  static final Polyline _kPolyline = Polyline(
-      polylineId: PolylineId('_kPolyline'),
-      points: [
-        LatLng(1.372440, 103.949550), //Current Location
-        LatLng(1.3452, 103.9326) //Destination
-      ],
-      width: 2);
+  // static final Polyline _kPolyline = Polyline(
+  //     polylineId: PolylineId('_kPolyline'),
+  //     points: [
+  //       LatLng(1.372440, 103.949550), //Current Location
+  //       LatLng(1.3452, 103.9326) //Destination
+  //     ],
+  //     width: 2);
 
-  static final Polygon _kPolygon = Polygon(
-      polygonId: PolygonId('_kPolygon'),
-      points: [
-        LatLng(1.372440, 103.949550), //Current Location
-        LatLng(1.3452, 103.9326), //Destination
-        LatLng(1.3453, 103.9226),
-        LatLng(1.3454, 103.9226)
-      ],
-      strokeWidth: 2,
-      fillColor: Colors.transparent);
+  // static final Polygon _kPolygon = Polygon(
+  //     polygonId: PolygonId('_kPolygon'),
+  //     points: [
+  //       LatLng(1.372440, 103.949550), //Current Location
+  //       LatLng(1.3452, 103.9326), //Destination
+  //       LatLng(1.3453, 103.9226),
+  //       LatLng(1.3454, 103.9226)
+  //     ],
+  //     strokeWidth: 2,
+  //     fillColor: Colors.transparent);
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +66,9 @@ class _RecordState extends State<Record> {
                 child: GoogleMap(
                   myLocationButtonEnabled: false,
                   zoomControlsEnabled: true,
-                  polylines: {
-                    _kPolyline,
-                  },
+                  // polylines: {
+                  //   _kPolyline,
+                  // },
                   // polygons: {_kPolygon},
                   initialCameraPosition: _initialCameraPosition,
                   onMapCreated: (GoogleMapController controller) {

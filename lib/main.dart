@@ -1,4 +1,5 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitlah/providers/all_water_intake.dart';
@@ -9,6 +10,7 @@ import 'package:fitlah/screens/login_signup_screen.dart';
 import 'package:fitlah/screens/profile_screen.dart';
 import 'package:fitlah/screens/record_screen.dart';
 import 'package:fitlah/screens/reset_password_screen.dart';
+import 'package:fitlah/screens/user_detail_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -38,26 +40,50 @@ class MyApp extends StatelessWidget {
       child: StreamBuilder<User?>(
           stream: authService.getAuthUser(),
           builder: (context, snapshot) {
-            return MaterialApp(
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                ),
-                home: snapshot.connectionState == ConnectionState.waiting
-                    ? Center(child: CircularProgressIndicator())
-                    : snapshot.hasData
-                        ? MainScreen()
-                        : LoginSignupScreen(),
-                routes: {
-                  LoginSignupScreen.routeName: (_) {
-                    return LoginSignupScreen();
-                  },
-                  ResetPasswordScreen.routeName: (_) {
-                    return ResetPasswordScreen();
-                  },
-                },
-                debugShowCheckedModeBanner: false);
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(snapshot.data?.email!)
+                    .snapshots(),
+                builder: (context, usersnapshot) {
+                  return MaterialApp(
+                      theme: ThemeData(
+                        primarySwatch: Colors.blue,
+                      ),
+                      home: checkSnapshots(snapshot, usersnapshot),
+                      routes: {
+                        LoginSignupScreen.routeName: (_) {
+                          return LoginSignupScreen();
+                        },
+                        ResetPasswordScreen.routeName: (_) {
+                          return ResetPasswordScreen();
+                        },
+                      },
+                      debugShowCheckedModeBanner: false);
+                });
           }),
     );
+  }
+
+  Widget checkSnapshots(
+    AsyncSnapshot<User?> authsnapshot,
+    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> usersnapshot,
+  ) {
+    if (!authsnapshot.hasData) {
+      return LoginSignupScreen();
+    }
+
+    if (usersnapshot.hasData && usersnapshot.data!.exists) {
+      print("poly" + usersnapshot.data.toString());
+      return MainScreen();
+    }
+
+    return UserDetailScreen();
   }
 }
 
@@ -87,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
     return authService.logOut().then((value) {
       FocusScope.of(context).unfocus();
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Logout successfully!'),
       ));
     }).catchError((error) {
@@ -105,14 +131,14 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Fitlah",
           style: TextStyle(color: themeColor),
         ),
         actions: [
           IconButton(
               onPressed: () => logOut(),
-              icon: Icon(
+              icon: const Icon(
                 Icons.logout,
                 color: themeColor,
               ))
@@ -148,24 +174,24 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(
-            title: Text('Home'),
-            icon: Icon(Icons.home),
-            activeColor: Color.fromARGB(255, 15, 3, 226),
+            title: const Text('Home'),
+            icon: const Icon(Icons.home),
+            activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: Text('Record'),
-            icon: FaIcon(FontAwesomeIcons.recordVinyl),
-            activeColor: Color.fromARGB(255, 15, 3, 226),
+            title: const Text('Record'),
+            icon: const FaIcon(FontAwesomeIcons.recordVinyl),
+            activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: Text('Explore'),
-            icon: Icon(Icons.explore),
-            activeColor: Color.fromARGB(255, 15, 3, 226),
+            title: const Text('Explore'),
+            icon: const Icon(Icons.explore),
+            activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: Text('Profile'),
-            icon: FaIcon(FontAwesomeIcons.user),
-            activeColor: Color.fromARGB(255, 15, 3, 226),
+            title: const Text('Profile'),
+            icon: const FaIcon(FontAwesomeIcons.user),
+            activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
         ],
       ),
