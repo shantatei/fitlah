@@ -1,5 +1,5 @@
 import 'package:fitlah/models/food_track_task.dart';
-import 'package:fitlah/services/database.dart';
+import 'package:fitlah/services/calories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../utils/constants.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'dart:math';
 
 class DayViewScreen extends StatefulWidget {
-  DayViewScreen();
+  const DayViewScreen();
 
   @override
   State<StatefulWidget> createState() {
@@ -23,12 +23,12 @@ class _DayViewState extends State<DayViewScreen> {
   String dropdownValue = 'grams';
   DateTime _value = DateTime.now();
   DateTime today = DateTime.now();
-  Color _rightArrowColor = Color(0xffC1C1C1);
-  Color _leftArrowColor = Color(0xffC1C1C1);
+  Color _rightArrowColor = const Color(0xffC1C1C1);
+  final Color _leftArrowColor = const Color(0xffC1C1C1);
   final _addFoodKey = GlobalKey<FormState>();
 
   DatabaseService databaseService =
-      new DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
+      DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
 
   late FoodTrackTask addFoodTrack;
 
@@ -63,8 +63,8 @@ class _DayViewState extends State<DayViewScreen> {
 
   Widget _calorieCounter() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-      child: new Container(
+      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+      child: Container(
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
@@ -84,7 +84,7 @@ class _DayViewState extends State<DayViewScreen> {
 
   Widget _backButton() {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios),
+      icon: const Icon(Icons.arrow_back_ios),
       iconSize: 20,
       color: themeColor,
       onPressed: () async {
@@ -95,7 +95,7 @@ class _DayViewState extends State<DayViewScreen> {
 
   Widget _addFoodButton() {
     return IconButton(
-      icon: Icon(Icons.add_box),
+      icon: const Icon(Icons.add_box),
       iconSize: 25,
       color: themeColor,
       onPressed: () async {
@@ -109,8 +109,8 @@ class _DayViewState extends State<DayViewScreen> {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _value,
-      firstDate: new DateTime(2019),
-      lastDate: new DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -125,10 +125,11 @@ class _DayViewState extends State<DayViewScreen> {
   }
 
   void _stateSetter() {
-    if (today.difference(_value).compareTo(Duration(days: 1)) == -1) {
-      setState(() => _rightArrowColor = Color(0xffEDEDED));
-    } else
+    if (today.difference(_value).compareTo(const Duration(days: 1)) == -1) {
+      setState(() => _rightArrowColor = const Color(0xffEDEDED));
+    } else {
       setState(() => _rightArrowColor = Colors.white);
+    }
   }
 
   checkFormValid() {
@@ -150,31 +151,31 @@ class _DayViewState extends State<DayViewScreen> {
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.pop(context), // passing false
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
               FlatButton(
                 onPressed: () async {
                   if (checkFormValid()) {
                     Navigator.pop(context);
-                    var random = new Random();
+                    var random = Random();
                     int randomMilliSecond = random.nextInt(1000);
                     addFoodTrack.createdOn = _value;
                     addFoodTrack.createdOn = addFoodTrack.createdOn
                         .add(Duration(milliseconds: randomMilliSecond));
                     databaseService.addFoodTrackEntry(addFoodTrack);
                     resetFoodTrack();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Food Added Successfully'),
                     ));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           "Invalid form data! All numeric fields must contain numeric values greater than 0"),
                       backgroundColor: Colors.white,
                     ));
                   }
                 },
-                child: Text('Ok'),
+                child: const Text('Ok'),
               ),
             ],
           );
@@ -341,20 +342,21 @@ class _DayViewState extends State<DayViewScreen> {
           },
         ),
         DropdownButtonFormField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             label: Text('Mealtime'),
           ),
-          items: [
+          items: const [
             DropdownMenuItem(child: Text('Breakfast'), value: 'breakfast'),
             DropdownMenuItem(child: Text('Lunch'), value: 'lunch'),
             DropdownMenuItem(child: Text('Dinner'), value: 'dinner'),
             DropdownMenuItem(child: Text('Supper'), value: 'supper'),
           ],
           validator: (value) {
-            if (value == null)
+            if (value == null) {
               return "Please provide a mealtime";
-            else
+            } else {
               return null;
+            }
           },
           onChanged: (value) {
             addFoodTrack.mealTime = value as String;
@@ -365,18 +367,18 @@ class _DayViewState extends State<DayViewScreen> {
   }
 
   Widget _showDatePicker() {
-    return Container(
+    return SizedBox(
       width: 250,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.arrow_left, size: 25.0),
+            icon: const Icon(Icons.arrow_left, size: 25.0),
             color: Colors.black,
             onPressed: () {
               setState(() {
-                _value = _value.subtract(Duration(days: 1));
+                _value = _value.subtract(const Duration(days: 1));
                 _rightArrowColor = Colors.black;
               });
             },
@@ -386,7 +388,7 @@ class _DayViewState extends State<DayViewScreen> {
             onPressed: () => _selectDate(),
             // },
             child: Text(_dateFormatter(_value),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontFamily: 'Open Sans',
                   fontSize: 18.0,
@@ -394,22 +396,26 @@ class _DayViewState extends State<DayViewScreen> {
                 )),
           ),
           IconButton(
-              icon: Icon(Icons.arrow_right, size: 25.0),
+              icon: const Icon(Icons.arrow_right, size: 25.0),
               color: _rightArrowColor,
               onPressed: () {
-                if (today.difference(_value).compareTo(Duration(days: 1)) ==
+                if (today
+                        .difference(_value)
+                        .compareTo(const Duration(days: 1)) ==
                     -1) {
                   setState(() {
-                    _rightArrowColor = Color.fromARGB(113, 0, 0, 0);
+                    _rightArrowColor = const Color.fromARGB(113, 0, 0, 0);
                   });
                 } else {
                   setState(() {
-                    _value = _value.add(Duration(days: 1));
+                    _value = _value.add(const Duration(days: 1));
                   });
-                  if (today.difference(_value).compareTo(Duration(days: 1)) ==
+                  if (today
+                          .difference(_value)
+                          .compareTo(const Duration(days: 1)) ==
                       -1) {
                     setState(() {
-                      _rightArrowColor = Color.fromARGB(113, 0, 0, 0);
+                      _rightArrowColor = const Color.fromARGB(113, 0, 0, 0);
                     });
                   }
                 }
@@ -420,9 +426,9 @@ class _DayViewState extends State<DayViewScreen> {
   }
 
   String _dateFormatter(DateTime tm) {
-    DateTime today = new DateTime.now();
-    Duration oneDay = new Duration(days: 1);
-    Duration twoDay = new Duration(days: 2);
+    DateTime today = DateTime.now();
+    Duration oneDay = const Duration(days: 1);
+    Duration twoDay = const Duration(days: 2);
     String month;
 
     switch (tm.month) {
@@ -494,11 +500,10 @@ class _DayViewState extends State<DayViewScreen> {
               ),
             )),
         body: StreamProvider<List<FoodTrackTask>>.value(
-          initialData: [],
-          value: new DatabaseService(
-                  uid: DATABASE_UID, currentDate: DateTime.now())
+          initialData: const [],
+          value: DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now())
               .foodTracks,
-          child: new Column(children: <Widget>[
+          child: Column(children: <Widget>[
             _showDatePicker(),
             _calorieCounter(),
             Expanded(
@@ -514,24 +519,24 @@ class _DayViewState extends State<DayViewScreen> {
 
 class FoodTrackList extends StatelessWidget {
   final DateTime datePicked;
-  FoodTrackList({required this.datePicked});
+  const FoodTrackList({required this.datePicked});
 
   @override
   Widget build(BuildContext context) {
     final DateTime curDate =
-        new DateTime(datePicked.year, datePicked.month, datePicked.day);
+        DateTime(datePicked.year, datePicked.month, datePicked.day);
 
     final foodTracks = Provider.of<List<FoodTrackTask>>(context);
 
     List findCurScans(List foodTrackFeed) {
       List curScans = [];
-      foodTrackFeed.forEach((foodTrack) {
+      for (var foodTrack in foodTrackFeed) {
         DateTime scanDate = DateTime(foodTrack.createdOn.year,
             foodTrack.createdOn.month, foodTrack.createdOn.day);
         if (scanDate.compareTo(curDate) == 0) {
           curScans.add(foodTrack);
         }
-      });
+      }
       return curScans;
     }
 
@@ -539,14 +544,14 @@ class FoodTrackList extends StatelessWidget {
 
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      physics: ClampingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       shrinkWrap: true,
       itemCount: curScans.length + 1,
       itemBuilder: (context, index) {
         if (index < curScans.length) {
           return FoodTrackTile(foodTrackEntry: curScans[index]);
         } else {
-          return SizedBox(height: 5);
+          return const SizedBox(height: 5);
         }
       },
     );
@@ -556,7 +561,7 @@ class FoodTrackList extends StatelessWidget {
 class FoodTrackTile extends StatefulWidget {
   final FoodTrackTask foodTrackEntry;
 
-  FoodTrackTile({required this.foodTrackEntry});
+  const FoodTrackTile({required this.foodTrackEntry});
 
   @override
   State<FoodTrackTile> createState() => _FoodTrackTileState();
@@ -565,11 +570,11 @@ class FoodTrackTile extends StatefulWidget {
 class _FoodTrackTileState extends State<FoodTrackTile> {
   var form = GlobalKey<FormState>();
   DatabaseService databaseService =
-      new DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
+      DatabaseService(uid: DATABASE_UID, currentDate: DateTime.now());
 
   List macros = CalorieStats.macroData;
   // late FoodTrackTask widget.foodTrackEntry;
-  DateTime _value = DateTime.now();
+  final DateTime _value = DateTime.now();
   DateTime today = DateTime.now();
   double servingSize = 0;
 
@@ -578,11 +583,11 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
     return ExpansionTile(
       leading: CircleAvatar(
         radius: 25.0,
-        backgroundColor: Color(0xff5FA55A),
+        backgroundColor: const Color(0xff5FA55A),
         child: _itemCalories(),
       ),
       title: Text(widget.foodTrackEntry.food_name,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
             fontFamily: 'Open Sans',
             fontWeight: FontWeight.w500,
@@ -608,12 +613,12 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Edit Food '),
+            title: const Text('Edit Food '),
             content: _editAmountHad(),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.pop(context), // passing false
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
               FlatButton(
                 onPressed: () async {
@@ -621,18 +626,18 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                     Navigator.pop(context);
                     databaseService.editFoodTrackEntry(widget.foodTrackEntry);
                     form.currentState!.reset();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Food Updated Successfully'),
                     ));
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text(
                           "Invalid form data! All numeric fields must contain numeric values greater than 0"),
                       backgroundColor: Colors.white,
                     ));
                   }
                 },
-                child: Text('Ok'),
+                child: const Text('Ok'),
               ),
             ],
           );
@@ -790,10 +795,10 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
           },
         ),
         DropdownButtonFormField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             label: Text('Mealtime'),
           ),
-          items: [
+          items: const [
             DropdownMenuItem(child: Text('Breakfast'), value: 'breakfast'),
             DropdownMenuItem(child: Text('Lunch'), value: 'lunch'),
             DropdownMenuItem(child: Text('Dinner'), value: 'dinner'),
@@ -801,10 +806,11 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
           ],
           value: widget.foodTrackEntry.mealTime,
           validator: (value) {
-            if (value == null)
+            if (value == null) {
               return "Please provide a mealtime";
-            else
+            } else {
               return null;
+            }
           },
           onChanged: (value) {
             widget.foodTrackEntry.mealTime = value as String;
@@ -820,13 +826,13 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(widget.foodTrackEntry.calories.toStringAsFixed(0),
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16.0,
               color: Colors.white,
               fontFamily: 'Open Sans',
               fontWeight: FontWeight.w500,
             )),
-        Text('kcal',
+        const Text('kcal',
             style: TextStyle(
               fontSize: 10.0,
               color: Colors.white,
@@ -840,7 +846,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
   Widget _macroData() {
     return Row(
       children: <Widget>[
-        Container(
+        SizedBox(
           width: 200,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -850,7 +856,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                   Container(
                     height: 8,
                     width: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(CARBS_COLOR),
                       shape: BoxShape.circle,
                     ),
@@ -859,7 +865,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                       ' ' +
                           widget.foodTrackEntry.carbs.toStringAsFixed(1) +
                           'g    ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
                         fontFamily: 'Open Sans',
@@ -868,7 +874,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                   Container(
                     height: 8,
                     width: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(PROTEIN_COLOR),
                       shape: BoxShape.circle,
                     ),
@@ -877,7 +883,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                       ' ' +
                           widget.foodTrackEntry.protein.toStringAsFixed(1) +
                           'g    ',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
                         fontFamily: 'Open Sans',
@@ -886,13 +892,13 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                   Container(
                     height: 8,
                     width: 8,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(FAT_COLOR),
                       shape: BoxShape.circle,
                     ),
                   ),
                   Text(' ' + widget.foodTrackEntry.fat.toStringAsFixed(1) + 'g',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.black,
                         fontFamily: 'Open Sans',
@@ -901,7 +907,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
                 ],
               ),
               Text(widget.foodTrackEntry.grams.toString() + 'g',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12.0,
                     color: Colors.black,
                     fontFamily: 'Open Sans',
@@ -916,7 +922,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
 
   Widget _expandedView(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -934,7 +940,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Text('% of total',
+        const Text('% of total',
             style: TextStyle(
               fontSize: 14.0,
               color: Colors.black,
@@ -942,14 +948,14 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
               fontWeight: FontWeight.w400,
             )),
         IconButton(
-            icon: Icon(Icons.edit, color: Colors.black),
+            icon: const Icon(Icons.edit, color: Colors.black),
             iconSize: 16,
             onPressed: () async {
               _editFoodToAdd(context);
               print("Edit button pressed");
             }),
         IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.delete,
               color: Colors.red,
             ),
@@ -957,7 +963,7 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
             onPressed: () async {
               print("Delete button pressed");
               databaseService.deleteFoodTrackEntry(widget.foodTrackEntry);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Food Deleted Successfully'),
               ));
             }),
@@ -971,20 +977,21 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       caloriesValue = widget.foodTrackEntry.calories / macros[0];
     }
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
       child: Row(
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 10.0,
             width: 200.0,
             child: LinearProgressIndicator(
               value: caloriesValue,
-              backgroundColor: Color(0xffEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xff5FA55A)),
+              backgroundColor: const Color(0xffEDEDED),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xff5FA55A)),
             ),
           ),
           Text('      ' + ((caloriesValue) * 100).toStringAsFixed(0) + '%',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14.0,
                 color: Colors.black,
                 fontFamily: 'Open Sans',
@@ -1001,16 +1008,17 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       carbsValue = widget.foodTrackEntry.carbs / macros[2];
     }
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: Row(
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 10.0,
             width: 200.0,
             child: LinearProgressIndicator(
               value: carbsValue,
-              backgroundColor: Color(0xffEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xffFA5457)),
+              backgroundColor: const Color(0xffEDEDED),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xffFA5457)),
             ),
           ),
           Text('      ' + ((carbsValue) * 100).toStringAsFixed(0) + '%'),
@@ -1025,16 +1033,17 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       proteinValue = widget.foodTrackEntry.protein / macros[1];
     }
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 0.0),
       child: Row(
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 10.0,
             width: 200.0,
             child: LinearProgressIndicator(
               value: proteinValue,
-              backgroundColor: Color(0xffEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xffFA8925)),
+              backgroundColor: const Color(0xffEDEDED),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xffFA8925)),
             ),
           ),
           Text('      ' + ((proteinValue) * 100).toStringAsFixed(0) + '%'),
@@ -1049,16 +1058,17 @@ class _FoodTrackTileState extends State<FoodTrackTile> {
       fatValue = widget.foodTrackEntry.fat / macros[3];
     }
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 10.0),
       child: Row(
         children: <Widget>[
-          Container(
+          SizedBox(
             height: 10.0,
             width: 200.0,
             child: LinearProgressIndicator(
               value: (widget.foodTrackEntry.fat / macros[3]),
-              backgroundColor: Color(0xffEDEDED),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xff01B4BC)),
+              backgroundColor: const Color(0xffEDEDED),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xff01B4BC)),
             ),
           ),
           Text('      ' + ((fatValue) * 100).toStringAsFixed(0) + '%'),

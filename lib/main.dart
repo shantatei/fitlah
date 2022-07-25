@@ -2,8 +2,6 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fitlah/providers/all_water_intake.dart';
-import 'package:fitlah/providers/goals_provider.dart';
 import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home_screen.dart';
 import 'package:fitlah/screens/login_signup_screen.dart';
@@ -28,46 +26,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AllWaterIntake>(
-          create: (ctx) => AllWaterIntake(),
-        ),
-        ChangeNotifierProvider<GoalsProvider>(
-          create: (ctx) => GoalsProvider(),
-        )
-      ],
-      child: StreamBuilder<User?>(
-          stream: authService.getAuthUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(snapshot.data?.email!)
-                    .snapshots(),
-                builder: (context, usersnapshot) {
-                  return MaterialApp(
-                      theme: ThemeData(
-                        primarySwatch: Colors.blue,
-                      ),
-                      home: checkSnapshots(snapshot, usersnapshot),
-                      routes: {
-                        LoginSignupScreen.routeName: (_) {
-                          return LoginSignupScreen();
-                        },
-                        ResetPasswordScreen.routeName: (_) {
-                          return ResetPasswordScreen();
-                        },
+    return StreamBuilder<User?>(
+        stream: authService.getAuthUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(snapshot.data?.email!)
+                  .snapshots(),
+              builder: (context, usersnapshot) {
+                return MaterialApp(
+                    theme: ThemeData(
+                      primarySwatch: Colors.blue,
+                    ),
+                    home: checkSnapshots(snapshot, usersnapshot),
+                    routes: {
+                      LoginSignupScreen.routeName: (_) {
+                        return LoginSignupScreen();
                       },
-                      debugShowCheckedModeBanner: false);
-                });
-          }),
-    );
+                      ResetPasswordScreen.routeName: (_) {
+                        return ResetPasswordScreen();
+                      },
+                    },
+                    debugShowCheckedModeBanner: false);
+              });
+        });
   }
 
   Widget checkSnapshots(

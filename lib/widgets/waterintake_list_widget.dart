@@ -3,9 +3,7 @@ import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/all_water_intake.dart';
+import '../services/water_service.dart';
 
 class WaterintakeList extends StatefulWidget {
   @override
@@ -14,9 +12,11 @@ class WaterintakeList extends StatefulWidget {
 
 class _WaterintakeListState extends State<WaterintakeList> {
   var form = GlobalKey<FormState>();
+
+  WaterService fsService = WaterService();
   late double waterintake;
 
-  void removeItem(int i, AllWaterIntake myWaterIntakeTask) {
+  void removeItem(String id) {
     showDialog<Null>(
         context: context,
         builder: (context) {
@@ -27,7 +27,7 @@ class _WaterintakeListState extends State<WaterintakeList> {
               TextButton(
                   onPressed: () {
                     setState(() {
-                      myWaterIntakeTask.removeWaterIntake(i);
+                      fsService.removeWater(id);
                     });
                     Navigator.of(context).pop();
                   },
@@ -42,124 +42,138 @@ class _WaterintakeListState extends State<WaterintakeList> {
         });
   }
 
-  _editWaterIntake(int i, AllWaterIntake myWaterIntakeTask) {
+  _editWaterIntake(id) {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text('Edit Water Intake '),
-            content: Form(
-              key: form,
-              child: TextFormField(
-                initialValue: myWaterIntakeTask
-                    .getMyWaterIntake()[i]
-                    .water
-                    .toStringAsFixed(0),
-                decoration: const InputDecoration(
-                  labelText: "Water Intake (ml)",
-                  hintText: "Please enter your Water Intake",
-                  errorStyle: TextStyle(color: Colors.red),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter your Water Intake";
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  waterintake = double.parse(value);
-                },
-              ),
-            ),
-            actions: [
-              FlatButton(
-                onPressed: () => Navigator.pop(context), // passing false
-                child: Text('Cancel'),
-              ),
-              FlatButton(
-                  onPressed: () {
-                    bool isValid = form.currentState!.validate();
-                    if (isValid) {
-                      form.currentState!.save();
+          return StreamBuilder<List<WaterIntakeTask>>(
+              stream: fsService.getWater(),
+              builder: (context, snapshot) {
+                return AlertDialog(
+                  title: Text('Edit Water Intake '),
+                  content: Form(
+                    key: form,
+                    child: TextFormField(
+                      initialValue: snapshot.data![id].water.toStringAsFixed(0),
+                      decoration: const InputDecoration(
+                        labelText: "Water Intake (ml)",
+                        hintText: "Please enter your Water Intake",
+                        errorStyle: TextStyle(color: Colors.red),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter your Water Intake";
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        waterintake = double.parse(value);
+                      },
+                    ),
+                  ),
+                  actions: [
+                    FlatButton(
+                      onPressed: () => Navigator.pop(context), // passing false
+                      child: Text('Cancel'),
+                    ),
+                    FlatButton(
+                        onPressed: () {
+                          bool isValid = form.currentState!.validate();
+                          if (isValid) {
+                            form.currentState!.save();
 
-                      setState(() {
-                        myWaterIntakeTask.editWaterIntake(waterintake, i);
-                      });
+                            // setState(() {
+                            //   myWaterIntakeTask.editWaterIntake(waterintake, i);
+                            // });
 
-                      // Hide the keyboard
-                      FocusScope.of(context).unfocus();
-                      // Resets the form
-                      form.currentState!.reset();
+                            fsService.editWater(
+                                id, waterintake, snapshot.data![id].createdon);
 
-                      //Exiting Form
-                      Navigator.of(context).pop();
+                            // Hide the keyboard
+                            FocusScope.of(context).unfocus();
+                            // Resets the form
+                            form.currentState!.reset();
 
-                      // Shows a SnackBar
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Water intake edited successfully!'),
-                      ));
-                    }
-                  },
-                  child: Text('Ok'))
-            ],
-          );
+                            //Exiting Form
+                            Navigator.of(context).pop();
+
+                            // Shows a SnackBar
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('Water intake edited successfully!'),
+                            ));
+                          }
+                        },
+                        child: Text('Ok'))
+                  ],
+                );
+              });
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    AllWaterIntake waterintakeList = Provider.of<AllWaterIntake>(context);
+    // AllWaterIntake waterintakeList = Provider.of<AllWaterIntake>(context);
 
-    return ListView.separated(
-      itemBuilder: (ctx, i) {
-        return ExpansionTile(
-          leading: CircleAvatar(
-            child: FaIcon(FontAwesomeIcons.glassWater),
-            backgroundColor: themeColor,
-          ),
-          title: Text(
-              waterintakeList.getMyWaterIntake()[i].water.toStringAsFixed(0) +
-                  " ml"),
-          subtitle: Text(DateFormat('yyyy-MM-dd')
-              .format(waterintakeList.getMyWaterIntake()[i].createdon)),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OutlinedButton(
-                  child: Text(
-                    "Edit",
-                    style: CustomTextStyle.metricTextStyle,
+    WaterService fsService = WaterService();
+    return StreamBuilder<List<WaterIntakeTask>>(
+        stream: fsService.getWater(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: CircularProgressIndicator());
+          else {
+            return ListView.separated(
+              itemBuilder: (ctx, i) {
+                return ExpansionTile(
+                  leading: CircleAvatar(
+                    child: FaIcon(FontAwesomeIcons.glassWater),
+                    backgroundColor: themeColor,
                   ),
-                  style:
-                      OutlinedButton.styleFrom(backgroundColor: Colors.green),
-                  onPressed: () {
-                    _editWaterIntake(i, waterintakeList);
-                  },
-                ),
-                OutlinedButton(
-                  child: Text(
-                    "Delete",
-                    style: CustomTextStyle.metricTextStyle,
-                  ),
-                  style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {
-                    removeItem(i, waterintakeList);
-                  },
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-      itemCount: waterintakeList.getMyWaterIntake().length,
-      separatorBuilder: (ctx, i) {
-        return Container(
-          width: double.infinity,
-          height: 2,
-          color: Colors.black,
-        );
-      },
-    );
+                  title:
+                      Text(snapshot.data![i].water.toStringAsFixed(0) + " ml"),
+                  subtitle: Text(DateFormat('yyyy-MM-dd')
+                      .format(snapshot.data![i].createdon)),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        OutlinedButton(
+                          child: Text(
+                            "Edit",
+                            style: CustomTextStyle.metricTextStyle,
+                          ),
+                          style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.green),
+                          onPressed: () {
+                            _editWaterIntake(snapshot.data![i].id);
+                          },
+                        ),
+                        OutlinedButton(
+                          child: Text(
+                            "Delete",
+                            style: CustomTextStyle.metricTextStyle,
+                          ),
+                          style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.red),
+                          onPressed: () {
+                            removeItem(snapshot.data![i].id);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+              itemCount: snapshot.data!.length,
+              separatorBuilder: (ctx, i) {
+                return Container(
+                  width: double.infinity,
+                  height: 2,
+                  color: Colors.black,
+                );
+              },
+            );
+          }
+        });
   }
 }

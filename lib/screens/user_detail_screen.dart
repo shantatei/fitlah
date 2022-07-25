@@ -16,6 +16,8 @@ class UserDetailScreen extends StatelessWidget {
         .collection("users")
         .doc(AuthService().getCurrentUser()!.email!)
         .set({"username": username});
+
+    
   }
 
   @override
