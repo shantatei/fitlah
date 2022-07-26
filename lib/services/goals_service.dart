@@ -10,15 +10,6 @@ class GoalService {
 
   final AuthService authService = AuthService();
 
-  // setGoal() {
-  //   return FirebaseFirestore.instance.collection('goals').doc().set({
-  //     'email': authService.getCurrentUser()!.email,
-  //     'waterintake': 2000,
-  //     'caloriesintake': 2000,
-  //     'steps': 10000
-  //   });
-  // }
-
   Stream<List<Goals>> getGoal() {
     return FirebaseFirestore.instance
         .collection('goals')

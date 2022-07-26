@@ -1,4 +1,4 @@
-import 'package:fitlah/screens/reset_password_screen.dart';
+import 'package:fitlah/screens/auth/reset_password_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       if (password != confirmPassword) {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.red,
           content: Text('Password and Confirm Password does not match!'),
         ));
@@ -41,7 +41,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           authService.logOut();
           FocusScope.of(context).unfocus();
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green,
             content: Text('User Registered successfully!'),
           ));
@@ -70,7 +70,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         var value = await authService.login(email, password);
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.green,
           content: Text('Login successfully!'),
         ));
@@ -81,13 +81,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             : 'An error has occurred.';
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
           content: Text(message),
         ));
       }
-      // } else {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //       SnackBar(backgroundColor: Colors.red, content: Text('Login Failed')));
-      // }
     }
   }
 
@@ -98,7 +95,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(backgroundColor),
+      // backgroundColor: Color(backgroundColor),
       body: Stack(
         children: [
           Positioned(
@@ -107,18 +104,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             left: 0,
             child: Container(
               height: 300,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("images/background.jpg"),
                       fit: BoxFit.fill)),
               child: Container(
-                padding: EdgeInsets.only(top: 90, left: 20),
+                padding: const EdgeInsets.only(top: 90, left: 20),
                 color: Colors.transparent.withOpacity(.85),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                           text: "Welcome to ",
                           style: TextStyle(
                             fontSize: 25,
@@ -136,14 +133,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             )
                           ]),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
                       isSignupScreen
                           ? "Signup to Continue"
                           : "Signin to Continue",
-                      style: TextStyle(
+                      style: const TextStyle(
                         letterSpacing: 1,
                         color: Colors.white,
                       ),
@@ -157,16 +154,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           buildBottomHalfContainer(true),
           //Main Container for Login and Signup
           AnimatedPositioned(
-              duration: Duration(milliseconds: 700),
+              duration: const Duration(milliseconds: 700),
               curve: Curves.bounceInOut,
               top: isSignupScreen ? 310 : 340,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 700),
+                duration: const Duration(milliseconds: 700),
                 curve: Curves.bounceInOut,
                 height: isSignupScreen ? 380 : 290,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width - 40,
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -197,12 +194,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: isSignupScreen
-                                          ? Color(textColor1)
-                                          : Color(activeColor)),
+                                          ? const Color(textColor1)
+                                          : const Color(activeColor)),
                                 ),
                                 if (!isSignupScreen)
                                   Container(
-                                    margin: EdgeInsets.only(top: 3),
+                                    margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
                                     color: Colors.orange,
@@ -225,12 +222,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: isSignupScreen
-                                          ? Color(activeColor)
-                                          : Color(textColor1)),
+                                          ? const Color(activeColor)
+                                          : const Color(textColor1)),
                                 ),
                                 if (isSignupScreen)
                                   Container(
-                                    margin: EdgeInsets.only(top: 3),
+                                    margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
                                     color: Colors.orange,
@@ -256,7 +253,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   Container buildSigninSection() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Form(
         key: form,
         child: Column(
@@ -271,7 +268,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     Navigator.of(context)
                         .pushNamed(ResetPasswordScreen.routeName);
                   },
-                  child: Text(
+                  child: const Text(
                     "Forget Password",
                     style: TextStyle(fontSize: 12, color: Color(textColor1)),
                   )),
@@ -284,7 +281,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   Container buildSignupSection() {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Form(
         key: form,
         child: Column(children: [
@@ -292,84 +289,86 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           buildTextField(Icons.email, "Email", false, true, false),
           buildTextField(Icons.lock, "Password", true, false, false),
           buildTextField(Icons.lock, "Confirm Password", false, false, true),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, left: 10),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isMale = true;
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              isMale ? Color(textColor2) : Colors.transparent,
-                          border: Border.all(
-                              width: 1,
-                              color: isMale
-                                  ? Colors.transparent
-                                  : Color(textColor1)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          color: isMale ? Colors.white : Color(iconColor),
-                        ),
-                      ),
-                      Text(
-                        "Male",
-                        style: TextStyle(color: Color(textColor1)),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isMale = false;
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          color:
-                              isMale ? Colors.transparent : Color(textColor2),
-                          border: Border.all(
-                              width: 1,
-                              color: isMale
-                                  ? Color(textColor1)
-                                  : Colors.transparent),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          color: isMale ? Color(iconColor) : Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "Female",
-                        style: TextStyle(color: Color(textColor1)),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 10, left: 10),
+          //   child: Row(
+          //     children: [
+          //       GestureDetector(
+          //         onTap: () {
+          //           setState(() {
+          //             isMale = true;
+          //           });
+          //         },
+          //         child: Row(
+          //           children: [
+          //             Container(
+          //               width: 30,
+          //               height: 30,
+          //               margin: const EdgeInsets.only(right: 8),
+          //               decoration: BoxDecoration(
+          //                 color: isMale
+          //                     ? const Color(textColor2)
+          //                     : Colors.transparent,
+          //                 border: Border.all(
+          //                     width: 1,
+          //                     color: isMale
+          //                         ? Colors.transparent
+          //                         : const Color(textColor1)),
+          //                 borderRadius: BorderRadius.circular(15),
+          //               ),
+          //               child: Icon(
+          //                 Icons.person,
+          //                 color: isMale ? Colors.white : const Color(iconColor),
+          //               ),
+          //             ),
+          //             const Text(
+          //               "Male",
+          //               style: TextStyle(color: Color(textColor1)),
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //       const SizedBox(
+          //         width: 30,
+          //       ),
+          //       GestureDetector(
+          //         onTap: () {
+          //           setState(() {
+          //             isMale = false;
+          //           });
+          //         },
+          //         child: Row(
+          //           children: [
+          //             Container(
+          //               width: 30,
+          //               height: 30,
+          //               margin: const EdgeInsets.only(right: 8),
+          //               decoration: BoxDecoration(
+          //                 color: isMale
+          //                     ? Colors.transparent
+          //                     : const Color(textColor2),
+          //                 border: Border.all(
+          //                     width: 1,
+          //                     color: isMale
+          //                         ? const Color(textColor1)
+          //                         : Colors.transparent),
+          //                 borderRadius: BorderRadius.circular(15),
+          //               ),
+          //               child: Icon(
+          //                 Icons.person,
+          //                 color: isMale ? const Color(iconColor) : Colors.white,
+          //               ),
+          //             ),
+          //             const Text(
+          //               "Female",
+          //               style: TextStyle(color: Color(textColor1)),
+          //             )
+          //           ],
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
           Container()
         ]),
       ),
@@ -378,7 +377,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   Widget buildBottomHalfContainer(bool showShadow) {
     return AnimatedPositioned(
-        duration: Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 700),
         curve: Curves.bounceInOut,
         top: isSignupScreen ? 645 : 580,
         right: 0,
@@ -387,7 +386,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           child: Container(
             height: 90,
             width: 90,
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(50),
@@ -402,7 +401,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             child: !showShadow
                 ? Container(
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [Colors.orange, Colors.red],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -413,7 +412,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               color: Colors.black.withOpacity(.3),
                               spreadRadius: 1,
                               blurRadius: 1,
-                              offset: Offset(0, 1))
+                              offset: const Offset(0, 1))
                         ]),
                     child: IconButton(
                       onPressed: () {
@@ -427,7 +426,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       color: Colors.white,
                     ),
                   )
-                : Center(),
+                : const Center(),
           ),
         ));
   }
@@ -447,21 +446,21 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         decoration: InputDecoration(
           prefixIcon: Icon(
             icon,
-            color: Color(iconColor),
+            color: const Color(iconColor),
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Color(textColor1)),
             borderRadius: BorderRadius.all(Radius.circular(35.0)),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Color(textColor1)),
             borderRadius: BorderRadius.all(Radius.circular(35.0)),
           ),
-          contentPadding: EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(10),
           hintText: hintText,
-          hintStyle: TextStyle(fontSize: 14, color: Color(textColor1)),
-          errorStyle: TextStyle(color: Colors.red),
-          errorBorder: OutlineInputBorder(
+          hintStyle: const TextStyle(fontSize: 14, color: Color(textColor1)),
+          errorStyle: const TextStyle(color: Colors.red),
+          errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.red),
               borderRadius: BorderRadius.all(Radius.circular(35.0))),
         ),
@@ -469,31 +468,35 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           if (isPassword) {
             if (value == null || value.isEmpty) {
               return "Please provide a password ";
-            } else if (value.length < 6)
+            } else if (value.length < 6) {
               return 'Password must be at least 6 characters.';
-            else
+            } else {
               return null;
+            }
           } else if (isEmail) {
             if (value == null || value.isEmpty) {
               return "Please enter an email address ";
-            } else if (!value.contains('@'))
+            } else if (!value.contains('@')) {
               return "Please provide a valid email address.";
-            else
+            } else {
               return null;
+            }
           } else if (isConfirmPassword) {
             if (value == null || value.isEmpty) {
               return "Please provide a password ";
-            } else if (value.length < 6)
+            } else if (value.length < 6) {
               return 'Password must be at least 6 characters.';
-            else
+            } else {
               return null;
+            }
           } else {
             if (value == null || value.isEmpty) {
               return "Please enter your username";
-            } else if (value.length < 6)
+            } else if (value.length < 6) {
               return 'Username must be at least 6 characters';
-            else
+            } else {
               return null;
+            }
           }
         },
         onSaved: (value) {

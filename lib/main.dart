@@ -4,11 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home_screen.dart';
-import 'package:fitlah/screens/login_signup_screen.dart';
+import 'package:fitlah/screens/auth/login_signup_screen.dart';
 import 'package:fitlah/screens/profile_screen.dart';
 import 'package:fitlah/screens/record_screen.dart';
-import 'package:fitlah/screens/reset_password_screen.dart';
-import 'package:fitlah/screens/user_detail_screen.dart';
+import 'package:fitlah/screens/auth/reset_password_screen.dart';
+import 'package:fitlah/screens/auth/user_detail_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +67,6 @@ class MyApp extends StatelessWidget {
     }
 
     if (usersnapshot.hasData && usersnapshot.data!.exists) {
-      print("poly" + usersnapshot.data.toString());
       return MainScreen();
     }
 

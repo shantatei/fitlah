@@ -16,15 +16,15 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: themeColor, //change your color here
         ),
         backgroundColor: Colors.white,
-        title: Text("Fitlah"),
+        title: const Text("Fitlah"),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 32),
-        physics: BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
             imagePath:
@@ -43,44 +43,45 @@ class _EditProfileState extends State<EditProfile> {
     return Form(
       key: form,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
+        const Text(
           'FullName',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         buildTextField('Robert', false),
-        Text(
+        const Text(
           'Email',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         buildTextField('teirenxuanshanta@gmail.com', true),
-        Text(
+        const Text(
           'Weight',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         buildTextField('55kg', false),
-        Text(
+        const Text(
           'Age',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         buildTextField('26 y.o', false),
-        Text(
+        const Text(
           'Height',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 8),
         buildTextField('165 cm', false),
         Center(
-          child: OutlinedButton(
-            onPressed: editSave,
-            child: Text(
-              "Save",
-              style: CustomTextStyle.metricTextStyle,
-            ),
-            style: OutlinedButton.styleFrom(backgroundColor: themeColor),
+          child: ElevatedButton(
+            child: const Text("Submit"),
+            style: ElevatedButton.styleFrom(
+                primary: themeColor,
+                fixedSize: const Size(160, 50),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50))),
+            onPressed: () {},
           ),
         )
       ]),
@@ -89,11 +90,11 @@ class _EditProfileState extends State<EditProfile> {
 
   Widget buildTextField(String initialText, bool isEmail) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: TextFormField(
         initialValue: initialText,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Color(textColor1)),
             borderRadius: BorderRadius.all(Radius.circular(35.0)),
@@ -113,15 +114,17 @@ class _EditProfileState extends State<EditProfile> {
           if (isEmail) {
             if (value == null || value.isEmpty) {
               return "Please enter an email address ";
-            } else if (!value.contains('@'))
+            } else if (!value.contains('@')) {
               return "Please provide a valid email address.";
-            else
+            } else {
               return null;
+            }
           } else {
             if (value == null || value.isEmpty) {
               return "Please your FullName";
-            } else
+            } else {
               return null;
+            }
           }
         },
         onSaved: (value) {

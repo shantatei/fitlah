@@ -11,13 +11,9 @@ const textColor2 = 0XFF9BB3C0;
 const backgroundColor = 0xFFECF3F9;
 const kPrimaryColor = Color(0xFF1B383A);
 const kSecondaryColor = Color(0xFF59706F);
-const kDarkGreyColor = Color(0xFFA8A8A8);
 const kWhiteColor = Color(0xFFFFFFFF);
-const kZambeziColor = Color(0xFF5B5B5B);
-const kBlackColor = Color(0xFF272726);
 const kLightColor = Color(0xffc4bbcc);
 const kTextFieldColor = Color(0xFF979797);
-const kBackgroundColor = Color(0xffF3F3F3);
 const themeColor = Color.fromARGB(255, 15, 3, 226);
 
 const kDefaultPadding = EdgeInsets.symmetric(horizontal: 30);

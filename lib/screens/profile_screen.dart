@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlah/models/goals.dart';
 import 'package:fitlah/screens/edit_profile_screen.dart';
 import 'package:fitlah/services/goals_service.dart';
+import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:fitlah/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../models/user.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -19,6 +23,12 @@ class _ProfileState extends State<Profile> {
   int? caloriesintake;
 
   int? steps;
+
+  UserModel? _userModel;
+  String? username = "";
+  double? height = 0.0;
+  double? weight = 0.0;
+  int? age = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -131,108 +141,126 @@ class _ProfileState extends State<Profile> {
     return StreamBuilder<List<Goals>>(
         stream: GoalService.instance().getGoal(),
         builder: (context, snapshot) {
-          return ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              ProfileWidget(
-                //use user imagepath ltr*
-                imagePath:
-                    'https://media.istockphoto.com/photos/portrait-of-a-handsome-black-man-picture-id1289461335?b=1&k=20&m=1289461335&s=170667a&w=0&h=7L30Sh0R-0JXjgqFnxupL9msH5idzcz0xZUAMB9hY_k=',
-                onClicked: () async {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => EditProfile()));
-                },
-              ),
-              const SizedBox(height: 24),
-              buildInfo("55kg", "26 y.o", "165cm"),
-              const SizedBox(height: 24),
-              Center(
-                child: Container(
-                  width: 250,
-                  height: 270,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                      border: Border.all(
-                        color: Colors.black,
-                      )),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Goals",
-                              style: CustomTextStyle.metricTextStyle2,
+          return StreamBuilder<UserModel?>(
+              stream: UserService.instance().getUserStream(),
+              builder: (context, user) {
+                if (user.hasData) {
+                  _userModel = user.data;
+                  username = _userModel?.username;
+                  weight = _userModel?.weight;
+                  height = _userModel?.height;
+                  age = _userModel?.age;
+                }
+                return ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    ProfileWidget(
+                      //use user imagepath ltr*
+                      imagePath:
+                          'https://media.istockphoto.com/photos/portrait-of-a-handsome-black-man-picture-id1289461335?b=1&k=20&m=1289461335&s=170667a&w=0&h=7L30Sh0R-0JXjgqFnxupL9msH5idzcz0xZUAMB9hY_k=',
+                      onClicked: () async {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => EditProfile()));
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    buildInfo(weight!.toString(), age!.toString(),
+                        height!.toString()),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: Container(
+                        width: 250,
+                        height: 270,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            border: Border.all(
+                              color: Colors.black,
+                            )),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Goals",
+                                    style: CustomTextStyle.metricTextStyle2,
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      _editGoals(
+                                        snapshot.hasData ? snapshot.data! : [],
+                                      );
+                                    },
+                                    icon: const Icon(Icons.edit))
+                              ],
                             ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                _editGoals(
-                                  snapshot.hasData ? snapshot.data! : [],
-                                );
-                              },
-                              icon: const Icon(Icons.edit))
-                        ],
-                      ),
-                      ListTile(
-                        leading: const FaIcon(
-                          FontAwesomeIcons.bolt,
-                          color: Colors.orange,
-                        ),
-                        title: const Text(
-                          "Calories",
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 15),
-                        ),
-                        subtitle: Text(
-                          snapshot.hasData && snapshot.data!.isNotEmpty
-                              ? snapshot.data!.first.caloriesintake.toString()
-                              : "2000",
-                          style: CustomTextStyle.metricTextStyle2,
-                        ),
-                      ),
-                      ListTile(
-                        leading: const FaIcon(
-                          FontAwesomeIcons.droplet,
-                          color: themeColor,
-                        ),
-                        title: const Text(
-                          "Water",
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 15),
-                        ),
-                        subtitle: Text(
-                          snapshot.hasData && snapshot.data!.isNotEmpty
-                              ? snapshot.data!.first.waterintake.toString()
-                              : "2000",
-                          style: CustomTextStyle.metricTextStyle2,
-                        ),
-                      ),
-                      ListTile(
-                        leading: const FaIcon(
-                          FontAwesomeIcons.shoePrints,
-                          color: Colors.red,
-                        ),
-                        title: const Text(
-                          "Steps",
-                          style: TextStyle(
-                              fontWeight: FontWeight.normal, fontSize: 15),
-                        ),
-                        subtitle: Text(
-                          snapshot.hasData && snapshot.data!.isNotEmpty
-                              ? snapshot.data!.first.steps.toString()
-                              : "10000",
-                          style: CustomTextStyle.metricTextStyle2,
+                            ListTile(
+                              leading: const FaIcon(
+                                FontAwesomeIcons.bolt,
+                                color: Colors.orange,
+                              ),
+                              title: const Text(
+                                "Calories",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                snapshot.hasData && snapshot.data!.isNotEmpty
+                                    ? snapshot.data!.first.caloriesintake
+                                        .toString()
+                                    : "2000",
+                                style: CustomTextStyle.metricTextStyle2,
+                              ),
+                            ),
+                            ListTile(
+                              leading: const FaIcon(
+                                FontAwesomeIcons.droplet,
+                                color: themeColor,
+                              ),
+                              title: const Text(
+                                "Water",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                snapshot.hasData && snapshot.data!.isNotEmpty
+                                    ? snapshot.data!.first.waterintake
+                                        .toString()
+                                    : "2000",
+                                style: CustomTextStyle.metricTextStyle2,
+                              ),
+                            ),
+                            ListTile(
+                              leading: const FaIcon(
+                                FontAwesomeIcons.shoePrints,
+                                color: Colors.red,
+                              ),
+                              title: const Text(
+                                "Steps",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                snapshot.hasData && snapshot.data!.isNotEmpty
+                                    ? snapshot.data!.first.steps.toString()
+                                    : "10000",
+                                style: CustomTextStyle.metricTextStyle2,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          );
+                    )
+                  ],
+                );
+              });
         });
   }
 
@@ -240,10 +268,11 @@ class _ProfileState extends State<Profile> {
     return Center(
       child: Column(
         children: [
-          const Text(
+          Text(
               //use user fullname later *
-              "Robert",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+              username!,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Row(
