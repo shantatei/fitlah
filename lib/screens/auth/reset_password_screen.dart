@@ -22,7 +22,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       return authService.forgotPassword(email).then((value) {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Please check your email for to reset your password!'),
         ));
         Navigator.of(context).pop();
@@ -40,49 +40,58 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Fitlah'),
+        iconTheme: const IconThemeData(
+          color: themeColor, //change your color here
+        ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Fitlah',
+          style: TextStyle(color: themeColor),
+        ),
       ),
       body: Padding(
         padding: kDefaultPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 200,
             ),
             Text(
               'Reset Password',
               style: titleText,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               'Please enter your email address',
               style: subTitle.copyWith(fontWeight: FontWeight.w600),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Form(
               key: form,
               child: Padding(
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       hintText: 'Email',
                       hintStyle: TextStyle(color: kTextFieldColor),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: kPrimaryColor))),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null)
+                    if (value == null) {
                       return "Please provide an email address.";
-                    else if (!value.contains('@'))
+                    } else if (!value.contains('@')) {
                       return "Please provide a valid email address.";
-                    else
+                    } else {
                       return null;
+                    }
                   },
                   onSaved: (value) {
                     email = value;
@@ -90,19 +99,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             GestureDetector(
-                onTap: () {
-                  reset();
-                },
-                child: PrimaryButton(buttonText: 'Reset Password'))
+              onTap: () {
+                reset();
+              },
+              child: const PrimaryButton(
+                buttonText: 'Reset Password',
+                buttonColor: Colors.red,
+              ),
+            )
           ],
         ),
       ),
     );
   }
 }
-
-

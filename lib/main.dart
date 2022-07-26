@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home_screen.dart';
 import 'package:fitlah/screens/auth/login_signup_screen.dart';
-import 'package:fitlah/screens/profile_screen.dart';
+import 'package:fitlah/screens/profile/profile_screen.dart';
 import 'package:fitlah/screens/record_screen.dart';
 import 'package:fitlah/screens/auth/reset_password_screen.dart';
 import 'package:fitlah/screens/auth/user_detail_screen.dart';

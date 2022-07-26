@@ -5,6 +5,7 @@ import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
+import '../../widgets/primary_button_widget.dart';
 
 class UserDetailScreen extends StatefulWidget {
   @override
@@ -65,14 +66,11 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         ),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
                 "Fill up your Particulars",
-                style: TextStyle(
-                  color: themeColor,
-                  fontSize: 35,
-                ),
+                style: titleText,
               ),
             ),
             Form(
@@ -122,18 +120,27 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        saveForm(context);
-                      },
-                      child: const Text("Submit"),
-                      style: ElevatedButton.styleFrom(
-                          primary: themeColor,
-                          fixedSize: const Size(160, 50),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50))),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       saveForm(context);
+                  //     },
+                  //     child: const Text("Submit"),
+                  //     style: ElevatedButton.styleFrom(
+                  //         primary: themeColor,
+                  //         fixedSize: const Size(160, 50),
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(50))),
+                  //   ),
+                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      saveForm(context);
+                    },
+                    child: const PrimaryButton(
+                      buttonText: 'Submit',
+                      buttonColor: themeColor,
                     ),
                   )
                 ],

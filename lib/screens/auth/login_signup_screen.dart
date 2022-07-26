@@ -11,13 +11,11 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String? email;
-  String? username;
   String? password;
   String? confirmPassword;
 
   AuthService authService = AuthService();
   var form = GlobalKey<FormState>();
-  bool isMale = true;
   bool isSignupScreen = true;
   bool isRememberMe = false;
 
@@ -95,7 +93,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(backgroundColor),
       body: Stack(
         children: [
           Positioned(
@@ -110,7 +107,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       fit: BoxFit.fill)),
               child: Container(
                 padding: const EdgeInsets.only(top: 90, left: 20),
-                color: Colors.transparent.withOpacity(.85),
+                color: const Color.fromARGB(0, 72, 68, 68).withOpacity(.85),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -160,7 +157,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 700),
                 curve: Curves.bounceInOut,
-                height: isSignupScreen ? 380 : 290,
+                height: isSignupScreen ? 310 : 290,
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width - 40,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -202,7 +199,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
-                                    color: Colors.orange,
+                                    color: themeColor,
                                   )
                               ],
                             ),
@@ -230,7 +227,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
-                                    color: Colors.orange,
+                                    color: themeColor,
                                   )
                               ],
                             ),
@@ -269,7 +266,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         .pushNamed(ResetPasswordScreen.routeName);
                   },
                   child: const Text(
-                    "Forget Password",
+                    "Forget Password?",
                     style: TextStyle(fontSize: 12, color: Color(textColor1)),
                   )),
             )
@@ -289,86 +286,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           buildTextField(Icons.email, "Email", false, true, false),
           buildTextField(Icons.lock, "Password", true, false, false),
           buildTextField(Icons.lock, "Confirm Password", false, false, true),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 10, left: 10),
-          //   child: Row(
-          //     children: [
-          //       GestureDetector(
-          //         onTap: () {
-          //           setState(() {
-          //             isMale = true;
-          //           });
-          //         },
-          //         child: Row(
-          //           children: [
-          //             Container(
-          //               width: 30,
-          //               height: 30,
-          //               margin: const EdgeInsets.only(right: 8),
-          //               decoration: BoxDecoration(
-          //                 color: isMale
-          //                     ? const Color(textColor2)
-          //                     : Colors.transparent,
-          //                 border: Border.all(
-          //                     width: 1,
-          //                     color: isMale
-          //                         ? Colors.transparent
-          //                         : const Color(textColor1)),
-          //                 borderRadius: BorderRadius.circular(15),
-          //               ),
-          //               child: Icon(
-          //                 Icons.person,
-          //                 color: isMale ? Colors.white : const Color(iconColor),
-          //               ),
-          //             ),
-          //             const Text(
-          //               "Male",
-          //               style: TextStyle(color: Color(textColor1)),
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //       const SizedBox(
-          //         width: 30,
-          //       ),
-          //       GestureDetector(
-          //         onTap: () {
-          //           setState(() {
-          //             isMale = false;
-          //           });
-          //         },
-          //         child: Row(
-          //           children: [
-          //             Container(
-          //               width: 30,
-          //               height: 30,
-          //               margin: const EdgeInsets.only(right: 8),
-          //               decoration: BoxDecoration(
-          //                 color: isMale
-          //                     ? Colors.transparent
-          //                     : const Color(textColor2),
-          //                 border: Border.all(
-          //                     width: 1,
-          //                     color: isMale
-          //                         ? const Color(textColor1)
-          //                         : Colors.transparent),
-          //                 borderRadius: BorderRadius.circular(15),
-          //               ),
-          //               child: Icon(
-          //                 Icons.person,
-          //                 color: isMale ? const Color(iconColor) : Colors.white,
-          //               ),
-          //             ),
-          //             const Text(
-          //               "Female",
-          //               style: TextStyle(color: Color(textColor1)),
-          //             )
-          //           ],
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
           Container()
         ]),
       ),
@@ -379,7 +296,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return AnimatedPositioned(
         duration: const Duration(milliseconds: 700),
         curve: Curves.bounceInOut,
-        top: isSignupScreen ? 645 : 580,
+        top: isSignupScreen ? 575 : 580,
         right: 0,
         left: 0,
         child: Center(
@@ -402,7 +319,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 ? Container(
                     decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Colors.orange, Colors.red],
+                          colors: [themeColor, Colors.lightBlue],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -440,76 +357,80 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: TextFormField(
-        obscureText: isPassword || isConfirmPassword,
-        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            color: const Color(iconColor),
+      child: Material(
+        elevation: 2,
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.hardEdge,
+        child: TextFormField(
+          obscureText: isPassword || isConfirmPassword,
+          keyboardType:
+              isEmail ? TextInputType.emailAddress : TextInputType.text,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              color: themeColor,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(textColor1)),
+              borderRadius: BorderRadius.all(Radius.circular(35.0)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(textColor1)),
+              borderRadius: BorderRadius.all(Radius.circular(35.0)),
+            ),
+            contentPadding: const EdgeInsets.all(10),
+            hintText: hintText,
+            hintStyle: const TextStyle(fontSize: 14, color: themeColor),
+            errorStyle: const TextStyle(color: Colors.red),
+            errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red),
+                borderRadius: BorderRadius.all(Radius.circular(35.0))),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(textColor1)),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(textColor1)),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
-          ),
-          contentPadding: const EdgeInsets.all(10),
-          hintText: hintText,
-          hintStyle: const TextStyle(fontSize: 14, color: Color(textColor1)),
-          errorStyle: const TextStyle(color: Colors.red),
-          errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.all(Radius.circular(35.0))),
+          validator: (value) {
+            if (isPassword) {
+              if (value == null || value.isEmpty) {
+                return "Please provide a password ";
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters.';
+              } else {
+                return null;
+              }
+            } else if (isEmail) {
+              if (value == null || value.isEmpty) {
+                return "Please enter an email address ";
+              } else if (!value.contains('@')) {
+                return "Please provide a valid email address.";
+              } else {
+                return null;
+              }
+            } else if (isConfirmPassword) {
+              if (value == null || value.isEmpty) {
+                return "Please provide a password ";
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters.';
+              } else {
+                return null;
+              }
+            } else {
+              if (value == null || value.isEmpty) {
+                return "Please enter your username";
+              } else if (value.length < 6) {
+                return 'Username must be at least 6 characters';
+              } else {
+                return null;
+              }
+            }
+          },
+          onSaved: (value) {
+            if (isPassword) {
+              password = value;
+            } else if (isEmail) {
+              email = value;
+            } else if (isConfirmPassword) {
+              confirmPassword = value;
+            }
+          },
         ),
-        validator: (value) {
-          if (isPassword) {
-            if (value == null || value.isEmpty) {
-              return "Please provide a password ";
-            } else if (value.length < 6) {
-              return 'Password must be at least 6 characters.';
-            } else {
-              return null;
-            }
-          } else if (isEmail) {
-            if (value == null || value.isEmpty) {
-              return "Please enter an email address ";
-            } else if (!value.contains('@')) {
-              return "Please provide a valid email address.";
-            } else {
-              return null;
-            }
-          } else if (isConfirmPassword) {
-            if (value == null || value.isEmpty) {
-              return "Please provide a password ";
-            } else if (value.length < 6) {
-              return 'Password must be at least 6 characters.';
-            } else {
-              return null;
-            }
-          } else {
-            if (value == null || value.isEmpty) {
-              return "Please enter your username";
-            } else if (value.length < 6) {
-              return 'Username must be at least 6 characters';
-            } else {
-              return null;
-            }
-          }
-        },
-        onSaved: (value) {
-          if (isPassword) {
-            password = value;
-          } else if (isEmail) {
-            email = value;
-          } else if (isConfirmPassword) {
-            confirmPassword = value;
-          } else {
-            username = value;
-          }
-        },
       ),
     );
   }

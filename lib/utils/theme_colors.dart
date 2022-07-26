@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const CARBS_COLOR = 0xffD83027;
@@ -18,14 +17,19 @@ const themeColor = Color.fromARGB(255, 15, 3, 226);
 
 const kDefaultPadding = EdgeInsets.symmetric(horizontal: 30);
 
-TextStyle titleText =
-    TextStyle(color: kPrimaryColor, fontSize: 32, fontWeight: FontWeight.w700);
-TextStyle subTitle = TextStyle(
-    color: kSecondaryColor, fontSize: 18, fontWeight: FontWeight.w500);
-TextStyle textButton = TextStyle(
+TextStyle titleText = const TextStyle(
+  color: themeColor,
+  fontSize: 32,
+);
+
+TextStyle subTitle = const TextStyle(
+  color: kSecondaryColor,
+  fontSize: 18,
+);
+
+TextStyle textButton = const TextStyle(
   color: kPrimaryColor,
   fontSize: 18,
-  fontWeight: FontWeight.w700,
 );
 
 class CustomTextStyle {

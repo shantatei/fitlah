@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlah/models/goals.dart';
-import 'package:fitlah/screens/edit_profile_screen.dart';
+import 'package:fitlah/screens/profile/edit_profile_screen.dart';
 import 'package:fitlah/services/goals_service.dart';
 import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
@@ -8,7 +7,7 @@ import 'package:fitlah/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -159,8 +158,11 @@ class _ProfileState extends State<Profile> {
                       imagePath:
                           'https://media.istockphoto.com/photos/portrait-of-a-handsome-black-man-picture-id1289461335?b=1&k=20&m=1289461335&s=170667a&w=0&h=7L30Sh0R-0JXjgqFnxupL9msH5idzcz0xZUAMB9hY_k=',
                       onClicked: () async {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => EditProfile()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EditProfile(),
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: 24),
@@ -269,10 +271,9 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: [
           Text(
-              //use user fullname later *
-              username!,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+            username!,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Row(

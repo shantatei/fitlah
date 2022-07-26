@@ -1,10 +1,10 @@
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 
-
 class PrimaryButton extends StatelessWidget {
   final String buttonText;
-  PrimaryButton({required this.buttonText});
+  final Color buttonColor;
+  const PrimaryButton({required this.buttonText, required this.buttonColor});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -12,7 +12,7 @@ class PrimaryButton extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.08,
       width: double.infinity,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
+          borderRadius: BorderRadius.circular(16), color: buttonColor),
       child: Text(
         buttonText,
         style: textButton.copyWith(color: kWhiteColor),
