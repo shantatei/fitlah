@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +20,17 @@ class _EditProfileState extends State<EditProfile> {
   double? height = 0.0;
   double? weight = 0.0;
   int? age = 0;
-  File? profileImage;
   bool _isLoading = false;
   final bool _isUploading = false;
   var form = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  Future<String?> getProfileImage(String imagePath) async {
+    return await FirebaseStorage.instance
+        .ref()
+        .child(imagePath)
+        .getDownloadURL();
+  }
 
   void saveForm(BuildContext context) async {
     bool isValid = form.currentState!.validate();
@@ -124,16 +130,41 @@ class _EditProfileState extends State<EditProfile> {
                       child: Material(
                           color: Colors.transparent,
                           child: user.data?.profileImage != null
-                              ? FittedBox(
-                                  fit: BoxFit.fill,
-                                  child:
-                                      Image.network(user.data!.profileImage!))
-                              : const FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 100,
-                                    color: Colors.grey,
+                              ? SizedBox(
+                                  width: 128,
+                                  height: 128,
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Image.network(
+                                      user.data!.profileImage!,
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        if (loadingProgress
+                                                .expectedTotalBytes ==
+                                            null) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                        double percentLoaded = loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!;
+                                        return CircularProgressIndicator(
+                                          value: percentLoaded,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 128,
+                                  height: 128,
+                                  child: FittedBox(
+                                    fit: BoxFit.cover,
+                                    child: Image.asset('images/user.png'),
                                   ),
                                 )),
                     ),
@@ -278,128 +309,15 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  // Widget _modalBottomSheedBuilder(BuildContext context) {
-  //   return Container(
-  //     height: 300,
-  //     padding: const EdgeInsets.symmetric(
-  //       vertical: 10,
-  //       horizontal: 20,
-  //     ),
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.end,
-  //       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //       children: [
-  //         Container(
-  //           clipBehavior: Clip.hardEdge,
-  //           decoration: const BoxDecoration(
-  //             borderRadius: BorderRadius.all(
-  //               Radius.circular(15),
-  //             ),
-  //           ),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.stretch,
-  //             children: [
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: _modalItem(
-  //                   text: "Choose from library",
-  //                   onTap: () {
-  //                     Navigator.pop(context);
-  //                     _pickImage(_scaffoldKey, ImageSource.gallery);
-  //                   },
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: _modalItem(
-  //                   text: "Take Photo",
-  //                   onTap: () {
-  //                     Navigator.pop(context);
-  //                     _pickImage(_scaffoldKey, ImageSource.camera);
-  //                   },
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: 50,
-  //                 child: _modalItem(
-  //                   text: "Remove Current Photo",
-  //                   onTap: () {
-  //                     Navigator.pop(context);
-  //                     _deletePhotoImage();
-  //                   },
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         const SizedBox(height: 10),
-  //         Container(
-  //           height: 50,
-  //           clipBehavior: Clip.hardEdge,
-  //           decoration: const BoxDecoration(
-  //             borderRadius: BorderRadius.all(
-  //               Radius.circular(15),
-  //             ),
-  //           ),
-  //           child: _modalItem(
-  //             text: "Cancel",
-  //             onTap: () => Navigator.pop(context),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _modalItem({
-  //   required String text,
-  //   required void Function() onTap,
-  // }) {
-  //   return Material(
-  //     child: InkWell(
-  //       onTap: onTap,
-  //       child: Ink(
-  //         child: Center(
-  //           child: Text(
-  //             text,
-  //             style: const TextStyle(
-  //               fontFamily: 'Roboto',
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // void _deletePhotoImage() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //     _isUploading = true;
-  //   });
-  //   bool result = await UserService.instance().deleteUserImage();
-  //   setState(() {
-  //     _isLoading = false;
-  //     _isUploading = false;
-  //   });
-  // }
-
   void pickImageProfile(mode) async {
     ImageSource chosenSource =
         mode == 0 ? ImageSource.camera : ImageSource.gallery;
     return ImagePicker()
         .pickImage(
-            source: chosenSource,
-            maxWidth: 600,
-            imageQuality: 50,
-            maxHeight: 150)
+      source: chosenSource,
+      imageQuality: 100,
+    )
         .then((imageFile) async {
-      // if (imageFile != null) {
-      //   setState(() {
-      //     profileImage = File(imageFile.path);
-      //   });
-      // }
-
       if (imageFile == null) return;
 
       bool results =

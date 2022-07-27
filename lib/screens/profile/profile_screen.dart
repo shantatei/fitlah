@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitlah/models/goals.dart';
 import 'package:fitlah/screens/profile/edit_profile_screen.dart';
 import 'package:fitlah/services/goals_service.dart';
@@ -29,121 +30,128 @@ class _ProfileState extends State<Profile> {
   double? weight = 0.0;
   int? age = 0;
 
+  Future<String?> getProfileImage(String imagePath) async {
+    return await FirebaseStorage.instance
+        .ref()
+        .child(imagePath)
+        .getDownloadURL();
+  }
+
+  void _editGoals(List<Goals> goals, BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Edit Calores Goal '),
+            content: Form(
+              key: form,
+              child: Column(
+                children: [
+                  TextFormField(
+                    initialValue: goals.first.caloriesintake.toString(),
+                    decoration: const InputDecoration(
+                      labelText: "Calories Goal (kcal)",
+                      hintText: "Please enter your Calories Intake Goal",
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Calories Intake  Goal";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      if (value == null) return;
+                      caloriesintake = int.parse(value);
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: goals.first.waterintake.toString(),
+                    decoration: const InputDecoration(
+                      labelText: "Water Intake Goal (ml)",
+                      hintText: "Please enter your Water Intake Goal",
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Water Intake Goal";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      if (value == null) return;
+                      waterintake = int.parse(value);
+                    },
+                  ),
+                  TextFormField(
+                    initialValue: goals.first.steps.toString(),
+                    decoration: const InputDecoration(
+                      labelText: "Steps (m)",
+                      hintText: "Please enter your Steps Goal",
+                      errorStyle: TextStyle(color: Colors.red),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your Steps Goal";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      if (value == null) return;
+                      steps = int.parse(value);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.pop(context), // passing false
+                child: const Text('Cancel'),
+              ),
+              FlatButton(
+                  onPressed: () {
+                    bool isValid = form.currentState!.validate();
+                    if (isValid) {
+                      form.currentState!.save();
+
+                      GoalService.instance().updateGoal(
+                        goals.first.id,
+                        waterintake,
+                        caloriesintake,
+                        steps,
+                      );
+
+                      // Hide the keyboard
+                      FocusScope.of(context).unfocus();
+                      // Resets the form
+                      form.currentState!.reset();
+
+                      //Exiting Form
+                      Navigator.of(context).pop();
+
+                      // Shows a SnackBar
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Goals Updated Successfully!'),
+                      ));
+                    }
+                  },
+                  child: const Text('Ok'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    _editGoals(List<Goals> goals) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Edit Calores Goal '),
-              content: Form(
-                key: form,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: goals.first.caloriesintake.toString(),
-                      decoration: const InputDecoration(
-                        labelText: "Calories Goal (kcal)",
-                        hintText: "Please enter your Calories Intake Goal",
-                        errorStyle: TextStyle(color: Colors.red),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your Calories Intake  Goal";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        if (value == null) return;
-                        caloriesintake = int.parse(value);
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: goals.first.waterintake.toString(),
-                      decoration: const InputDecoration(
-                        labelText: "Water Intake Goal (ml)",
-                        hintText: "Please enter your Water Intake Goal",
-                        errorStyle: TextStyle(color: Colors.red),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your Water Intake Goal";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        if (value == null) return;
-                        waterintake = int.parse(value);
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: goals.first.steps.toString(),
-                      decoration: const InputDecoration(
-                        labelText: "Steps (m)",
-                        hintText: "Please enter your Steps Goal",
-                        errorStyle: TextStyle(color: Colors.red),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your Steps Goal";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        if (value == null) return;
-                        steps = int.parse(value);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                FlatButton(
-                  onPressed: () => Navigator.pop(context), // passing false
-                  child: const Text('Cancel'),
-                ),
-                FlatButton(
-                    onPressed: () {
-                      bool isValid = form.currentState!.validate();
-                      if (isValid) {
-                        form.currentState!.save();
-
-                        GoalService.instance().updateGoal(
-                          goals.first.id,
-                          waterintake,
-                          caloriesintake,
-                          steps,
-                        );
-
-                        // Hide the keyboard
-                        FocusScope.of(context).unfocus();
-                        // Resets the form
-                        form.currentState!.reset();
-
-                        //Exiting Form
-                        Navigator.of(context).pop();
-
-                        // Shows a SnackBar
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Goals Updated Successfully!'),
-                        ));
-                      }
-                    },
-                    child: const Text('Ok'))
-              ],
-            );
-          });
-    }
-
     return StreamBuilder<List<Goals>>(
         stream: GoalService.instance().getGoal(),
         builder: (context, snapshot) {
           return StreamBuilder<UserModel?>(
               stream: UserService.instance().getUserStream(),
               builder: (context, user) {
-                if (user.connectionState == ConnectionState.waiting) {
+                if (user.connectionState == ConnectionState.waiting ||
+                    !user.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (user.hasData) {
@@ -157,9 +165,34 @@ class _ProfileState extends State<Profile> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     user.data?.profileImage != null
-                        ? ProfileWidget(
-                            //use user imagepath ltr*
-                            imagePath: user.data!.profileImage!,
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Center(
+                              child: ClipOval(
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Ink.image(
+                                    image:
+                                        NetworkImage(user.data!.profileImage!),
+                                    fit: BoxFit.cover,
+                                    width: 128,
+                                    height: 128,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => EditProfile(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : ProfileWidget(
+                            imagePath: getProfileImage("user.png"),
                             onClicked: () async {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -167,11 +200,6 @@ class _ProfileState extends State<Profile> {
                                 ),
                               );
                             },
-                          )
-                        : const Icon(
-                            Icons.person,
-                            size: 100,
-                            color: Colors.grey,
                           ),
                     const SizedBox(height: 24),
                     buildInfo(weight!.toString(), age!.toString(),
@@ -203,6 +231,7 @@ class _ProfileState extends State<Profile> {
                                     onPressed: () {
                                       _editGoals(
                                         snapshot.hasData ? snapshot.data! : [],
+                                        context,
                                       );
                                     },
                                     icon: const Icon(Icons.edit))

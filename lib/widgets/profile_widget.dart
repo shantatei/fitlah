@@ -2,7 +2,7 @@ import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class ProfileWidget extends StatelessWidget {
-  final String imagePath;
+  final Future<String?> imagePath;
   final bool isEdit;
   final VoidCallback onClicked;
 
@@ -15,7 +15,7 @@ class ProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20),
       child: Center(
         child: Stack(
           children: [
@@ -28,21 +28,39 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    final image = NetworkImage(imagePath);
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 128,
-          height: 128,
-          child: InkWell(
-            onTap: onClicked,
+   
+    return FutureBuilder<String?>(
+      future: imagePath,
+      builder: (_, snaphsot) {
+        if (snaphsot.connectionState == ConnectionState.waiting) {
+          return ClipOval(
+            child: Material(
+              elevation: 4,
+              color: Colors.grey[700],
+              child: Container(
+                width: 128,
+                height: 128,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+        return ClipOval(
+          child: Material(
+            color: Colors.transparent,
+            child: Ink.image(
+              image: NetworkImage(snaphsot.data!),
+              fit: BoxFit.cover,
+              width: 128,
+              height: 128,
+              child: InkWell(
+                onTap: onClicked,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
