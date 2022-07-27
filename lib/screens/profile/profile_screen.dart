@@ -143,6 +143,9 @@ class _ProfileState extends State<Profile> {
           return StreamBuilder<UserModel?>(
               stream: UserService.instance().getUserStream(),
               builder: (context, user) {
+                if (user.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 if (user.hasData) {
                   _userModel = user.data;
                   username = _userModel?.username;
@@ -153,18 +156,23 @@ class _ProfileState extends State<Profile> {
                 return ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    ProfileWidget(
-                      //use user imagepath ltr*
-                      imagePath:
-                          'https://media.istockphoto.com/photos/portrait-of-a-handsome-black-man-picture-id1289461335?b=1&k=20&m=1289461335&s=170667a&w=0&h=7L30Sh0R-0JXjgqFnxupL9msH5idzcz0xZUAMB9hY_k=',
-                      onClicked: () async {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditProfile(),
+                    user.data?.profileImage != null
+                        ? ProfileWidget(
+                            //use user imagepath ltr*
+                            imagePath: user.data!.profileImage!,
+                            onClicked: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditProfile(),
+                                ),
+                              );
+                            },
+                          )
+                        : const Icon(
+                            Icons.person,
+                            size: 100,
+                            color: Colors.grey,
                           ),
-                        );
-                      },
-                    ),
                     const SizedBox(height: 24),
                     buildInfo(weight!.toString(), age!.toString(),
                         height!.toString()),
