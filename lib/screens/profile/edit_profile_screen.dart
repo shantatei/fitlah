@@ -56,10 +56,7 @@ class _EditProfileState extends State<EditProfile> {
     }
 
     try {
-      // bool updateResults = await UserService.instance().updateUser(
-      //   map,
-      // );
-      bool updateResults = false;
+      bool updateResults = await UserService.instance().updateUser(map, null);
 
       setState(() {
         _isLoading = false;
