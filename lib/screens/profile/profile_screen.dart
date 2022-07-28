@@ -168,27 +168,34 @@ class _ProfileState extends State<Profile> {
                         ? Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Center(
-                              child: ClipOval(
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Ink.image(
-                                    image:
-                                        NetworkImage(user.data!.profileImage!),
-                                    fit: BoxFit.cover,
-                                    width: 128,
-                                    height: 128,
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => EditProfile(),
-                                          ),
-                                        );
-                                      },
+                              child: Stack(children: [
+                                ClipOval(
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Ink.image(
+                                      image: NetworkImage(
+                                          user.data!.profileImage!),
+                                      fit: BoxFit.cover,
+                                      width: 128,
+                                      height: 128,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfile(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 4,
+                                    child: buildEditIcon(themeColor)),
+                              ]),
                             ),
                           )
                         : ProfileWidget(
@@ -349,4 +356,31 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
+  Widget buildEditIcon(Color color) => buildCircle(
+        color: Colors.white,
+        all: 3,
+        child: buildCircle(
+          color: color,
+          all: 8,
+          child: const Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
+
+  Widget buildCircle({
+    required Widget child,
+    required double all,
+    required Color color,
+  }) =>
+      ClipOval(
+        child: Container(
+          padding: EdgeInsets.all(all),
+          color: color,
+          child: child,
+        ),
+      );
 }

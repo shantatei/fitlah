@@ -2,9 +2,9 @@ import 'package:fitlah/models/food_track_task.dart';
 import 'package:fitlah/services/calories_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../utils/constants.dart';
-import '../utils/theme_colors.dart';
-import '../widgets/calorie-stats_widget.dart';
+import '../../utils/constants.dart';
+import '../../utils/theme_colors.dart';
+import 'widgets/calorie-stats_widget.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 

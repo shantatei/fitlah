@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 class ProfileWidget extends StatelessWidget {
   final Future<String?> imagePath;
-  final bool isEdit;
   final VoidCallback onClicked;
 
   const ProfileWidget({
     Key? key,
     required this.imagePath,
-    this.isEdit = false,
     required this.onClicked,
   }) : super(key: key);
   @override
@@ -28,7 +26,6 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-   
     return FutureBuilder<String?>(
       future: imagePath,
       builder: (_, snaphsot) {
@@ -70,8 +67,8 @@ class ProfileWidget extends StatelessWidget {
         child: buildCircle(
           color: color,
           all: 8,
-          child: Icon(
-            isEdit ? Icons.add_a_photo : Icons.edit,
+          child: const Icon(
+            Icons.add_a_photo,
             color: Colors.white,
             size: 20,
           ),

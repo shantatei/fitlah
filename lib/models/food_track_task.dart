@@ -1,7 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-@JsonSerializable()
 class FoodTrackTask {
   String email;
   String food_name;
@@ -50,26 +48,4 @@ class FoodTrackTask {
     };
   }
 
-  FoodTrackTask.fromJson(Map<dynamic, dynamic> json)
-      : email = json['email'],
-        mealTime = json['mealTime'],
-        calories = json['calories'],
-        createdOn = DateTime.parse(json['createdOn']),
-        food_name = json['food_name'],
-        carbs = json['carbs'],
-        fat = json['fat'],
-        protein = json['protein'],
-        grams = json['grams'];
-
-  Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-        'email' : email,
-        'mealTime': mealTime,
-        'createdOn': createdOn.toString(),
-        'food_name': food_name,
-        'calories': calories,
-        'carbs': carbs,
-        'fat': fat,
-        'protein': protein,
-        'grams': grams,
-      };
 }

@@ -3,20 +3,20 @@ import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Record extends StatefulWidget {
+class RunTracker extends StatefulWidget {
   @override
-  State<Record> createState() => _RecordState();
+  State<RunTracker> createState() => _RunTrackerState();
 }
 
-class _RecordState extends State<Record> {
+class _RunTrackerState extends State<RunTracker> {
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(1.372440, 103.949550),
     zoom: 11.5,
   );
 
-  Completer<GoogleMapController> _googleMapController = Completer();
+  final Completer<GoogleMapController> _googleMapController = Completer();
 
-  static final Marker _initialMarker = Marker(
+  static final Marker _initialMarker = const Marker(
     markerId: MarkerId('_initialMarker'),
     infoWindow: InfoWindow(title: 'Current Locaiton'),
     icon: BitmapDescriptor.defaultMarker,
@@ -24,10 +24,10 @@ class _RecordState extends State<Record> {
   );
 
   static final Marker _destinationMarker = Marker(
-    markerId: MarkerId('_destinationMarker'),
-    infoWindow: InfoWindow(title: 'Destination'),
+    markerId: const MarkerId('_destinationMarker'),
+    infoWindow: const InfoWindow(title: 'Destination'),
     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-    position: LatLng(1.3452, 103.9326),
+    position: const LatLng(1.3452, 103.9326),
   );
 
   // static final Polyline _kPolyline = Polyline(
@@ -53,7 +53,7 @@ class _RecordState extends State<Record> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: Align(
           alignment: Alignment.topCenter,
           child: Column(
@@ -80,7 +80,7 @@ class _RecordState extends State<Record> {
               Container(
                 width: 350,
                 height: 150,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border: Border(
                   bottom: BorderSide(color: Colors.black),
                   left: BorderSide(color: Colors.black),
@@ -91,7 +91,7 @@ class _RecordState extends State<Record> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: const [
                         Text(
                           "00:00",
                           style: TextStyle(
@@ -106,7 +106,7 @@ class _RecordState extends State<Record> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: const [
                         Text(
                           "Duration",
                           style: TextStyle(
@@ -121,7 +121,7 @@ class _RecordState extends State<Record> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: const [
                         Text(
                           "00:00",
                           style: TextStyle(
@@ -136,7 +136,7 @@ class _RecordState extends State<Record> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: const [
                         Text(
                           "PACE(KM/H)",
                           style: TextStyle(
@@ -153,14 +153,14 @@ class _RecordState extends State<Record> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: FloatingActionButton(
                     backgroundColor: themeColor,
                     foregroundColor: Colors.white,
                     onPressed: () {
                       startRecord();
                     },
-                    child: Text("START")),
+                    child: const Text("START")),
               ),
             ],
           ),

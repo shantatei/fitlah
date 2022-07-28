@@ -3,7 +3,7 @@ import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import '../services/water_service.dart';
+import '../../../services/water_service.dart';
 
 class WaterintakeList extends StatefulWidget {
   @override

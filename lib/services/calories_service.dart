@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlah/models/food_track_task.dart';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:fitlah/services/auth_service.dart';
 
@@ -86,12 +85,6 @@ class DatabaseService {
         .map(_foodTrackListFromSnapshot);
   }
 
-  //get all food track reccords in a database
-  // Future<List<dynamic>> getAllFoodTrackData() async {
-  //   QuerySnapshot snapshot = await foodTrackCollection.get();
-  //   List<dynamic> result = snapshot.docs.map((doc) => doc.data()).toList();
-  //   return result;
-  // }
 
   //getting a specific food track record using uid
   Future<String> getFoodTrackData(String uid) async {
