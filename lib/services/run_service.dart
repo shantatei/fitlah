@@ -20,7 +20,7 @@ class RunService {
     return fbstore
         .collection('runs')
         .where('email', isEqualTo: authService.getCurrentUser()!.email)
-        .orderBy('date')
+        .orderBy('timestarted')
         .snapshots()
         .map(
           (snapshot) =>
@@ -37,7 +37,7 @@ class RunService {
       await fbstore.collection('runs').doc(run.id).set({
         'email': run.email,
         'runImage': run.runImage,
-        'date': run.date,
+        'timestarted': run.timestarted,
         'duration': run.duration,
         'distance': run.distance,
         'speed': run.speed,

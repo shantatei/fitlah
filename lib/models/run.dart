@@ -4,8 +4,8 @@ class Run {
   String id;
   String email;
   String runImage;
-  String date;
-  double duration;
+  int timestarted;
+  int duration;
   double distance;
   double speed;
 
@@ -13,7 +13,7 @@ class Run {
     required this.id,
     required this.email,
     required this.runImage,
-    required this.date,
+    required this.timestarted,
     required this.duration,
     required this.distance,
     required this.speed,
@@ -25,7 +25,7 @@ class Run {
           id: document.id,
           email: document["email"],
           runImage: document["runImage"],
-          date: document["date"],
+          timestarted: document["timestarted"],
           duration: document["duration"],
           distance: document["distance"],
           speed: document["speed"],

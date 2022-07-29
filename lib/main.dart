@@ -8,6 +8,7 @@ import 'package:fitlah/screens/auth/login_signup_screen.dart';
 import 'package:fitlah/screens/profile/profile_screen.dart';
 import 'package:fitlah/screens/auth/reset_password_screen.dart';
 import 'package:fitlah/screens/auth/user_detail_screen.dart';
+import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
 import 'package:fitlah/screens/runnning_tracker/run_tracker_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
@@ -142,7 +143,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Home(),
             ),
             Container(
-              child: RunTracker(),
+              child: const AllRuns(),
             ),
             Container(
               child: Explore(),
