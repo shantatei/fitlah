@@ -2,14 +2,12 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fitlah/screens/explore_screen.dart';
 import 'package:fitlah/screens/home/home_screen.dart';
 import 'package:fitlah/screens/auth/login_signup_screen.dart';
 import 'package:fitlah/screens/profile/profile_screen.dart';
 import 'package:fitlah/screens/auth/reset_password_screen.dart';
 import 'package:fitlah/screens/auth/user_detail_screen.dart';
 import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
-import 'package:fitlah/screens/runnning_tracker/run_tracker_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -146,9 +144,6 @@ class _MainScreenState extends State<MainScreen> {
               child: const AllRuns(),
             ),
             Container(
-              child: Explore(),
-            ),
-            Container(
               child: Profile(),
             ),
           ],
@@ -167,13 +162,8 @@ class _MainScreenState extends State<MainScreen> {
             activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
-            title: const Text('Record'),
-            icon: const FaIcon(FontAwesomeIcons.recordVinyl),
-            activeColor: const Color.fromARGB(255, 15, 3, 226),
-          ),
-          BottomNavyBarItem(
-            title: const Text('Explore'),
-            icon: const Icon(Icons.explore),
+            title: const Text('Your Runs'),
+            icon: const FaIcon(FontAwesomeIcons.running),
             activeColor: const Color.fromARGB(255, 15, 3, 226),
           ),
           BottomNavyBarItem(
