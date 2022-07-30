@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
 import 'package:fitlah/screens/runnning_tracker/widgets/maps.dart';
 import 'package:fitlah/screens/runnning_tracker/widgets/run_panel.dart';
 import 'package:fitlah/services/auth_service.dart';
@@ -147,12 +146,13 @@ class _RunTrackerState extends State<RunTracker> {
   void _closeRun(BuildContext context) {
     if (_takingSnapshot) return;
     if (_isFirstTimeTracking) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const AllRuns(),
-        ),
-      );
+      Navigator.pop(context);
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => const AllRuns(),
+      //   ),
+      // );
       return;
     }
     showDialog(
@@ -174,12 +174,13 @@ class _RunTrackerState extends State<RunTracker> {
               });
               _location.enableBackgroundMode(enable: false);
               Navigator.pop(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AllRuns(),
-                ),
-              );
+              Navigator.pop(context);
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => const AllRuns(),
+              //   ),
+              // );
             },
             child: const Text("Yes"),
           ),

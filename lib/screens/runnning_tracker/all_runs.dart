@@ -21,21 +21,9 @@ class _AllRunsState extends State<AllRuns> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Your Runs"),
-      ),
       body: StreamBuilder<List<Run>>(
         stream: RunService.instance().getRunList(),
         builder: _builder,
-        // builder: (context, snapshot) {
-        //   bool snapshotIsWaiting =
-        //       snapshot.connectionState == ConnectionState.waiting;
-        //   if (!snapshotIsWaiting &&
-        //       (!snapshot.hasData || snapshot.data!.isEmpty)) {
-        //     return const Text("You have no runs saved yet ! ");
-        //   }
-        //   return ListView();
-        // },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
@@ -76,37 +64,4 @@ class _AllRunsState extends State<AllRuns> {
       ),
     );
   }
-
-  // void deleteRuns() async {
-  //   if (_listViewKey.currentState?.selectedCount == 0) return clearSelection();
-  //   setState(() {
-  //     isSelectable = false;
-  //     isLoading = true;
-  //     title = null;
-  //   });
-  //   _listViewKey.currentState!.setState(() {
-  //     _listViewKey.currentState!.isSelectable = false;
-  //   });
-  //   widget.appbarKey.currentState?.setTitle("Your Runs");
-  //   widget.refreshParent();
-  //   List<String> selectedItems = _listViewKey.currentState!.selectedItems;
-  //   bool deleteResults = await RunRepository.instance().deleteRun(
-  //     selectedItems,
-  //   );
-  //   bool isPositionDeleted = false;
-  //   for (String runId in selectedItems) {
-  //     isPositionDeleted = await PositionRepository.instance().deleteRunRoute(
-  //       runId,
-  //     );
-  //   }
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  //   if (!deleteResults || !isPositionDeleted) {
-  //     SnackbarUtils(context: context).createSnackbar(
-  //       'Unknown error has occurred',
-  //     );
-  //   }
-  // }
-
 }
