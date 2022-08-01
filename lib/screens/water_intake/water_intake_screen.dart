@@ -1,4 +1,4 @@
-import 'package:fitlah/models/water_intake_task.dart';
+import 'package:fitlah/models/water.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:fitlah/screens/water_intake/widgets/waterintake_list_widget.dart';
 import 'package:flutter/material.dart';

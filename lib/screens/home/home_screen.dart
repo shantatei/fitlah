@@ -1,20 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitlah/models/food_track_task.dart';
 import 'package:fitlah/models/goals.dart';
 import 'package:fitlah/models/user.dart';
-import 'package:fitlah/models/water_intake_task.dart';
+import 'package:fitlah/models/water.dart';
 import 'package:fitlah/services/goals_service.dart';
 import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/services/water_service.dart';
-import 'package:fitlah/screens/home/widgets/calorie-stats-simplified_widget.dart';
 import 'package:fitlah/screens/calories_intake/calories_intake_screen.dart';
 import 'package:fitlah/screens/water_intake/water_intake_screen.dart';
-import 'package:fitlah/services/calories_service.dart';
-import 'package:fitlah/utils/constants.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -48,6 +42,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    BuildContext widgetcontext = context;
     WaterService fsService = WaterService();
 
     final ButtonStyle buttonStyle =
@@ -65,356 +60,326 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
               sum += doc.water;
             }
             return StreamBuilder<List<Goals>>(
-                stream: GoalService.instance().getGoal(),
-                builder: (context, goals) {
-                  return StreamBuilder<UserModel?>(
-                      stream: UserService.instance().getUserStream(),
-                      builder: (context, user) {
-                        if (user.hasData) {
-                          _userModel = user.data;
-                          username = _userModel?.username;
-                        }
-                        return StreamProvider<List<FoodTrackTask>>.value(
-                          initialData: const [],
-                          value: DatabaseService(
-                            uid: DATABASE_UID,
-                            currentDate: DateTime.now(),
-                          ).foodTracks,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 8, top: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: const [
-                                      Text(
-                                        "Welcome to ",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 30,
-                                        ),
-                                      ),
-                                      Text(
-                                        "FITLAH",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30,
-                                          color: themeColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        username!,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 25,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                _showDatePicker(),
-                                //Running Card
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    height: 200,
-                                    width: 350,
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8, top: 8),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          const Color.fromARGB(255, 233, 20, 5),
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          top: 20,
-                                          left: 20,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons.running,
-                                                  color: Colors.white,
-                                                  size: 35,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: const [
-                                                    Text(
-                                                      "RUNNING",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle2,
-                                                    ),
-                                                    Text(
-                                                      "2500" "m",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle,
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+              stream: GoalService.instance().getGoal(),
+              builder: (context, goals) {
+                return StreamBuilder<UserModel?>(
+                  stream: UserService.instance().getUserStream(),
+                  builder: (context, user) {
+                    if (user.hasData) {
+                      _userModel = user.data;
+                      username = _userModel?.username;
+                    }
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          _getHeader(),
+                          _getUserName(),
+                          _showDatePicker(),
+                          //Running Card
+                          _getRunningCard(goals),
+                          //Calories Card
+                          InkWell(
+                            onTap: () {
+                              onClickDayViewScreenButton(context);
+                            },
+                            child: Container(
+                              height: 200,
+                              width: 350,
+                              margin: const EdgeInsets.only(bottom: 8, top: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 20,
+                                    left: 20,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          const FaIcon(
+                                            FontAwesomeIcons.utensils,
+                                            color: Colors.white,
+                                            size: 35,
                                           ),
-                                        ),
-                                        Positioned(
-                                          top: 150,
-                                          left: 20,
-                                          child: Container(
-                                            child: Row(children: [
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: const [
                                               Text(
-                                                goals.hasData &&
-                                                        goals.data!.isNotEmpty
-                                                    ? goals.data!.first.steps
-                                                        .toString()
-                                                    : "10000",
-                                                style: CustomTextStyle
-                                                    .metricTextStyle,
-                                              ),
-                                              const Text(
-                                                " " "m",
+                                                "CALORIES",
                                                 style: CustomTextStyle
                                                     .metricTextStyle2,
-                                              )
-                                            ]),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: SizedBox(
-                                            height: 10,
-                                            width: 260,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: LinearProgressIndicator(
-                                                value: 2500 /
-                                                    (goals.hasData &&
-                                                            goals.data!
-                                                                .isNotEmpty
-                                                        ? goals
-                                                            .data!.first.steps
-                                                            .toDouble()
-                                                        : 10000),
-                                                valueColor:
-                                                    const AlwaysStoppedAnimation(
-                                                  Colors.white,
-                                                ),
-                                                backgroundColor: kLightColor
-                                                    .withOpacity(0.2),
                                               ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                              Text("TEST"),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                //Calories Card
-                                InkWell(
-                                  onTap: () {
-                                    onClickDayViewScreenButton(context);
-                                  },
-                                  child: Container(
-                                    height: 250,
-                                    width: 350,
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8, top: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          top: 20,
-                                          left: 20,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons.utensils,
-                                                  color: Colors.white,
-                                                  size: 35,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      "CALORIES",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle2,
-                                                    ),
-                                                    TotalCalories(
-                                                        datePicked: _value)
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        //Chart
-
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 20,
-                                              top: 50,
-                                            ),
-                                            child: CalorieStatsSimplified(
-                                              datePicked: _value,
-                                            ),
-                                          ),
-                                        ),
-
-                                        //Progress Bar
-                                        // Align(
-                                        //   alignment: Alignment.center,
-                                        //   child: Container(
-                                        //     height: 10,
-                                        //     width: 260,
-                                        //     child: ClipRRect(
-                                        //       borderRadius: BorderRadius.circular(10.0),
-                                        //       child: LinearProgressIndicator(
-                                        //         value: 100 / 2000,
-                                        //         valueColor: AlwaysStoppedAnimation(Colors.white),
-                                        //         backgroundColor: kLightColor.withOpacity(0.2),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                //Water Intake Card
-                                InkWell(
-                                  onTap: () {
-                                    onClickWaterIntakeScreenButton(context);
-                                  },
-                                  child: Container(
-                                    height: 200,
-                                    width: 350,
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8, top: 8),
-                                    decoration: BoxDecoration(
-                                        color: themeColor,
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: SizedBox(
+                                      height: 10,
+                                      width: 260,
+                                      child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(20.0)),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                            top: 20,
-                                            left: 20,
-                                            child: Container(
-                                              child: Row(children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons.glassWater,
-                                                  color: Colors.white,
-                                                  size: 35,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      "WATER INTAKE",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle2,
-                                                    ),
-                                                    Text(
-                                                      sum.toStringAsFixed(0) +
-                                                          "ml",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle,
-                                                    )
-                                                  ],
-                                                )
-                                              ]),
-                                            )),
-                                        Positioned(
-                                          top: 150,
-                                          left: 20,
-                                          child: Container(
-                                            child: Row(children: [
-                                              Text(
-                                                goals.hasData &&
-                                                        goals.data!.isNotEmpty
-                                                    ? goals
-                                                        .data!.first.waterintake
-                                                        .toString()
-                                                    : "2000",
-                                                style: CustomTextStyle
-                                                    .metricTextStyle,
-                                              ),
-                                              const Text(
-                                                " " "ml",
-                                                style: CustomTextStyle
-                                                    .metricTextStyle2,
-                                              )
-                                            ]),
+                                            BorderRadius.circular(10.0),
+                                        child: LinearProgressIndicator(
+                                          // value: _getTotalCalories(
+                                          //         widgetcontext, _value) /
+                                          //     (goals.hasData &&
+                                          //             goals.data!
+                                          //                 .isNotEmpty
+                                          //         ? goals.data!.first
+                                          //             .caloriesintake
+                                          //         : 2000),
+                                          valueColor:
+                                              const AlwaysStoppedAnimation(
+                                            Colors.white,
                                           ),
+                                          backgroundColor:
+                                              kLightColor.withOpacity(0.2),
                                         ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: SizedBox(
-                                            height: 10,
-                                            width: 260,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: LinearProgressIndicator(
-                                                value: sum /
-                                                    (goals.hasData &&
-                                                            goals.data!
-                                                                .isNotEmpty
-                                                        ? goals.data!.first
-                                                            .waterintake
-                                                        : 2000),
-                                                valueColor:
-                                                    const AlwaysStoppedAnimation(
-                                                        Colors.white),
-                                                backgroundColor: kLightColor
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      });
-                });
+                          //Water Intake Card
+                          _getWaterIntakeCard(context, sum, goals),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            );
           }
         },
+      ),
+    );
+  }
+
+  InkWell _getWaterIntakeCard(
+      BuildContext context, double sum, AsyncSnapshot<List<Goals>> goals) {
+    return InkWell(
+      onTap: () {
+        onClickWaterIntakeScreenButton(context);
+      },
+      child: Container(
+        height: 200,
+        width: 350,
+        margin: const EdgeInsets.only(bottom: 8, top: 8),
+        decoration: BoxDecoration(
+            color: themeColor, borderRadius: BorderRadius.circular(20.0)),
+        child: Stack(
+          children: [
+            Positioned(
+                top: 20,
+                left: 20,
+                child: Container(
+                  child: Row(children: [
+                    const FaIcon(
+                      FontAwesomeIcons.glassWater,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "WATER INTAKE",
+                          style: CustomTextStyle.metricTextStyle2,
+                        ),
+                        Text(
+                          sum.toStringAsFixed(0) + "ml",
+                          style: CustomTextStyle.metricTextStyle,
+                        )
+                      ],
+                    )
+                  ]),
+                )),
+            Positioned(
+              top: 150,
+              left: 20,
+              child: Container(
+                child: Row(children: [
+                  Text(
+                    goals.hasData && goals.data!.isNotEmpty
+                        ? goals.data!.first.waterintake.toString()
+                        : "2000",
+                    style: CustomTextStyle.metricTextStyle,
+                  ),
+                  const Text(
+                    " " "ml",
+                    style: CustomTextStyle.metricTextStyle2,
+                  )
+                ]),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 10,
+                width: 260,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: LinearProgressIndicator(
+                    value: sum /
+                        (goals.hasData && goals.data!.isNotEmpty
+                            ? goals.data!.first.waterintake
+                            : 2000),
+                    valueColor: const AlwaysStoppedAnimation(Colors.white),
+                    backgroundColor: kLightColor.withOpacity(0.2),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  InkWell _getRunningCard(AsyncSnapshot<List<Goals>> goals) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        height: 200,
+        width: 350,
+        margin: const EdgeInsets.only(bottom: 8, top: 8),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 233, 20, 5),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Container(
+                child: Row(
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.running,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "RUNNING",
+                          style: CustomTextStyle.metricTextStyle2,
+                        ),
+                        Text(
+                          "2500" "m",
+                          style: CustomTextStyle.metricTextStyle,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 150,
+              left: 20,
+              child: Container(
+                child: Row(children: [
+                  Text(
+                    goals.hasData && goals.data!.isNotEmpty
+                        ? goals.data!.first.steps.toString()
+                        : "10000",
+                    style: CustomTextStyle.metricTextStyle,
+                  ),
+                  const Text(
+                    " " "m",
+                    style: CustomTextStyle.metricTextStyle2,
+                  )
+                ]),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 10,
+                width: 260,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: LinearProgressIndicator(
+                    value: 2500 /
+                        (goals.hasData && goals.data!.isNotEmpty
+                            ? goals.data!.first.steps.toDouble()
+                            : 10000),
+                    valueColor: const AlwaysStoppedAnimation(
+                      Colors.white,
+                    ),
+                    backgroundColor: kLightColor.withOpacity(0.2),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Padding _getUserName() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            username!,
+            style: const TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 25,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _getHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, top: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          Text(
+            "Welcome to ",
+            style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 30,
+            ),
+          ),
+          Text(
+            "FITLAH",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+              color: themeColor,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -562,51 +527,5 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
     } else {
       return "${tm.day} $month ${tm.year}";
     }
-  }
-}
-
-class TotalCalories extends StatelessWidget {
-  final DateTime datePicked;
-  num displayCalories = 0;
-  TotalCalories({required this.datePicked});
-  static List<num> macroData = [];
-
-  @override
-  Widget build(BuildContext context) {
-    final DateTime curDate =
-        DateTime(datePicked.year, datePicked.month, datePicked.day);
-
-    final foodTracks = Provider.of<List<FoodTrackTask>>(context);
-
-    List findCurScans(List<FoodTrackTask> foodTracks) {
-      List currentFoodTracks = [];
-      for (var foodTrack in foodTracks) {
-        DateTime trackDate = DateTime(foodTrack.createdOn.year,
-            foodTrack.createdOn.month, foodTrack.createdOn.day);
-        if (trackDate.compareTo(curDate) == 0) {
-          currentFoodTracks.add(foodTrack);
-        }
-      }
-      return currentFoodTracks;
-    }
-
-    List currentFoodTracks = findCurScans(foodTracks);
-
-    void findTotalCalories(List foodTracks) {
-      for (var scan in foodTracks) {
-        displayCalories += scan.calories;
-      }
-    }
-
-    findTotalCalories(currentFoodTracks);
-
-    macroData = [displayCalories];
-
-    displayCalories = 0;
-
-    return Text(
-      macroData[0].toStringAsFixed(0) + "kcal",
-      style: CustomTextStyle.metricTextStyle,
-    );
   }
 }

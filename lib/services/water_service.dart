@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlah/services/auth_service.dart';
 
-import '../models/water_intake_task.dart';
+import '../models/water.dart';
 
 class WaterService {
   AuthService authService = AuthService();
