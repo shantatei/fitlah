@@ -37,6 +37,7 @@ class RunService {
       await fbstore.collection('runs').doc(run.id).set({
         'email': run.email,
         'runImage': run.runImage,
+        'date': run.date,
         'timestarted': run.timestarted,
         'duration': run.duration,
         'distance': run.distance,

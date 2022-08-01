@@ -5,6 +5,7 @@ import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,6 +29,7 @@ class _RunTrackerState extends State<RunTracker> {
   int timestarted = 0;
   int duration = 0;
   double distance = 0;
+  double speed = 0;
 
   final AuthService authService = AuthService();
 
@@ -135,6 +137,7 @@ class _RunTrackerState extends State<RunTracker> {
       id: '',
       email: authService.getCurrentUser()!.email.toString(),
       runImage: "maps/dark-${const Uuid().v4()}",
+      date:DateFormat.yMMMMd('en_US').format(DateTime.now()),
       timestarted: timestarted,
       duration: duration,
       distance: distance,
@@ -147,13 +150,6 @@ class _RunTrackerState extends State<RunTracker> {
     if (_takingSnapshot) return;
     if (_isFirstTimeTracking) {
       Navigator.pop(context);
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (_) => const AllRuns(),
-      //   ),
-      // );
-      return;
     }
     showDialog(
       context: context,
@@ -175,12 +171,6 @@ class _RunTrackerState extends State<RunTracker> {
               _location.enableBackgroundMode(enable: false);
               Navigator.pop(context);
               Navigator.pop(context);
-              // Navigator.pushReplacement(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (_) => const AllRuns(),
-              //   ),
-              // );
             },
             child: const Text("Yes"),
           ),
@@ -270,7 +260,10 @@ class _RunTrackerState extends State<RunTracker> {
           return polyline.map((position) => position.toLatLng()).toList();
         },
       ).toList();
+      print(polylines);
       distance = polylines.calculateDistance();
+      speed = locationData.speed!;
+      _runPanelKey.currentState!.setSpeed(speed);
       _runPanelKey.currentState!.setDistance(distance);
       _mapKey.currentState!.setPolylines(polylines);
       _mapKey.currentState!.animateCamera(polylines.last.last);
@@ -285,6 +278,7 @@ class _RunTrackerState extends State<RunTracker> {
       (timer) {
         if (!_isTracking) return timer.cancel();
         duration += 1000;
+        double timeTakenInHours = duration / 1000 / 60 / 60;
         var timeTaken = duration.toTimeString();
         _runPanelKey.currentState!.setDuration(timeTaken);
         _setUpNotification(timeTaken);

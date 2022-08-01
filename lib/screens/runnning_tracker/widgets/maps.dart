@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:fitlah/models/run.dart';
-import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
 import 'package:fitlah/services/position_service.dart';
 import 'package:fitlah/services/run_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
@@ -33,6 +32,8 @@ class MapsState extends State<Maps> {
             visible: true,
             points: individualRoute,
             width: 3,
+            startCap: Cap.roundCap,
+            endCap: Cap.roundCap,
             color: themeColor,
           ),
         );
@@ -77,12 +78,7 @@ class MapsState extends State<Maps> {
     if (!insertResults || !insertrouteResult) {
       print("Error");
     }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const AllRuns(),
-      ),
-    );
+    Navigator.pop(context);
   }
 
   void _setLatLngBounds(List<List<LatLng>> runRoute) {

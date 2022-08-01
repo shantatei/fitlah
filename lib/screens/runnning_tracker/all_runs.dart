@@ -46,7 +46,12 @@ class _AllRunsState extends State<AllRuns> {
     bool snapshotIsWaiting =
         snapshot.connectionState == ConnectionState.waiting;
     if (!snapshotIsWaiting && (!snapshot.hasData || snapshot.data!.isEmpty)) {
-      return const Text("You have no runs saved yet ! ");
+      return const Center(
+        child: Text(
+          "You have no runs saved yet ! ",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+        ),
+      );
     }
     return Container(
       width: double.infinity,

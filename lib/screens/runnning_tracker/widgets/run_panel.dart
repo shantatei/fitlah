@@ -10,13 +10,21 @@ class RunPanel extends StatefulWidget {
 
 class RunPanelState extends State<RunPanel> {
   double distance = 0.0;
+  double speed = 0.0;
   String duration = "00:00:00";
   final bool _isTracking = false;
-   void handleclick = ({});
+
+  void handleclick = ({});
 
   void setDistance(double distanceRan) {
     setState(() {
       distance = distanceRan;
+    });
+  }
+
+  void setSpeed(double currentSpeed) {
+    setState(() {
+      speed = currentSpeed;
     });
   }
 
@@ -39,19 +47,22 @@ class RunPanelState extends State<RunPanel> {
     return "${(distance / 1200).toStringAsFixed(3)}km";
   }
 
+  String _getSpeedString() {
+    return "${speed.toStringAsFixed(2)} m/s";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
-          children: const [
-            Text("SPEED (KM/H)",
+          children: [
+            const Text("SPEED",
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+            Text(_getSpeedString(),
                 style:
-                    TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-            Text("0:00",
-                style:
-                    TextStyle(fontSize: 30, fontWeight: FontWeight.w300))
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w300))
           ],
         ),
         Column(
@@ -62,21 +73,19 @@ class RunPanelState extends State<RunPanel> {
             ),
             Text(
               duration,
-              style: const TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.w300),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
             ),
           ],
         ),
         Column(
           children: [
             const Text(
-              "DISTANCE (KM)",
+              "DISTANCE",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
             ),
             Text(
               _getDistanceString(),
-              style: const TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.w300),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
             )
           ],
         ),

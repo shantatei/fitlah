@@ -47,6 +47,7 @@ class RunDetailState extends State<RunDetail> {
                   elevation: 10,
                   child: Column(
                     children: [
+                      _getDateRow(widget.runModel),
                       SizedBox(
                         child: _getImage(widget.runModel),
                       ),
@@ -96,6 +97,23 @@ class RunDetailState extends State<RunDetail> {
           }
           return Container();
         },
+      ),
+    );
+  }
+
+  Widget _getDateRow(Run runModel) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            runModel.date,
+            style: Theme.of(context).textTheme.headline6?.copyWith(
+                  overflow: TextOverflow.ellipsis,
+                ),
+          ),
+        ],
       ),
     );
   }
