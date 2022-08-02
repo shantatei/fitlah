@@ -39,23 +39,33 @@ class CalorieService {
     await fbstore.collection(collectionName).doc(id).delete();
   }
 
-  Future<List<Calorie>> getCaloriebyDate(DateTime selectedDate) async {
-    QuerySnapshot<Map<String, dynamic>> doclist = await fbstore
-        .collection(collectionName)
-        .where('email', isEqualTo: email)
-        .get();
-    var list = doclist.docs.map((snapshot) {
-      return Calorie.fromSnapshot(snapshot);
-    }).toList();
+  Stream<List<Calorie>> getCaloriebyDate(DateTime selectedDate) async* {
     var dateSelected = DateTime(
       selectedDate.year,
       selectedDate.month,
       selectedDate.day,
     );
+    var stream = fbstore
+        .collection(collectionName)
+        .where('email', isEqualTo: email)
+        .snapshots();
 
-    List<Calorie> selectedCalorie = findSelectedCalorie(list, dateSelected);
-
-    return selectedCalorie;
+    await for (var snapshot in stream) {
+      List<Calorie> calorieList = [];
+      for (var doc in snapshot.docs) {
+        Calorie calorie = Calorie.fromSnapshot(doc);
+        DateTime scanDate = DateTime(
+          calorie.createdOn.year,
+          calorie.createdOn.month,
+          calorie.createdOn.day,
+        );
+        print(scanDate.compareTo(dateSelected));
+        if (scanDate.compareTo(dateSelected) == 0) {
+          calorieList.add(calorie);
+        }
+      }
+      yield calorieList;
+    }
   }
 
   List<Calorie> findSelectedCalorie(List foodTrackFeed, DateTime dateSelected) {

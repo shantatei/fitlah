@@ -1,6 +1,8 @@
+import 'package:fitlah/models/calorie.dart';
 import 'package:fitlah/models/goals.dart';
 import 'package:fitlah/models/user.dart';
 import 'package:fitlah/models/water.dart';
+import 'package:fitlah/services/calories_service.dart';
 import 'package:fitlah/services/goals_service.dart';
 import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/services/water_service.dart';
@@ -53,7 +55,9 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         stream: fsService.getWater(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
             double sum = 0;
             for (var doc in snapshot.data!) {
@@ -69,95 +73,115 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                       _userModel = user.data;
                       username = _userModel?.username;
                     }
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _getHeader(),
-                          _getUserName(),
-                          _showDatePicker(),
-                          //Running Card
-                          _getRunningCard(goals),
-                          //Calories Card
-                          InkWell(
-                            onTap: () {
-                              onClickDayViewScreenButton(context);
-                            },
-                            child: Container(
-                              height: 200,
-                              width: 350,
-                              margin: const EdgeInsets.only(bottom: 8, top: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.orange,
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    top: 20,
-                                    left: 20,
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          const FaIcon(
-                                            FontAwesomeIcons.utensils,
-                                            color: Colors.white,
-                                            size: 35,
+                    return StreamBuilder<List<Calorie>>(
+                        stream:
+                            CalorieService.instance().getCaloriebyDate(_value),
+                        builder: (context, caloriesnapshot) {
+                          if (caloriesnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          num caloriesum = 0;
+                          for (var doc in caloriesnapshot.data!) {
+                            caloriesum = doc.calories;
+                          }
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                _getHeader(),
+                                _getUserName(),
+                                _showDatePicker(),
+                                //Running Card
+                                _getRunningCard(goals),
+                                //Calories Card
+                                InkWell(
+                                  onTap: () {
+                                    onClickDayViewScreenButton(context);
+                                  },
+                                  child: Container(
+                                    height: 200,
+                                    width: 350,
+                                    margin: const EdgeInsets.only(
+                                        bottom: 8, top: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange,
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: 20,
+                                          left: 20,
+                                          child: Container(
+                                            child: Row(
+                                              children: [
+                                                const FaIcon(
+                                                  FontAwesomeIcons.utensils,
+                                                  color: Colors.white,
+                                                  size: 35,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      "CALORIES",
+                                                      style: CustomTextStyle
+                                                          .metricTextStyle2,
+                                                    ),
+                                                    Text(
+                                                      caloriesum.toString() +
+                                                          "kcal",
+                                                      style: CustomTextStyle
+                                                          .metricTextStyle,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: const [
-                                              Text(
-                                                "CALORIES",
-                                                style: CustomTextStyle
-                                                    .metricTextStyle2,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            height: 10,
+                                            width: 260,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: LinearProgressIndicator(
+                                                value: caloriesum /
+                                                    (goals.hasData &&
+                                                            goals.data!
+                                                                .isNotEmpty
+                                                        ? goals.data!.first
+                                                            .caloriesintake
+                                                        : 2000),
+                                                valueColor:
+                                                    const AlwaysStoppedAnimation(
+                                                  Colors.white,
+                                                ),
+                                                backgroundColor: kLightColor
+                                                    .withOpacity(0.2),
                                               ),
-                                              Text("TEST"),
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: SizedBox(
-                                      height: 10,
-                                      width: 260,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: LinearProgressIndicator(
-                                          // value: _getTotalCalories(
-                                          //         widgetcontext, _value) /
-                                          //     (goals.hasData &&
-                                          //             goals.data!
-                                          //                 .isNotEmpty
-                                          //         ? goals.data!.first
-                                          //             .caloriesintake
-                                          //         : 2000),
-                                          valueColor:
-                                              const AlwaysStoppedAnimation(
-                                            Colors.white,
-                                          ),
-                                          backgroundColor:
-                                              kLightColor.withOpacity(0.2),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                //Water Intake Card
+                                _getWaterIntakeCard(context, sum, goals),
+                              ],
                             ),
-                          ),
-                          //Water Intake Card
-                          _getWaterIntakeCard(context, sum, goals),
-                        ],
-                      ),
-                    );
+                          );
+                        });
                   },
                 );
               },

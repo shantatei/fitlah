@@ -33,28 +33,30 @@ class _DayViewState extends State<DayViewScreen> {
   void initState() {
     super.initState();
     addFoodTrack = Calorie(
-        email: "",
-        food_name: "",
-        calories: 0,
-        carbs: 0,
-        protein: 0,
-        fat: 0,
-        mealTime: "",
-        createdOn: _value,
-        grams: 0);
+      email: "",
+      food_name: "",
+      calories: 0,
+      carbs: 0,
+      protein: 0,
+      fat: 0,
+      mealTime: "",
+      createdOn: _value,
+      grams: 0,
+    );
   }
 
   void resetFoodTrack() {
     addFoodTrack = Calorie(
-        email: "",
-        food_name: "",
-        calories: 0,
-        carbs: 0,
-        protein: 0,
-        fat: 0,
-        mealTime: "",
-        createdOn: _value,
-        grams: 0);
+      email: "",
+      food_name: "",
+      calories: 0,
+      carbs: 0,
+      protein: 0,
+      fat: 0,
+      mealTime: "",
+      createdOn: _value,
+      grams: 0,
+    );
   }
 
   Widget _calorieCounter(AsyncSnapshot<List<Calorie>> caloriesnapshot) {
@@ -423,47 +425,23 @@ class _DayViewState extends State<DayViewScreen> {
     Duration oneDay = const Duration(days: 1);
     Duration twoDay = const Duration(days: 2);
     String month;
-
-    switch (tm.month) {
-      case 1:
-        month = "Jan";
-        break;
-      case 2:
-        month = "Feb";
-        break;
-      case 3:
-        month = "Mar";
-        break;
-      case 4:
-        month = "Apr";
-        break;
-      case 5:
-        month = "May";
-        break;
-      case 6:
-        month = "Jun";
-        break;
-      case 7:
-        month = "Jul";
-        break;
-      case 8:
-        month = "Aug";
-        break;
-      case 9:
-        month = "Sep";
-        break;
-      case 10:
-        month = "Oct";
-        break;
-      case 11:
-        month = "Nov";
-        break;
-      case 12:
-        month = "Dec";
-        break;
-      default:
-        month = "Undefined";
-        break;
+    if (tm.month < 0 || tm.month > 12) {
+      month = "Undefined";
+    } else {
+      month = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ][tm.month - 1];
     }
 
     Duration difference = today.difference(tm);
@@ -492,8 +470,8 @@ class _DayViewState extends State<DayViewScreen> {
               ],
             ),
           )),
-      body: FutureBuilder<List<Calorie>>(
-        future: CalorieService.instance().getCaloriebyDate(_value),
+      body: StreamBuilder<List<Calorie>>(
+        stream: CalorieService.instance().getCaloriebyDate(_value),
         builder: (context, caloriesnapshot) {
           if (caloriesnapshot.connectionState == ConnectionState.waiting ||
               !caloriesnapshot.hasData) {
