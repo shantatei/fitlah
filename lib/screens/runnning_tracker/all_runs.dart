@@ -26,7 +26,7 @@ class _AllRunsState extends State<AllRuns> {
         builder: _builder,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
+        onPressed: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const RunTracker(),

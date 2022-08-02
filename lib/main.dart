@@ -73,24 +73,36 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
+  int? index;
+
+  MainScreen({this.index});
+
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  late PageController _pageController;
+  late List<Widget> children;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-  }
+    children = <Widget>[
+      Container(
+        child: Home(),
+      ),
+      Container(
+        child: const AllRuns(),
+      ),
+      Container(
+        child: Profile(),
+      ),
+    ];
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
+    if (widget.index != null) {
+      _currentIndex = widget.index!;
+    }
   }
 
   AuthService authService = AuthService();
@@ -130,30 +142,12 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: SizedBox.expand(
-        child: PageView(
-          physics: const BouncingScrollPhysics(),
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _currentIndex = index);
-          },
-          children: <Widget>[
-            Container(
-              child: Home(),
-            ),
-            Container(
-              child: const AllRuns(),
-            ),
-            Container(
-              child: Profile(),
-            ),
-          ],
-        ),
+        child: children[_currentIndex],
       ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         onItemSelected: (index) {
           setState(() => _currentIndex = index);
-          _pageController.jumpToPage(index);
         },
         items: <BottomNavyBarItem>[
           BottomNavyBarItem(

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:fitlah/models/run.dart';
+import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
 import 'package:fitlah/services/position_service.dart';
 import 'package:fitlah/services/run_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
@@ -78,7 +79,12 @@ class MapsState extends State<Maps> {
     if (!insertResults || !insertrouteResult) {
       print("Error");
     }
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AllRuns(),
+      ),
+    );
   }
 
   void _setLatLngBounds(List<List<LatLng>> runRoute) {

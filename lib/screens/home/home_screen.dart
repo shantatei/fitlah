@@ -27,11 +27,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   UserModel? _userModel;
   String? username = "";
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   onClickDayViewScreenButton(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const DayViewScreen()));

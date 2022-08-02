@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fitlah/main.dart';
 import 'package:fitlah/screens/runnning_tracker/widgets/maps.dart';
 import 'package:fitlah/screens/runnning_tracker/widgets/run_panel.dart';
 import 'package:fitlah/services/auth_service.dart';
@@ -137,7 +138,7 @@ class _RunTrackerState extends State<RunTracker> {
       id: '',
       email: authService.getCurrentUser()!.email.toString(),
       runImage: "maps/dark-${const Uuid().v4()}",
-      date:DateFormat.yMMMMd('en_US').format(DateTime.now()),
+      date: DateFormat.yMMMMd('en_US').format(DateTime.now()),
       timestarted: timestarted,
       duration: duration,
       distance: distance,
@@ -149,7 +150,14 @@ class _RunTrackerState extends State<RunTracker> {
   void _closeRun(BuildContext context) {
     if (_takingSnapshot) return;
     if (_isFirstTimeTracking) {
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MainScreen(index: 1,),
+        ),
+      );
+
+      return;
     }
     showDialog(
       context: context,
@@ -170,7 +178,12 @@ class _RunTrackerState extends State<RunTracker> {
               });
               _location.enableBackgroundMode(enable: false);
               Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MainScreen(index: 1,),
+                ),
+              );
             },
             child: const Text("Yes"),
           ),
