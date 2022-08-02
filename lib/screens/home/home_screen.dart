@@ -88,89 +88,9 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                                 _getHeader(),
                                 _getUserName(),
                                 _showDatePicker(),
-                                //Running Card
-                                _getRunningCard(goals),
                                 //Calories Card
-                                InkWell(
-                                  onTap: () {
-                                    onClickDayViewScreenButton(context);
-                                  },
-                                  child: Container(
-                                    height: 200,
-                                    width: 350,
-                                    margin: const EdgeInsets.only(
-                                        bottom: 8, top: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          top: 20,
-                                          left: 20,
-                                          child: Container(
-                                            child: Row(
-                                              children: [
-                                                const FaIcon(
-                                                  FontAwesomeIcons.utensils,
-                                                  color: Colors.white,
-                                                  size: 35,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      "CALORIES",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle2,
-                                                    ),
-                                                    Text(
-                                                      caloriesum.toString() +
-                                                          "kcal",
-                                                      style: CustomTextStyle
-                                                          .metricTextStyle,
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: SizedBox(
-                                            height: 10,
-                                            width: 260,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: LinearProgressIndicator(
-                                                value: caloriesum /
-                                                    (goals.hasData &&
-                                                            goals.data!
-                                                                .isNotEmpty
-                                                        ? goals.data!.first
-                                                            .caloriesintake
-                                                        : 2000),
-                                                valueColor:
-                                                    const AlwaysStoppedAnimation(
-                                                  Colors.white,
-                                                ),
-                                                backgroundColor: kLightColor
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                _getCalorieIntakeCard(
+                                    context, caloriesum, goals),
                                 //Water Intake Card
                                 _getWaterIntakeCard(context, sum, goals),
                               ],
@@ -183,6 +103,97 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
             );
           }
         },
+      ),
+    );
+  }
+
+  InkWell _getCalorieIntakeCard(
+      BuildContext context, num caloriesum, AsyncSnapshot<List<Goals>> goals) {
+    return InkWell(
+      onTap: () {
+        onClickDayViewScreenButton(context);
+      },
+      child: Container(
+        height: 200,
+        width: 350,
+        margin: const EdgeInsets.only(bottom: 8, top: 8),
+        decoration: BoxDecoration(
+          color: Colors.orange,
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Container(
+                child: Row(
+                  children: [
+                    const FaIcon(
+                      FontAwesomeIcons.utensils,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "CALORIES",
+                          style: CustomTextStyle.metricTextStyle2,
+                        ),
+                        Text(
+                          caloriesum.toString() + "kcal",
+                          style: CustomTextStyle.metricTextStyle,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 150,
+              left: 20,
+              child: Container(
+                child: Row(children: [
+                  Text(
+                    goals.hasData && goals.data!.isNotEmpty
+                        ? goals.data!.first.caloriesintake.toString()
+                        : "2000",
+                    style: CustomTextStyle.metricTextStyle,
+                  ),
+                  const Text(
+                    " " "ml",
+                    style: CustomTextStyle.metricTextStyle2,
+                  )
+                ]),
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: 10,
+                width: 260,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: LinearProgressIndicator(
+                    value: caloriesum /
+                        (goals.hasData && goals.data!.isNotEmpty
+                            ? goals.data!.first.caloriesintake
+                            : 2000),
+                    valueColor: const AlwaysStoppedAnimation(
+                      Colors.white,
+                    ),
+                    backgroundColor: kLightColor.withOpacity(0.2),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -202,10 +213,11 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         child: Stack(
           children: [
             Positioned(
-                top: 20,
-                left: 20,
-                child: Container(
-                  child: Row(children: [
+              top: 20,
+              left: 20,
+              child: Container(
+                child: Row(
+                  children: [
                     const FaIcon(
                       FontAwesomeIcons.glassWater,
                       color: Colors.white,
@@ -227,8 +239,10 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                         )
                       ],
                     )
-                  ]),
-                )),
+                  ],
+                ),
+              ),
+            ),
             Positioned(
               top: 150,
               left: 20,
@@ -260,94 +274,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                             ? goals.data!.first.waterintake
                             : 2000),
                     valueColor: const AlwaysStoppedAnimation(Colors.white),
-                    backgroundColor: kLightColor.withOpacity(0.2),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  InkWell _getRunningCard(AsyncSnapshot<List<Goals>> goals) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        height: 200,
-        width: 350,
-        margin: const EdgeInsets.only(bottom: 8, top: 8),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 233, 20, 5),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 20,
-              left: 20,
-              child: Container(
-                child: Row(
-                  children: [
-                    const FaIcon(
-                      FontAwesomeIcons.running,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "RUNNING",
-                          style: CustomTextStyle.metricTextStyle2,
-                        ),
-                        Text(
-                          "2500" "m",
-                          style: CustomTextStyle.metricTextStyle,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 150,
-              left: 20,
-              child: Container(
-                child: Row(children: [
-                  Text(
-                    goals.hasData && goals.data!.isNotEmpty
-                        ? goals.data!.first.steps.toString()
-                        : "10000",
-                    style: CustomTextStyle.metricTextStyle,
-                  ),
-                  const Text(
-                    " " "m",
-                    style: CustomTextStyle.metricTextStyle2,
-                  )
-                ]),
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: 10,
-                width: 260,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: LinearProgressIndicator(
-                    value: 2500 /
-                        (goals.hasData && goals.data!.isNotEmpty
-                            ? goals.data!.first.steps.toDouble()
-                            : 10000),
-                    valueColor: const AlwaysStoppedAnimation(
-                      Colors.white,
-                    ),
                     backgroundColor: kLightColor.withOpacity(0.2),
                   ),
                 ),

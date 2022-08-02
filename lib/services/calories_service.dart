@@ -59,7 +59,6 @@ class CalorieService {
           calorie.createdOn.month,
           calorie.createdOn.day,
         );
-        print(scanDate.compareTo(dateSelected));
         if (scanDate.compareTo(dateSelected) == 0) {
           calorieList.add(calorie);
         }
