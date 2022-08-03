@@ -67,15 +67,4 @@ class CalorieService {
     }
   }
 
-  List<Calorie> findSelectedCalorie(List foodTrackFeed, DateTime dateSelected) {
-    List<Calorie> selectedCalorie = [];
-    for (var foodTrack in foodTrackFeed) {
-      DateTime scanDate = DateTime(foodTrack.createdOn.year,
-          foodTrack.createdOn.month, foodTrack.createdOn.day);
-      if (scanDate.compareTo(dateSelected) == 0) {
-        selectedCalorie.add(foodTrack);
-      }
-    }
-    return selectedCalorie;
-  }
 }

@@ -23,7 +23,6 @@ class _DayViewState extends State<DayViewScreen> {
   DateTime _value = DateTime.now();
   DateTime today = DateTime.now();
   Color _rightArrowColor = const Color(0xffC1C1C1);
-  final Color _leftArrowColor = const Color(0xffC1C1C1);
   final _addFoodKey = GlobalKey<FormState>();
   final String email = AuthService().getCurrentUser()!.email!;
 

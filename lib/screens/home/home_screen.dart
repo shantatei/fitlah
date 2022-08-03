@@ -23,7 +23,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   DateTime _value = DateTime.now();
   DateTime today = DateTime.now();
   Color _rightArrowColor = const Color(0xffC1C1C1);
-  final Color _leftArrowColor = const Color(0xffC1C1C1);
   UserModel? _userModel;
   String? username = "";
 
@@ -39,15 +38,13 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    BuildContext widgetcontext = context;
-    WaterService fsService = WaterService();
 
     final ButtonStyle buttonStyle =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
     return Scaffold(
       body: StreamBuilder<List<WaterIntakeTask>>(
-        stream: fsService.getWater(),
+        stream: WaterService.instance().getWaterbyDate(_value),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -64,39 +61,44 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                 return StreamBuilder<UserModel?>(
                   stream: UserService.instance().getUserStream(),
                   builder: (context, user) {
+                    if (user.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     if (user.hasData) {
                       _userModel = user.data;
                       username = _userModel?.username;
                     }
                     return StreamBuilder<List<Calorie>>(
-                        stream:
-                            CalorieService.instance().getCaloriebyDate(_value),
-                        builder: (context, caloriesnapshot) {
-                          if (caloriesnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          num caloriesum = 0;
-                          for (var doc in caloriesnapshot.data!) {
-                            caloriesum = doc.calories;
-                          }
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                _getHeader(),
-                                _getUserName(),
-                                _showDatePicker(),
-                                //Calories Card
-                                _getCalorieIntakeCard(
-                                    context, caloriesum, goals),
-                                //Water Intake Card
-                                _getWaterIntakeCard(context, sum, goals),
-                              ],
-                            ),
+                      stream:
+                          CalorieService.instance().getCaloriebyDate(_value),
+                      builder: (context, caloriesnapshot) {
+                        if (caloriesnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
                           );
-                        });
+                        }
+                        num caloriesum = 0;
+                        for (var doc in caloriesnapshot.data!) {
+                          caloriesum = doc.calories;
+                        }
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              _getHeader(),
+                              _getUserName(),
+                              _showDatePicker(),
+                              //Calories Card
+                              _getCalorieIntakeCard(context, caloriesum, goals),
+                              //Water Intake Card
+                              _getWaterIntakeCard(context, sum, goals),
+                            ],
+                          ),
+                        );
+                      },
+                    );
                   },
                 );
               },
@@ -158,18 +160,20 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
               top: 150,
               left: 20,
               child: Container(
-                child: Row(children: [
-                  Text(
-                    goals.hasData && goals.data!.isNotEmpty
-                        ? goals.data!.first.caloriesintake.toString()
-                        : "2000",
-                    style: CustomTextStyle.metricTextStyle,
-                  ),
-                  const Text(
-                    " " "ml",
-                    style: CustomTextStyle.metricTextStyle2,
-                  )
-                ]),
+                child: Row(
+                  children: [
+                    Text(
+                      goals.hasData && goals.data!.isNotEmpty
+                          ? goals.data!.first.caloriesintake.toString()
+                          : "2000",
+                      style: CustomTextStyle.metricTextStyle,
+                    ),
+                    const Text(
+                      " " "ml",
+                      style: CustomTextStyle.metricTextStyle2,
+                    )
+                  ],
+                ),
               ),
             ),
             Align(
@@ -247,18 +251,20 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
               top: 150,
               left: 20,
               child: Container(
-                child: Row(children: [
-                  Text(
-                    goals.hasData && goals.data!.isNotEmpty
-                        ? goals.data!.first.waterintake.toString()
-                        : "2000",
-                    style: CustomTextStyle.metricTextStyle,
-                  ),
-                  const Text(
-                    " " "ml",
-                    style: CustomTextStyle.metricTextStyle2,
-                  )
-                ]),
+                child: Row(
+                  children: [
+                    Text(
+                      goals.hasData && goals.data!.isNotEmpty
+                          ? goals.data!.first.waterintake.toString()
+                          : "2000",
+                      style: CustomTextStyle.metricTextStyle,
+                    ),
+                    const Text(
+                      " " "ml",
+                      style: CustomTextStyle.metricTextStyle2,
+                    )
+                  ],
+                ),
               ),
             ),
             Align(
@@ -292,10 +298,10 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            username!,
+            username!.toUpperCase(),
             style: const TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
             ),
           ),
         ],

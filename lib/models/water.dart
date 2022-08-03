@@ -12,6 +12,14 @@ class WaterIntakeTask {
     required this.water,
     required this.createdon,
   });
+  
+  WaterIntakeTask.fromSnapshot(DocumentSnapshot document)
+      : this(
+          id: document.id,
+          email: document['email'],
+          water: document['water'],
+          createdon: document['createdon'].toDate(),
+        );
 
   WaterIntakeTask.fromMap(Map<String, dynamic> snapshot, String id)
       : id = id,
