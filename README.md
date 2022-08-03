@@ -1,6 +1,6 @@
 <img src="https://github.com/shantatei/fitlah/blob/master/images/fitlahlogo-light.png" align="left" width="200">
-FITLAH is a FITNESS TRACKING APPLICATION built using the Flutter framework with firebase as the backend.
-<br clear="left"/>
+
+##FITLAH is a FITNESS TRACKING APPLICATION built using the Flutter framework with firebase as the backend.
 
 ## Features:
 - User authentication using Firebase Authentication
