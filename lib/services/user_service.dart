@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitlah/models/user.dart';
 import 'package:fitlah/services/auth_service.dart';
+import 'package:fitlah/services/run_service.dart';
 import 'package:uuid/uuid.dart';
 
 class UserService {
@@ -32,7 +33,6 @@ class UserService {
     }
   }
 
-
   Stream<UserModel?> getUserStream() {
     return fbstore
         .collection('users')
@@ -49,7 +49,6 @@ class UserService {
     );
   }
 
-
   Future<bool> addUser(UserModel user) async {
     try {
       Map<String, dynamic> map = {
@@ -65,7 +64,6 @@ class UserService {
       return Future.value(false);
     }
   }
-
 
   Future<bool> updateUser(
     Map<String, dynamic> map,
@@ -96,9 +94,9 @@ class UserService {
     }
   }
 
-
   Future<bool> deleteUser() async {
     try {
+      RunService.instance().deleteAllRuns();
       await fbstore
           .collection('users')
           .doc(authService.getCurrentUser()!.email)
@@ -110,7 +108,6 @@ class UserService {
       return Future.value(false);
     }
   }
-
 
   Future<bool> deleteUserImage() async {
     try {

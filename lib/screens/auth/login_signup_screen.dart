@@ -68,10 +68,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         var value = await authService.login(email, password);
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('Login successfully!'),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Login successfully!'),
+          ),
+        );
       } catch (error) {
         FocusScope.of(context).unfocus();
         String message = error.toString().contains('] ')

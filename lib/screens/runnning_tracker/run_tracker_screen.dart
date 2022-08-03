@@ -55,17 +55,23 @@ class _RunTrackerState extends State<RunTracker> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tracking Your Run"),
+        backgroundColor: Colors.white,
+        title: const Text(
+          "Tracking Your Run",
+          style: TextStyle(color: themeColor),
+        ),
         actions: [
           Visibility(
             visible: !_isTracking && !_isFirstTimeTracking,
             child: IconButton(
               onPressed: () => _saveRun(),
+              color: themeColor,
               icon: const Icon(Icons.save),
             ),
           ),
           IconButton(
             onPressed: () => _closeRun(context),
+            color: themeColor,
             icon: const Icon(Icons.close),
           )
         ],
@@ -153,7 +159,9 @@ class _RunTrackerState extends State<RunTracker> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => MainScreen(index: 1,),
+          builder: (_) => MainScreen(
+            index: 1,
+          ),
         ),
       );
 
@@ -181,7 +189,9 @@ class _RunTrackerState extends State<RunTracker> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => MainScreen(index: 1,),
+                  builder: (_) => MainScreen(
+                    index: 1,
+                  ),
                 ),
               );
             },
