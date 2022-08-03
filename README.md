@@ -13,7 +13,7 @@
 - Update Goals
 
 
-## Further enchanements in the future:
+## Further enhancements in the future:
 - Social Media Integration
 - Chat 
 - Water Reminder 
