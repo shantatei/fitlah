@@ -1,5 +1,7 @@
 <img src="https://github.com/shantatei/fitlah/blob/master/images/fitlahlogo-light.png" align="left" width="200">
 
+<br clear="left"/>
+
 
 
 ## Features:
