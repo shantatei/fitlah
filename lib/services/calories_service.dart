@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlah/models/calorie.dart';
 import 'package:fitlah/services/auth_service.dart';
@@ -67,4 +69,23 @@ class CalorieService {
     }
   }
 
+   Future<bool> deleteAllCalories() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> allCalories = await fbstore
+          .collection(collectionName)
+          .where('email', isEqualTo: email)
+          .get(); 
+      WriteBatch batch = fbstore.batch();
+      for (var doc in allCalories.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
 }
+

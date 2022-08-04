@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlah/services/auth_service.dart';
 
@@ -69,5 +71,24 @@ class WaterService {
       'water': water,
       'createdon': createdon,
     });
+  }
+
+  
+   Future<bool> deleteAllWater() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> allWater= await fbstore
+          .collection(collectionName)
+          .where('email', isEqualTo: email)
+          .get(); 
+      WriteBatch batch = fbstore.batch();
+      for (var doc in allWater.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
   }
 }

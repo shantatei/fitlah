@@ -120,20 +120,6 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       saveForm(context);
-                  //     },
-                  //     child: const Text("Submit"),
-                  //     style: ElevatedButton.styleFrom(
-                  //         primary: themeColor,
-                  //         fixedSize: const Size(160, 50),
-                  //         shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(50))),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {
                       saveForm(context);
@@ -213,8 +199,6 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           } else {
             if (value == null || value.isEmpty) {
               return "Please enter your username";
-            } else if (value.length < 6) {
-              return 'Username must be at least 6 characters';
             } else {
               return null;
             }

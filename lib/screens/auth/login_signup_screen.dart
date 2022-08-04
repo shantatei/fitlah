@@ -43,6 +43,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             backgroundColor: Colors.green,
             content: Text('User Registered successfully!'),
           ));
+          _resetForm();
         } catch (error) {
           FocusScope.of(context).unfocus();
           String message = error.toString().contains('] ')

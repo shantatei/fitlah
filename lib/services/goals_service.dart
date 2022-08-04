@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlah/models/goals.dart';
 import 'package:fitlah/services/auth_service.dart';
@@ -8,6 +10,7 @@ class GoalService {
   static final GoalService _instance = GoalService._();
   factory GoalService.instance() => _instance;
 
+  final FirebaseFirestore fbstore = FirebaseFirestore.instance;
   final AuthService authService = AuthService();
 
   Stream<List<Goals>> getGoal() {
@@ -65,5 +68,24 @@ class GoalService {
       'caloriesintake': caloriesintake,
       'steps': steps
     });
+  }
+
+  
+   Future<bool> deleteGoal() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> goal = await fbstore
+          .collection('goals')
+          .where('email', isEqualTo: authService.getCurrentUser()!.email!)
+          .get(); 
+      WriteBatch batch = fbstore.batch();
+      for (var doc in goal.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
   }
 }

@@ -76,6 +76,14 @@ class RunService {
       WriteBatch batch = fbstore.batch();
       for (var doc in allRuns.docs) {
         batch.delete(doc.reference);
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await fbstore
+            .collection('runs')
+            .doc(doc.id)
+            .collection('routes')
+            .get();
+        for (QueryDocumentSnapshot document in querySnapshot.docs) {
+          batch.delete(document.reference);
+        }
       }
       await batch.commit();
       return true;

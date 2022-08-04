@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitlah/models/user.dart';
 import 'package:fitlah/services/auth_service.dart';
+import 'package:fitlah/services/calories_service.dart';
+import 'package:fitlah/services/goals_service.dart';
 import 'package:fitlah/services/run_service.dart';
+import 'package:fitlah/services/water_service.dart';
 import 'package:uuid/uuid.dart';
 
 class UserService {
@@ -96,6 +99,9 @@ class UserService {
 
   Future<bool> deleteUser() async {
     try {
+      await CalorieService.instance().deleteAllCalories();
+      await WaterService.instance().deleteAllWater();
+      await GoalService.instance().deleteGoal();
       await RunService.instance().deleteAllRuns();
       await fbstore
           .collection('users')

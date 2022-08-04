@@ -283,7 +283,6 @@ class _RunTrackerState extends State<RunTracker> {
           return polyline.map((position) => position.toLatLng()).toList();
         },
       ).toList();
-      print(polylines);
       distance = polylines.calculateDistance();
       speed = locationData.speed!;
       _runPanelKey.currentState!.setSpeed(speed);
