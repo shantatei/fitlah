@@ -263,14 +263,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(ResetPasswordScreen.routeName);
-                  },
-                  child: const Text(
-                    "Forget Password?",
-                    style: TextStyle(fontSize: 12, color: Color(textColor1)),
-                  )),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(ResetPasswordScreen.routeName);
+                },
+                child: const Text(
+                  "Forget Password?",
+                  style: TextStyle(fontSize: 12, color: Color(textColor1)),
+                ),
+              ),
             )
           ],
         ),
@@ -283,13 +284,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       margin: const EdgeInsets.only(top: 20),
       child: Form(
         key: form,
-        child: Column(children: [
-          // buildTextField(Icons.person, "Username", false, false, false),
-          buildTextField(Icons.email, "Email", false, true, false),
-          buildTextField(Icons.lock, "Password", true, false, false),
-          buildTextField(Icons.lock, "Confirm Password", false, false, true),
-          Container()
-        ]),
+        child: Column(
+          children: [
+            // buildTextField(Icons.person, "Username", false, false, false),
+            buildTextField(Icons.email, "Email", false, true, false),
+            buildTextField(Icons.lock, "Password", true, false, false),
+            buildTextField(Icons.lock, "Confirm Password", false, false, true),
+            Container()
+          ],
+        ),
       ),
     );
   }

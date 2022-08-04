@@ -8,7 +8,6 @@ import 'package:fitlah/screens/profile/profile_screen.dart';
 import 'package:fitlah/screens/auth/reset_password_screen.dart';
 import 'package:fitlah/screens/auth/user_detail_screen.dart';
 import 'package:fitlah/screens/runnning_tracker/all_runs.dart';
-import 'package:fitlah/screens/splash_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +65,7 @@ class MyApp extends StatelessWidget {
     }
 
     if (usersnapshot.hasData && usersnapshot.data!.exists) {
-      return SplashScreen();
+      return MainScreen();
     }
 
     return UserDetailScreen();
@@ -107,6 +106,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   AuthService authService = AuthService();
+
   logOut() {
     return authService.logOut().then((value) {
       FocusScope.of(context).unfocus();

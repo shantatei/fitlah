@@ -97,149 +97,150 @@ class _EditProfileState extends State<EditProfile> {
         title: const Text("Fitlah"),
       ),
       body: StreamBuilder<UserModel?>(
-          stream: UserService.instance().getUserStream(),
-          builder: (context, user) {
-            if (user.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (user.hasData) {
-              _userModel = user.data;
-              username = _userModel?.username;
-              weight = _userModel?.weight;
-              height = _userModel?.height;
-              age = _userModel?.age;
-            }
-            return ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              physics: const BouncingScrollPhysics(),
-              children: [
-                const SizedBox(height: 8),
-                const Text(
-                  'Profile Image',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+        stream: UserService.instance().getUserStream(),
+        builder: (context, user) {
+          if (user.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (user.hasData) {
+            _userModel = user.data;
+            username = _userModel?.username;
+            weight = _userModel?.weight;
+            height = _userModel?.height;
+            age = _userModel?.age;
+          }
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const SizedBox(height: 8),
+              const Text(
+                'Profile Image',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipOval(
+                    child: Material(
+                        color: Colors.transparent,
+                        child: user.data?.profileImage != null
+                            ? SizedBox(
+                                width: 128,
+                                height: 128,
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Image.network(
+                                    user.data!.profileImage!,
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      if (loadingProgress.expectedTotalBytes ==
+                                          null) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      double percentLoaded = loadingProgress
+                                              .cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!;
+                                      return CircularProgressIndicator(
+                                        value: percentLoaded,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
+                            : SizedBox(
+                                width: 128,
+                                height: 128,
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: Image.asset('images/user.png'),
+                                ),
+                              )),
+                  ),
+                  Column(
+                    children: [
+                      TextButton.icon(
+                          icon: const Icon(Icons.camera_alt),
+                          onPressed: () => pickImageProfile(0),
+                          label: const Text('Take Photo')),
+                      TextButton.icon(
+                          icon: const Icon(Icons.image),
+                          onPressed: () => pickImageProfile(1),
+                          label: const Text('Add Image')),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 24),
+              Form(
+                key: form,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ClipOval(
-                      child: Material(
-                          color: Colors.transparent,
-                          child: user.data?.profileImage != null
-                              ? SizedBox(
-                                  width: 128,
-                                  height: 128,
-                                  child: FittedBox(
-                                    fit: BoxFit.cover,
-                                    child: Image.network(
-                                      user.data!.profileImage!,
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        if (loadingProgress
-                                                .expectedTotalBytes ==
-                                            null) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        }
-                                        double percentLoaded = loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!;
-                                        return CircularProgressIndicator(
-                                          value: percentLoaded,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : SizedBox(
-                                  width: 128,
-                                  height: 128,
-                                  child: FittedBox(
-                                    fit: BoxFit.cover,
-                                    child: Image.asset('images/user.png'),
-                                  ),
-                                )),
+                    const Text(
+                      'Username',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                    Column(
-                      children: [
-                        TextButton.icon(
-                            icon: const Icon(Icons.camera_alt),
-                            onPressed: () => pickImageProfile(0),
-                            label: const Text('Take Photo')),
-                        TextButton.icon(
-                            icon: const Icon(Icons.image),
-                            onPressed: () => pickImageProfile(1),
-                            label: const Text('Add Image')),
-                      ],
+                    const SizedBox(height: 8),
+                    buildTextField(username!, false, false, false),
+                    const Text(
+                      'Weight',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    buildTextField(weight!.toString(), false, true, false),
+                    const Text(
+                      'Age',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    buildTextField(age!.toString(), false, false, true),
+                    const Text(
+                      'Height',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    buildTextField(height!.toString(), true, false, false),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          saveForm(context);
+                        },
+                        child: const PrimaryButton(
+                          buttonText: 'Save',
+                          buttonColor: themeColor,
+                        ),
+                      ),
                     )
                   ],
                 ),
-                const SizedBox(height: 24),
-                Form(
-                  key: form,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Username',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        buildTextField(username!, false, false, false),
-                        const Text(
-                          'Weight',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        buildTextField(weight!.toString(), false, true, false),
-                        const Text(
-                          'Age',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        buildTextField(age!.toString(), false, false, true),
-                        const Text(
-                          'Height',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        buildTextField(height!.toString(), true, false, false),
-                        Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              saveForm(context);
-                            },
-                            child: const PrimaryButton(
-                              buttonText: 'Save',
-                              buttonColor: themeColor,
-                            ),
-                          ),
-                        )
-                      ]),
-                )
-              ],
-            );
-          }),
+              )
+            ],
+          );
+        },
+      ),
     );
   }
 

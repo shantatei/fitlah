@@ -96,7 +96,7 @@ class UserService {
 
   Future<bool> deleteUser() async {
     try {
-      RunService.instance().deleteAllRuns();
+      await RunService.instance().deleteAllRuns();
       await fbstore
           .collection('users')
           .doc(authService.getCurrentUser()!.email)

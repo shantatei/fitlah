@@ -16,14 +16,19 @@ class DeleteProfile extends StatefulWidget {
 class _DeleteProfileState extends State<DeleteProfile> {
   String _password = "";
   var form = GlobalKey<FormState>();
+  bool obscureText = true;
 
   delete() async {
     bool isValid = form.currentState!.validate();
     if (isValid) {
+      form.currentState!.save();
+
       try {
-        print(_password);
         AuthService authService = AuthService();
-        await authService.login(authService.getCurrentUser()!.email!, _password);
+        print(authService.getCurrentUser()!.email!);
+        print(_password);
+        await authService.login(
+            authService.getCurrentUser()!.email!, _password);
         bool deleteImageResults =
             await UserService.instance().deleteUserImage();
         bool deleteUserResults = await UserService.instance().deleteUser();
@@ -45,14 +50,16 @@ class _DeleteProfileState extends State<DeleteProfile> {
             builder: (_) => LoginSignupScreen(),
           ),
         );
-      } catch (e) {
+      } catch (error) {
         FocusScope.of(context).unfocus();
+        String message = error.toString().contains('] ')
+            ? error.toString().split('] ')[1]
+            : 'An error has occurred.';
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
-            content:
-                Text('Wrong password has been given. Unable to delete account'),
+            content: Text(message),
           ),
         );
       }
@@ -97,27 +104,39 @@ class _DeleteProfileState extends State<DeleteProfile> {
             ),
             Form(
               key: form,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Password',
-                    hintStyle: TextStyle(color: kTextFieldColor),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: kPrimaryColor),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: const TextStyle(color: kTextFieldColor),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                  ),
+                  suffixIcon: IconTheme(
+                    data: const IconThemeData(color: Colors.grey),
+                    child: IconButton(
+                      icon: obscureText
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off),
+                      onPressed: () => setState(
+                        () {
+                          obscureText = !obscureText;
+                        },
+                      ),
+                      splashRadius: 20,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null) {
-                      return "Please enter your password";
-                    } else {
-                      return null;
-                    }
-                  },
-                  onSaved: (value) {
-                    _password = value!;
-                  },
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your password";
+                  } else {
+                    return null;
+                  }
+                },
+                obscureText: obscureText,
+                onSaved: (value) {
+                  _password = value!;
+                },
               ),
             ),
             const SizedBox(
