@@ -160,7 +160,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 700),
                 curve: Curves.bounceInOut,
-                height: isSignupScreen ? 310 : 290,
+                height: isSignupScreen ? 340 : 290,
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width - 40,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -302,7 +302,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return AnimatedPositioned(
         duration: const Duration(milliseconds: 700),
         curve: Curves.bounceInOut,
-        top: isSignupScreen ? 575 : 580,
+        top: isSignupScreen ? 605 : 580,
         right: 0,
         left: 0,
         child: Center(
@@ -363,80 +363,91 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Material(
-        elevation: 2,
-        shape: const StadiumBorder(),
-        clipBehavior: Clip.hardEdge,
-        child: TextFormField(
-          obscureText: isPassword || isConfirmPassword,
-          keyboardType:
-              isEmail ? TextInputType.emailAddress : TextInputType.text,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              icon,
-              color: themeColor,
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Color(textColor1)),
-              borderRadius: BorderRadius.all(Radius.circular(35.0)),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Color(textColor1)),
-              borderRadius: BorderRadius.all(Radius.circular(35.0)),
-            ),
-            contentPadding: const EdgeInsets.all(10),
-            hintText: hintText,
-            hintStyle: const TextStyle(fontSize: 14, color: themeColor),
-            errorStyle: const TextStyle(color: Colors.red),
-            errorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
-                borderRadius: BorderRadius.all(Radius.circular(35.0))),
+      child: TextFormField(
+        obscureText: isPassword || isConfirmPassword,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            icon,
+            color: themeColor,
           ),
-          validator: (value) {
-            if (isPassword) {
-              if (value == null || value.isEmpty) {
-                return "Please provide a password ";
-              } else if (value.length < 6) {
-                return 'Password must be at least 6 characters.';
-              } else {
-                return null;
-              }
-            } else if (isEmail) {
-              if (value == null || value.isEmpty) {
-                return "Please enter an email address ";
-              } else if (!value.contains('@')) {
-                return "Please provide a valid email address.";
-              } else {
-                return null;
-              }
-            } else if (isConfirmPassword) {
-              if (value == null || value.isEmpty) {
-                return "Please provide a password ";
-              } else if (value.length < 6) {
-                return 'Password must be at least 6 characters.';
-              } else {
-                return null;
-              }
-            } else {
-              if (value == null || value.isEmpty) {
-                return "Please enter your username";
-              } else if (value.length < 6) {
-                return 'Username must be at least 6 characters';
-              } else {
-                return null;
-              }
-            }
-          },
-          onSaved: (value) {
-            if (isPassword) {
-              password = value;
-            } else if (isEmail) {
-              email = value;
-            } else if (isConfirmPassword) {
-              confirmPassword = value;
-            }
-          },
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(textColor1),
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(textColor1),
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
+          ),
+          contentPadding: const EdgeInsets.all(10),
+          hintText: hintText,
+          hintStyle: const TextStyle(fontSize: 14, color: themeColor),
+          errorStyle: const TextStyle(color: Colors.red),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
+          ),
         ),
+        validator: (value) {
+          if (isPassword) {
+            if (value == null || value.isEmpty) {
+              return "Please provide a password ";
+            } else if (value.length < 6) {
+              return 'Password must be at least 6 characters.';
+            } else {
+              return null;
+            }
+          } else if (isEmail) {
+            if (value == null || value.isEmpty) {
+              return "Please enter an email address ";
+            } else if (!value.contains('@')) {
+              return "Please provide a valid email address.";
+            } else {
+              return null;
+            }
+          } else if (isConfirmPassword) {
+            if (value == null || value.isEmpty) {
+              return "Please provide a password ";
+            } else if (value.length < 6) {
+              return 'Password must be at least 6 characters.';
+            } else {
+              return null;
+            }
+          } else {
+            if (value == null || value.isEmpty) {
+              return "Please enter your username";
+            } else if (value.length < 6) {
+              return 'Username must be at least 6 characters';
+            } else {
+              return null;
+            }
+          }
+        },
+        onSaved: (value) {
+          if (isPassword) {
+            password = value;
+          } else if (isEmail) {
+            email = value;
+          } else if (isConfirmPassword) {
+            confirmPassword = value;
+          }
+        },
       ),
     );
   }

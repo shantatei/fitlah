@@ -140,82 +140,83 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
 
   Widget _buildTextField(IconData icon, String hintText, bool isAge,
       bool isHeight, bool isWeight) {
-    return Material(
-      elevation: 2,
-      shape: const StadiumBorder(),
-      clipBehavior: Clip.hardEdge,
-      child: TextFormField(
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: themeColor),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(textColor1),
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(35.0),
-            ),
+    return TextFormField(
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: themeColor),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(textColor1),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Color(textColor1),
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(35.0),
-            ),
-          ),
-          contentPadding: const EdgeInsets.all(10),
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontSize: 14,
-            color: themeColor,
-          ),
-          errorStyle: const TextStyle(color: Colors.red),
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.all(
-              Radius.circular(35.0),
-            ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(35.0),
           ),
         ),
-        validator: (value) {
-          if (isAge) {
-            if (value == null || value.isEmpty) {
-              return "Please state your age ";
-            } else {
-              return null;
-            }
-          } else if (isHeight) {
-            if (value == null || value.isEmpty) {
-              return "Please enter your Height in (cm)";
-            } else {
-              return null;
-            }
-          } else if (isWeight) {
-            if (value == null || value.isEmpty) {
-              return "Please enter your Weight in (kg) ";
-            } else {
-              return null;
-            }
-          } else {
-            if (value == null || value.isEmpty) {
-              return "Please enter your username";
-            } else {
-              return null;
-            }
-          }
-        },
-        onSaved: (value) {
-          if (isAge) {
-            age = int.parse(value!);
-          } else if (isWeight) {
-            weight = double.parse(value!);
-          } else if (isHeight) {
-            height = double.parse(value!);
-          } else {
-            username = value.toString();
-          }
-        },
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(textColor1),
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(35.0),
+          ),
+        ),
+        contentPadding: const EdgeInsets.all(10),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 14,
+          color: themeColor,
+        ),
+        errorStyle: const TextStyle(color: Colors.red),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(
+            Radius.circular(35.0),
+          ),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.all(
+            Radius.circular(35.0),
+          ),
+        ),
       ),
+      validator: (value) {
+        if (isAge) {
+          if (value == null || value.isEmpty) {
+            return "Please state your age ";
+          } else {
+            return null;
+          }
+        } else if (isHeight) {
+          if (value == null || value.isEmpty) {
+            return "Please enter your Height in (cm)";
+          } else {
+            return null;
+          }
+        } else if (isWeight) {
+          if (value == null || value.isEmpty) {
+            return "Please enter your Weight in (kg) ";
+          } else {
+            return null;
+          }
+        } else {
+          if (value == null || value.isEmpty) {
+            return "Please enter your username";
+          } else {
+            return null;
+          }
+        }
+      },
+      onSaved: (value) {
+        if (isAge) {
+          age = int.parse(value!);
+        } else if (isWeight) {
+          weight = double.parse(value!);
+        } else if (isHeight) {
+          height = double.parse(value!);
+        } else {
+          username = value.toString();
+        }
+      },
     );
   }
 }

@@ -193,9 +193,6 @@ class _DayViewState extends State<DayViewScreen> {
             labelText: "Name *",
             hintText: "Please enter food name",
             errorStyle: TextStyle(color: Colors.red),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.red),
-            // ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -205,7 +202,6 @@ class _DayViewState extends State<DayViewScreen> {
           },
           onChanged: (value) {
             addFoodTrack.food_name = value;
-            // addFood.calories = value;
           },
         ),
         TextFormField(
@@ -213,9 +209,6 @@ class _DayViewState extends State<DayViewScreen> {
             labelText: "Calories *",
             hintText: "Please enter a calorie amount",
             errorStyle: TextStyle(color: Colors.red),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.red),
-            // ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -231,7 +224,6 @@ class _DayViewState extends State<DayViewScreen> {
               // return "Please enter numeric values"
               addFoodTrack.calories = 0;
             }
-            // addFood.calories = value;
           },
         ),
         TextFormField(
@@ -239,9 +231,6 @@ class _DayViewState extends State<DayViewScreen> {
             labelText: "Carbs *",
             hintText: "Please enter a carbs amount",
             errorStyle: TextStyle(color: Colors.red),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.red),
-            // ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -263,9 +252,6 @@ class _DayViewState extends State<DayViewScreen> {
             labelText: "Protein *",
             hintText: "Please enter a protein amount",
             errorStyle: TextStyle(color: Colors.red),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.red),
-            // ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -286,9 +272,6 @@ class _DayViewState extends State<DayViewScreen> {
             labelText: "Fat *",
             hintText: "Please enter a fat amount",
             errorStyle: TextStyle(color: Colors.red),
-            // errorBorder: OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.red),
-            // ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {

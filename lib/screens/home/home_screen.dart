@@ -38,7 +38,6 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     final ButtonStyle buttonStyle =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
 
@@ -82,7 +81,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                         }
                         num caloriesum = 0;
                         for (var doc in caloriesnapshot.data!) {
-                          caloriesum = doc.calories;
+                          caloriesum += doc.calories;
                         }
                         return SingleChildScrollView(
                           child: Column(

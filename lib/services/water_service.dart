@@ -11,12 +11,12 @@ class WaterService {
   factory WaterService.instance() => _instance;
 
   final FirebaseFirestore fbstore = FirebaseFirestore.instance;
-  final String email = AuthService().getCurrentUser()!.email!;
   final String collectionName = 'water';
+  final AuthService authService = AuthService();
 
   addWater(water, createdon) {
     return FirebaseFirestore.instance.collection('water').add({
-      'email': email,
+      'email': authService.getCurrentUser()!.email!,
       'water': water,
       'createdon': createdon,
     });
@@ -29,7 +29,7 @@ class WaterService {
   Stream<List<WaterIntakeTask>> getWater() {
     return FirebaseFirestore.instance
         .collection('water')
-        .where('email', isEqualTo:email)
+        .where('email', isEqualTo: authService.getCurrentUser()!.email!)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map<WaterIntakeTask>(
@@ -45,7 +45,7 @@ class WaterService {
     );
     var stream = fbstore
         .collection(collectionName)
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: authService.getCurrentUser()!.email!)
         .snapshots();
 
     await for (var snapshot in stream) {
@@ -67,19 +67,18 @@ class WaterService {
 
   editWater(id, water, createdon) {
     return FirebaseFirestore.instance.collection('water').doc(id).set({
-      'email': email,
+      'email': authService.getCurrentUser()!.email!,
       'water': water,
       'createdon': createdon,
     });
   }
 
-  
-   Future<bool> deleteAllWater() async {
+  Future<bool> deleteAllWater() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> allWater= await fbstore
+      QuerySnapshot<Map<String, dynamic>> allWater = await fbstore
           .collection(collectionName)
-          .where('email', isEqualTo: email)
-          .get(); 
+          .where('email', isEqualTo: authService.getCurrentUser()!.email!)
+          .get();
       WriteBatch batch = fbstore.batch();
       for (var doc in allWater.docs) {
         batch.delete(doc.reference);

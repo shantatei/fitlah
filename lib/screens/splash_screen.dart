@@ -1,9 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlah/main.dart';
-import 'package:fitlah/screens/home/home_screen.dart';
+import 'package:fitlah/screens/auth/login_signup_screen.dart';
+import 'package:fitlah/screens/auth/user_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  // final AsyncSnapshot<User?> authsnapshot;
+  // final AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> usersnapshot;
+
+  const SplashScreen({
+    Key? key,
+    // required this.authsnapshot,
+    // required this.usersnapshot,
+  }) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -13,24 +23,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigatetoLogin();
+    // _checksnapshots();
   }
 
-  _navigatetoLogin() async {
-    await Future.delayed(const Duration(milliseconds: 1500), () {});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainScreen(),
-      ),
-    );
-  }
+  // _checksnapshots() async {
+  //   await Future.delayed(const Duration(milliseconds: 1500), () {});
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (_) {
+  //         if (!widget.authsnapshot.hasData) {
+  //           return LoginSignupScreen();
+  //         }
+
+  //         if (widget.usersnapshot.hasData && widget.usersnapshot.data!.exists) {
+  //           return MainScreen();
+  //         }
+
+  //         return UserDetailScreen();
+  //       },
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(child: Image.asset('images/fitlahlogo-dark.png')),
+        child: Container(
+          child: Image.asset('images/fitlahlogo-dark.png'),
+        ),
       ),
     );
   }

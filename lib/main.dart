@@ -25,41 +25,51 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-        stream: authService.getAuthUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(snapshot.data?.email!)
-                  .snapshots(),
-              builder: (context, usersnapshot) {
-                return MaterialApp(
-                    theme: ThemeData(
-                      primarySwatch: Colors.blue,
-                    ),
-                    home: checkSnapshots(snapshot, usersnapshot),
-                    routes: {
-                      LoginSignupScreen.routeName: (_) {
-                        return LoginSignupScreen();
-                      },
-                      ResetPasswordScreen.routeName: (_) {
-                        return ResetPasswordScreen();
-                      },
-                    },
-                    debugShowCheckedModeBanner: false);
-              });
-        });
+      stream: authService.getAuthUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+          stream: FirebaseFirestore.instance
+              .collection("users")
+              .doc(snapshot.data?.email!)
+              .snapshots(),
+          builder: (context, usersnapshot) {
+            return MaterialApp(
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                ),
+                home: checkSnapshots(snapshot, usersnapshot),
+                routes: {
+                  LoginSignupScreen.routeName: (_) {
+                    return LoginSignupScreen();
+                  },
+                  ResetPasswordScreen.routeName: (_) {
+                    return ResetPasswordScreen();
+                  },
+                },
+                debugShowCheckedModeBanner: false);
+          },
+        );
+      },
+    );
   }
 
   Widget checkSnapshots(
     AsyncSnapshot<User?> authsnapshot,
     AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> usersnapshot,
   ) {
+    // if (authsnapshot.connectionState == ConnectionState.waiting) {
+    //   return const SplashScreen();
+    // }
+
+    // if (usersnapshot.connectionState == ConnectionState.waiting) {
+    //   return const SplashScreen();
+    // }
+
     if (!authsnapshot.hasData) {
       return LoginSignupScreen();
     }

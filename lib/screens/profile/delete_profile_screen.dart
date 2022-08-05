@@ -25,8 +25,6 @@ class _DeleteProfileState extends State<DeleteProfile> {
 
       try {
         AuthService authService = AuthService();
-        print(authService.getCurrentUser()!.email!);
-        print(_password);
         await authService.login(
             authService.getCurrentUser()!.email!, _password);
         bool deleteImageResults =
@@ -43,6 +41,11 @@ class _DeleteProfileState extends State<DeleteProfile> {
             ),
           );
         }
+        FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Account deleted successfully!'),
+        ));
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,

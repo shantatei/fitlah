@@ -10,13 +10,13 @@ class CalorieService {
   factory CalorieService.instance() => _instance;
 
   final FirebaseFirestore fbstore = FirebaseFirestore.instance;
-  final String email = AuthService().getCurrentUser()!.email!;
   final String collectionName = 'foodTracks';
+  final AuthService authService = AuthService();
 
   Stream<List<Calorie>> getCalorieList() {
     return fbstore
         .collection(collectionName)
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: authService.getCurrentUser()!.email!)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map(
@@ -49,7 +49,7 @@ class CalorieService {
     );
     var stream = fbstore
         .collection(collectionName)
-        .where('email', isEqualTo: email)
+        .where('email', isEqualTo: authService.getCurrentUser()!.email!)
         .snapshots();
 
     await for (var snapshot in stream) {
@@ -69,12 +69,12 @@ class CalorieService {
     }
   }
 
-   Future<bool> deleteAllCalories() async {
+  Future<bool> deleteAllCalories() async {
     try {
       QuerySnapshot<Map<String, dynamic>> allCalories = await fbstore
           .collection(collectionName)
-          .where('email', isEqualTo: email)
-          .get(); 
+          .where('email', isEqualTo: authService.getCurrentUser()!.email!)
+          .get();
       WriteBatch batch = fbstore.batch();
       for (var doc in allCalories.docs) {
         batch.delete(doc.reference);
@@ -86,6 +86,4 @@ class CalorieService {
       return false;
     }
   }
-
 }
-

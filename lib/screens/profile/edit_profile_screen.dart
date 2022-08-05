@@ -100,7 +100,9 @@ class _EditProfileState extends State<EditProfile> {
         stream: UserService.instance().getUserStream(),
         builder: (context, user) {
           if (!user.hasData || _isUploading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           if (user.hasData) {
             _userModel = user.data;
