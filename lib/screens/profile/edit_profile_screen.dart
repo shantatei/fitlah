@@ -21,7 +21,7 @@ class _EditProfileState extends State<EditProfile> {
   double? weight = 0.0;
   int? age = 0;
   bool _isLoading = false;
-  final bool _isUploading = false;
+  bool _isUploading = false;
   var form = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -99,7 +99,7 @@ class _EditProfileState extends State<EditProfile> {
       body: StreamBuilder<UserModel?>(
         stream: UserService.instance().getUserStream(),
         builder: (context, user) {
-          if (user.connectionState == ConnectionState.waiting) {
+          if (!user.hasData || _isUploading) {
             return const Center(child: CircularProgressIndicator());
           }
           if (user.hasData) {
@@ -318,11 +318,22 @@ class _EditProfileState extends State<EditProfile> {
       source: chosenSource,
       imageQuality: 100,
     )
-        .then((imageFile) async {
-      if (imageFile == null) return;
+        .then(
+      (imageFile) async {
+        if (imageFile == null) return;
+        setState(() {
+          _isUploading = true;
+        });
 
-      bool results =
-          await UserService.instance().updateUser({}, File(imageFile.path));
-    });
+        bool results = await UserService.instance().updateUser(
+          {},
+          File(imageFile.path),
+        );
+
+        setState(() {
+          _isUploading = false;
+        });
+      },
+    );
   }
 }
