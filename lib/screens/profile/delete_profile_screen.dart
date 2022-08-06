@@ -43,9 +43,12 @@ class _DeleteProfileState extends State<DeleteProfile> {
         }
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Account deleted successfully!'),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Account deleted successfully!'),
+          ),
+        );
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,

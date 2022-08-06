@@ -254,19 +254,31 @@ class _EditProfileState extends State<EditProfile> {
         initialValue: initialText,
         decoration: const InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(textColor1)),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
+            borderSide: BorderSide(
+              color: Color(textColor1),
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(textColor1)),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
+            borderSide: BorderSide(
+              color: Color(textColor1),
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(35.0),
+            ),
           ),
           contentPadding: EdgeInsets.all(10),
-          hintStyle: TextStyle(fontSize: 14, color: Color(textColor1)),
+          hintStyle: TextStyle(
+            fontSize: 14,
+            color: Color(textColor1),
+          ),
           errorStyle: TextStyle(color: Colors.red),
           errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red),
-              borderRadius: BorderRadius.all(Radius.circular(35.0))),
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.all(Radius.circular(35.0)),
+          ),
         ),
         validator: (value) {
           if (isAge) {
@@ -290,8 +302,6 @@ class _EditProfileState extends State<EditProfile> {
           } else {
             if (value == null || value.isEmpty) {
               return "Please enter your username";
-            } else if (value.length < 6) {
-              return 'Username must be at least 6 characters';
             } else {
               return null;
             }
