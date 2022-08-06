@@ -168,7 +168,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
                       style: CustomTextStyle.metricTextStyle,
                     ),
                     const Text(
-                      " " "ml",
+                      " " "kcal",
                       style: CustomTextStyle.metricTextStyle2,
                     )
                   ],

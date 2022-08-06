@@ -1,4 +1,3 @@
-import 'package:fitlah/screens/auth/login_signup_screen.dart';
 import 'package:fitlah/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -41,8 +40,7 @@ class _DeleteProfileState extends State<DeleteProfile> {
             ),
           );
         }
-        FocusScope.of(context).unfocus();
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
@@ -50,12 +48,12 @@ class _DeleteProfileState extends State<DeleteProfile> {
           ),
         );
         Navigator.pop(context);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => LoginSignupScreen(),
-          ),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => LoginSignupScreen(),
+        //   ),
+        // );
       } catch (error) {
         FocusScope.of(context).unfocus();
         String message = error.toString().contains('] ')

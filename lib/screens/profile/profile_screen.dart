@@ -1,5 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitlah/models/goals.dart';
+import 'package:fitlah/screens/profile/delete_profile_screen.dart';
 import 'package:fitlah/screens/profile/edit_profile_screen.dart';
 import 'package:fitlah/services/goals_service.dart';
 import 'package:fitlah/services/user_service.dart';
@@ -317,18 +318,18 @@ class _ProfileState extends State<Profile> {
             username!,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
-          // ElevatedButton(
-          //   onPressed: () => Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => const DeleteProfile(),
-          //     ),
-          //   ),
-          //   child: const Text("Delete Account"),
-          //   style: ElevatedButton.styleFrom(
-          //     primary: Colors.red,
-          //   ),
-          // ),
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DeleteProfile(),
+              ),
+            ),
+            child: const Text("Delete Account"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Row(

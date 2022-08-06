@@ -23,7 +23,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please check your email for to reset your password!'),
+          content: Text('Please check your email to reset your password!'),
         ));
         Navigator.of(context).pop();
       }).catchError((error) {

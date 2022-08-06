@@ -73,6 +73,9 @@ class _EditProfileState extends State<EditProfile> {
           content: Text("Unknown Error has occured"),
         );
       }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Profile Updated Successfully'),
+      ));
     } catch (e) {
       setState(() {
         _isLoading = false;

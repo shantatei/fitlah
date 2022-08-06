@@ -38,6 +38,11 @@ class MyApp extends StatelessWidget {
               .doc(snapshot.data?.email!)
               .snapshots(),
           builder: (context, usersnapshot) {
+            if (usersnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return MaterialApp(
                 theme: ThemeData(
                   primarySwatch: Colors.blue,
@@ -118,20 +123,26 @@ class _MainScreenState extends State<MainScreen> {
   AuthService authService = AuthService();
 
   logOut() {
-    return authService.logOut().then((value) {
-      FocusScope.of(context).unfocus();
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Logout successfully!'),
-      ));
-    }).catchError((error) {
-      FocusScope.of(context).unfocus();
-      String message = error.toString();
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-      ));
-    });
+    return authService.logOut().then(
+      (value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Logout successfully!'),
+          ),
+        );
+      },
+    ).catchError(
+      (error) {
+        FocusScope.of(context).unfocus();
+        String message = error.toString();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+          ),
+        );
+      },
+    );
   }
 
   @override

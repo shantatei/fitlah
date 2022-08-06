@@ -1,8 +1,5 @@
-import 'package:fitlah/main.dart';
 import 'package:fitlah/screens/auth/reset_password_screen.dart';
-import 'package:fitlah/screens/auth/user_detail_screen.dart';
 import 'package:fitlah/services/auth_service.dart';
-import 'package:fitlah/services/user_service.dart';
 import 'package:fitlah/utils/theme_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +67,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       AuthService authService = AuthService();
       try {
         var value = await authService.login(email, password);
-        FocusScope.of(context).unfocus();
+        // FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -78,7 +75,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             content: Text('Login successfully!'),
           ),
         );
-
       } catch (error) {
         FocusScope.of(context).unfocus();
         String message = error.toString().contains('] ')

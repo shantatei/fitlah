@@ -75,6 +75,7 @@ class RunService {
           .get();
       WriteBatch batch = fbstore.batch();
       for (var doc in allRuns.docs) {
+        await _reference.child(doc["runImage"]).delete();
         batch.delete(doc.reference);
         QuerySnapshot<Map<String, dynamic>> querySnapshot = await fbstore
             .collection('runs')
